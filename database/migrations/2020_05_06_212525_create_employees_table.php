@@ -25,7 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('employees_company_id')->nullable();
             $table->timestamps();
             
-            $table->foreign('employee_company_id')->references('id')->on('employees_companies')
+            $table->foreign('employees_company_id')->references('id')->on('employees_companies')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
             $table->foreign('type_employee')->references('id')->on('employee_types')

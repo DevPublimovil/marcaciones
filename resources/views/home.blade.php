@@ -26,11 +26,11 @@
 </div> --}}
 
 <div class="flex flex-wrap justify-between mx-2 py-2">
-    <div class="lg:w-4/6 md:w-4/6 sm:w-full w-full">
-
-    </div>
-    <div class="lg:w-2/6 md:w-2/6 w-0 pl-4">
+    <div class="lg:w-2/6 md:w-2/6 w-0">
         <x-profile/>
+    </div>
+    <div class="pl-4 lg:w-4/6 md:w-4/6 sm:w-full w-full">
+        
     </div>
 </div>
 @endsection

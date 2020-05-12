@@ -10,6 +10,12 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        $role = Role::create(['name' => 'empleado', 'display_name' => 'Empleado']);
+
+        $role = Role::create(['name' => 'gerente', 'display_name' => 'Gerente']);
+
+        $role = Role::create(['name' => 'rrhh', 'display_name' => 'RRHH']);
+
         $role = Role::firstOrNew(['name' => 'admin']);
         if (!$role->exists) {
             $role->fill([
