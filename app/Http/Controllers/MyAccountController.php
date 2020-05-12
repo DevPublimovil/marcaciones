@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MyCountController extends Controller
+class MyAccountController extends Controller
 {
-    //
+    
 }
