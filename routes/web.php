@@ -28,6 +28,15 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
 
+Route::group(['middleware' => ['auth']], function(){
+    Route::get('/markings-weekly/{id}', 'MyMarkingsController@showWeeklyDials')->name('markings.weekly');
+    Route::get('/markings-month/{id}', 'MyMarkingsController@showMonthDials')->name('markings.month');
+    Route::get('/percent/{id}', 'MyMarkingsController@showPercent')->name('markings.percent');
+    Route::resource('/employees', 'EmployeeController');
+    Route::get('/getemployeesadmin', 'EmployeeController@getempAdmin')->name('employees.admins');
+    Route::get('/getemployeesope', 'EmployeeController@getempOpe')->name('employees.ope');
+});
+
 
 
 Auth::routes();

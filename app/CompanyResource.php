@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Marking extends Model
+class CompanyResource extends Model
 {
-    protected $guarded = [];
+    //
 }

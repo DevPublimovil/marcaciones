@@ -1,12 +1,12 @@
 .union-btn{
-    @apply table-cell text-indigo-600 cursor-pointer border border-indigo-400 rounded py-2 px-2 text-xs mx-0 my-0
+    @apply table-cell text-primary cursor-pointer border border-primary rounded py-2 px-2 text-xs mx-0 my-0
 }
 .union-btn:hover{
-    @apply bg-indigo-500 text-white
+    @apply bg-primary text-white
 }
 
 .union-btn-active{
-    @apply bg-indigo-500
+    @apply bg-primary
 }
 
 .btn-circle-xs{
@@ -18,11 +18,11 @@
 }
 
 .btn-circle{
-    @apply bg-transparent py-2 px-3 border border-indigo-500 rounded-full items-center justify-center
+    @apply bg-transparent py-2 px-3 border border-primary rounded-full items-center justify-center
 }
 
 .btn-circle:hover{
-    @apply bg-indigo-500 text-white
+    @apply bg-primary text-white
 }
 
 .button{
@@ -30,7 +30,7 @@
 }
 
 .button-one{
-    @apply text-white bg-indigo-600
+    @apply text-white bg-primary cursor-pointer
 }
 
 .button-one:hover{

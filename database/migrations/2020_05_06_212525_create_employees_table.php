@@ -19,10 +19,12 @@ class CreateEmployeesTable extends Migration
             $table->string('surname_employee',150);
             $table->string('cod_marking',15)->nullable();
             $table->decimal('salary',8,2)->nullable();
+            $table->string('position',150)->nullable();
             $table->unsignedBigInteger('type_employee')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('jefe_id')->nullable();
             $table->unsignedBigInteger('employees_company_id')->nullable();
+            $table->unsignedBigInteger('terminal_id')->nullable();
             $table->timestamps();
             
             $table->foreign('employees_company_id')->references('id')->on('employees_companies')
@@ -35,6 +37,9 @@ class CreateEmployeesTable extends Migration
                 ->onDelete('set null')
                 ->onUpdate('cascade');
             $table->foreign('jefe_id')->references('id')->on('employees')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+            $table->foreign('terminal_id')->references('id')->on('terminals')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });

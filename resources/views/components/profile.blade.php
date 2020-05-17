@@ -1,28 +1,31 @@
 <div>
-    <div class="w-full bg-white rounded overflow-hidden shadow-lg ">
+    <div class="w-full bg-white rounded overflow-hidden shadow-md">
         <div class="w-full h-50 bg-cover p-2" style="background-image: url('/images/bgprofile.jpg')">
-            <img class="mx-auto w-20 h-20 rounded-full"  src="" id="imageavatar">
+            <img class="mx-auto w-20 h-20 rounded-full"  src="{{ asset('/storage/' . $employee->user->avatar) }}" id="imageavatar">
             <p class="font-bold text-white text-center mt-2">
-    
+                {{ $employee->name_employee . ' ' . $employee->surname_employee }}
             </p>
         </div>
-        <div class="relative px-4 py-4">
-            <p class="text-gray-700 text-basem mb-2">
-                <strong>Dui: </strong>
+        <div class="relative px-4 py-4 text-gray-600">
+            <p class="text-base mb-2">
+                <strong class="text-gray-600">Correo: </strong> {{ $employee->user->email }}
             </p>
-            <p class="text-gray-700 text-basem mb-2">
-                <strong>Correo: </strong> {{ $user->email }}
+            <p class="text-base mb-2">
+                <strong class="text-gray-600">Puesto: </strong> {{ $employee->position }}
             </p>
-            <p class="text-gray-700 text-basem mb-2">
-                <strong>Departamento: </strong>
+            <p class="text-base mb-2">
+                <strong class="text-gray-600">País: </strong> {{ $employee->areaCountry->country->name }}
             </p>
-            <p class="text-gray-700 text-basem mb-2">
-                <strong>Puesto: </strong>
+            <p class="text-base mb-2">
+                <strong class="text-gray-600">Departamento: </strong> {{ $employee->areaCountry->departament->display_name }}
             </p>
-            <p class="text-gray-700 text-basem mb-2">
-                <strong>País: </strong>
+            <p class="text-base mb-2">
+                <strong class="text-gray-600">Compañia: </strong> {{ $employee->areaCountry->company->display_name }}
             </p>
-            <p class="flex text-gray-700 text-base justify-end items-end">
+            <p class="text-base mb-2">
+                <strong class="text-gray-600">Tipo de empleado: </strong> {{ $employee->typeemployee->name_type_employee }}
+            </p>
+            <p class="flex text-primary text-base justify-end items-end">
                 <a href="" class="btn-circle">
                     <i class="fa fa-pencil"></i>
                 </a>

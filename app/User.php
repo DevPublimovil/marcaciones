@@ -42,4 +42,9 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasOne(Employee::class);
     }
+
+    public function Terminalrrhh()
+    {
+        return $this->hasMany(TerminalRrhh::class);
+    }
 }

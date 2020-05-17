@@ -27,4 +27,9 @@ class Employee extends Model
     {
         return $this->hasMany('App\Marking', 'cod_marking', 'cod_marking');
     }
+
+    public function typeemployee()
+    {
+        return $this->belongsTo('App\EmployeeType', 'type_employee', 'id');
+    }
 }

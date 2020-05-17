@@ -8,4 +8,9 @@ class Terminal extends Model
 {
     //
     protected $guarded = [];
+
+    public function terminalrrhh()
+    {
+        return $this->hasMany(TerminalRrhh::class);
+    }
 }

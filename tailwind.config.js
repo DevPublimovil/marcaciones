@@ -3,8 +3,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#302df1',
-        primaryhover: '#0C81FE'
+        primary: '#335eea',
+        primaryhover: '#0C81FE',
+        primaryshadow: '#2924D4',
+        primaryred: '#FF5A5F',
+        primarygreen: '#42ba96',
       },
     },
   },

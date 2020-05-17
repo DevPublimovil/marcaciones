@@ -16,10 +16,12 @@ class CreateMarkingsTable extends Migration
         Schema::create('markings', function (Blueprint $table) {
             $table->id();
             $table->string('serialno',25)->nullable();
+            $table->string('cod_marking',15)->nullable();
             $table->dateTime('check_in')->nullable();
             $table->dateTime('check_out')->nullable();
-            $table->time('hours_worked')->nullable();
-            $table->time('extra_hours')->nullable();
+            $table->decimal('hours_worked',8,2)->nullable();
+            $table->decimal('extra_hours',8,2)->nullable();
+            $table->integer('late_arrivals')->nullable();
             $table->timestamps();
         });
     }

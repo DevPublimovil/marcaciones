@@ -7,6 +7,10 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.bus = new Vue();
+
+import VModal from 'vue-js-modal'
+Vue.use(VModal)
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,6 +24,9 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('header-component', require('./components/HeaderComponent.vue').default);
 Vue.component('menu-component', require('./components/MenuComponent.vue').default);
+Vue.component('my-markings', require('./components/MyMarkings.vue').default);
+Vue.component('bad-progress', require('./components/BadProgress.vue').default);
+Vue.component('modal-component', require('./components/ModalComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
