@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Employee;
-use App\Terminal;
-use App\TerminalRrhh;
-use App\TerminalEmployee;
+use App\CompanyResource;
 use App\User;
 use DataTables;
 
@@ -95,15 +93,16 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getempAdmin()
+    public function getEmployees()
     {
         $user = User::find(Auth::id());
-        $terminal = $user->terminalrrhh;
-        return $terminal;
+        $resource = $user->companiesResources()->orderBy('id','ASC')->first();
 
-        return DataTables::of(User::all())
+        $query = Employee::where('company_id',$resource->company_id)->with(['user','departament:id,display_name','company:id,display_name'])->orderBy('surname_employee','ASC')->get();
+
+        return DataTables::of($query)
         ->addColumn('avatar', function($row){
-            $image =  $row->avatar;
+            $image =  $row->user->avatar;
             return view('partials.avatar', compact('image'));
         })
         ->addColumn('actions', function($row){

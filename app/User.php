@@ -43,8 +43,8 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasOne(Employee::class);
     }
 
-    public function Terminalrrhh()
+    public function companiesResources()
     {
-        return $this->hasMany(TerminalRrhh::class);
+        return $this->hasMany(CompanyResource::class);
     }
 }

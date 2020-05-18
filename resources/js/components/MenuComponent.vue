@@ -34,6 +34,14 @@
                             </a>
                         </li>
                         <li class="nav-item rounded w-full mx-auto h-10 hover:bg-primaryhover">
+                            <a href="/marcaciones/index" class="nav-link">
+                            <i class="text-white nav-icon fa fa-check-circle-o"></i>
+                            <p class="text-white">
+                                Asistencia
+                            </p>
+                            </a>
+                        </li>
+                        <li class="nav-item rounded w-full mx-auto h-10 hover:bg-primaryhover">
                             <a href="/employees" class="nav-link">
                             <i class="text-white nav-icon fa fa-users"></i>
                             <p class="text-white">

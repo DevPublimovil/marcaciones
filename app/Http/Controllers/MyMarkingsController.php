@@ -67,9 +67,13 @@ class MyMarkingsController extends Controller
         //busco el empleado
         $employee = Employee::find($id);
 
-        //defino la consulta
-        $percent = $employee->markings()->sum('late_arrivals');
+        //establezco los filtros de mes
+        $first_day = Fecha::now()->startOfWeek()->format('Y-m-d');
+        $last_day = Fecha::now()->endOfWeek()->format('Y-m-d');
 
+        //defino la consulta
+        $percent = $employee->markings()->whereDate('markings.check_in','>=',$first_day)->whereDate('markings.check_out','<=',$last_day)->sum('late_arrivals');
+        
         //si obtengo datos de la consulta realizo la operacion para obtener el porcentaje de llegadas tarde
         if($percent){
             $percent = ($percent / 30) * 100;

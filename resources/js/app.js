@@ -34,6 +34,10 @@ Vue.component('my-modal-component', require('./components/MyModal.vue').default)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import DataViewer from './components/DataViewer.vue'
 const app = new Vue({
     el: '#app',
+    components:{
+        DataViewer
+    },
 });

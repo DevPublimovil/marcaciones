@@ -3,9 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Marking;
+use App\Helper\DataViewer;
 
 class Employee extends Model
 {
+    use DataViewer;
+
+    public static $columns = [
+        'id','name_employee', 'surname_employee', 'cod_marking', 'cod_terminal', 'salary', 'position', 'type_employee','user_id','jefe_id','company_id','departament_id','created_at','updated_at'
+    ];
+
     protected $guarded = [];
 
     public function user()
