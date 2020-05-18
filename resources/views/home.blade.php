@@ -35,7 +35,6 @@
         </div>
     </div>
 </div>
-<modal-component></modal-component>
 {{-- <bad-progress :employee="{{ $employee }}"></bad-progress>
 
 <div class="flex flex-wrap justify-between mx-2 py-2">

@@ -17,7 +17,12 @@ class CreateCompaniesTable extends Migration
             $table->id();
             $table->string('name',100);
             $table->string('display_name',100);
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('country_id')->references('id')->on('countries')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

@@ -18,7 +18,6 @@ class CreateDepartamentsTable extends Migration
             $table->string('name',150);
             $table->string('display_name',150);
             $table->timestamps();
-
         });
     }
 

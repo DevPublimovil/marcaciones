@@ -26,7 +26,7 @@ Vue.component('header-component', require('./components/HeaderComponent.vue').de
 Vue.component('menu-component', require('./components/MenuComponent.vue').default);
 Vue.component('my-markings', require('./components/MyMarkings.vue').default);
 Vue.component('bad-progress', require('./components/BadProgress.vue').default);
-Vue.component('modal-component', require('./components/ModalComponent.vue').default);
+Vue.component('my-modal-component', require('./components/MyModal.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

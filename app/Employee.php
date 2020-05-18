@@ -13,9 +13,14 @@ class Employee extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function areaCountry()
+    public function company()
     {
-        return $this->belongsTo('App\Employees_company', 'employees_company_id', 'id');
+        return $this->belongsTo(Company::class);
+    }
+
+    public function departament()
+    {
+        return $this->belongsTo(Departament::class);
     }
 
     public function actions()

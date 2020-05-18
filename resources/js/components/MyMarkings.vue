@@ -9,7 +9,7 @@
                         </a>
                     </div>
                     <div class="flex-initial">
-                         <span class="transition duration-500 ease-in-out button button-one text-xs border-b-4 border-primaryshadow transform hover:-translate-y-1 hover:scale-100" :class="{'union-btn-active' : period == 'semanal', 'text-white' : period == 'semanal'}" @click="showModal()">{{ action }}</span>
+                         <span class="transition duration-500 ease-in-out button button-one text-xs border-b-4 border-primaryshadow transform hover:-translate-y-1 hover:scale-100" :class="{'union-btn-active' : period == 'semanal', 'text-white' : period == 'semanal'}" @click="showModal = true">{{ action }}</span>
                     </div>
                 </div>
                 <input v-model="date" class="shadow appearance-none border border-indigo-400 sm:block hidden rounded w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-none text-xs" name="search" id="search" type="search" placeholder="Buscar">
@@ -33,21 +33,43 @@
                 </tbody>
             </table>
         </div>
+        <my-modal-component v-if="showModal" @close="showModal = false">
+            <div slot="body">
+                <div class="flex">
+                    <div class="flex-1">
+                        <datepicker :language="es" input-class="form-input" v-model="start_date"  placeholder="Selecciona la fecha"></datepicker>
+                    </div>
+                    <div class="flex-1">
+                        <datepicker :language="es" input-class="form-input" v-model="end_date" placeholder="Selecciona la fecha"></datepicker>
+                    </div>
+                </div>
+            </div>
+            <h3 slot="header">custom header</h3>
+        </my-modal-component>
     </div>
 </template>
 
 <script>
 import EventBus from '../eventbus.js';
+import Datepicker from 'vuejs-datepicker';
+import {en, es} from 'vuejs-datepicker/dist/locale';
+
 export default {
     props:['employee'],
+    components: {
+        Datepicker
+    },
     data(){
         return{
             markings: [],
-            period: 'semanal',
+            period: 1,
+            showModal: false,
             date: '',
             action:'Periodo',
-               title: 'A Vue.js and Tailwind CSS Modal',
-                body: 'Lorem Khaled Ipsum is a major key to success. The key to more success is to get a massage once a week, very important, major key, cloth talk. Hammock talk come soon. It’s important to use cocoa butter. It’s the key to more success, why not live smooth? Why live rough? Stay focused. Let’s see what Chef Dee got that they don’t want us to eat. Lion! The key is to enjoy life, because they don’t want you to enjoy life. I promise you, they don’t want you to jetski, they don’t want you to smile.'
+            start_date: '',
+            end_date:'',
+            en: en,
+            es: es
         }
     },
     computed: {
@@ -57,22 +79,17 @@ export default {
     },
     methods: {
         getMarkingsWeekly(){
-            this.period = 'semanal'
+            this.period = 1
             axios.get('/markings-weekly/' + this.employee).then(response => {
                 this.markings = response.data.data
-                EventBus.$emit('markings', this.period)
             })
         },
-        getMarkingsMonth(){
-            this.period = 'mensual'
+        getMarkings(){
+            this.period = 2
             axios.get('/markings-month/' + this.employee).then(response => {
                 this.markings = response.data.data
-                EventBus.$emit('markings', this.period)
             })
         },
-        showModal(){
-            this.$modal.show('hello-world');
-        }
     },
     mounted() {
         this.getMarkingsWeekly();

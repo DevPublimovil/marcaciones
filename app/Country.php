@@ -8,9 +8,9 @@ class Country extends Model
 {
     protected $guarded = [];
 
-    public function employees()
+    public function companies()
     {
-        return $this->hasManyThrough('App\Employee', 'App\Employees_company');
+        return $this->hasMany(Company::class);
     }
 }
  

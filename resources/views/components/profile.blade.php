@@ -14,13 +14,13 @@
                 <strong class="text-gray-600">Puesto: </strong> {{ $employee->position }}
             </p>
             <p class="text-base mb-2">
-                <strong class="text-gray-600">País: </strong> {{ $employee->areaCountry->country->name }}
+                <strong class="text-gray-600">País: </strong> {{ $employee->company->country->name }}
             </p>
             <p class="text-base mb-2">
-                <strong class="text-gray-600">Departamento: </strong> {{ $employee->areaCountry->departament->display_name }}
+                <strong class="text-gray-600">Departamento: </strong> {{ $employee->departament->display_name }}
             </p>
             <p class="text-base mb-2">
-                <strong class="text-gray-600">Compañia: </strong> {{ $employee->areaCountry->company->display_name }}
+                <strong class="text-gray-600">Compañia: </strong> {{ $employee->company->display_name }}
             </p>
             <p class="text-base mb-2">
                 <strong class="text-gray-600">Tipo de empleado: </strong> {{ $employee->typeemployee->name_type_employee }}

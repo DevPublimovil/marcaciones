@@ -13,18 +13,21 @@ class CompanySeeder extends Seeder
     public function run()
     {
         Company::create([
-            'name'          => 'publimovil',
+            'name'          => 'publimovil sv',
             'display_name'  => 'Publimovil',
+            'country_id'    => '1'
         ]);
 
         Company::create([
-            'name'          => 'publimagen',
+            'name'          => 'publimagen sv',
             'display_name'  => 'Publimagen',
+            'country_id'    => '1'
         ]);
 
         Company::create([
-            'name'          => 'urbman',
+            'name'          => 'urbman sv',
             'display_name'  => 'Urbman',
+            'country_id'    => '1'
         ]);
     }
 }

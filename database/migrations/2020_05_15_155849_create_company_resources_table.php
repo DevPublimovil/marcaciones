@@ -15,7 +15,12 @@ class CreateCompanyResourcesTable extends Migration
     {
         Schema::create('company_resources', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

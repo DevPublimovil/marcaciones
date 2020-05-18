@@ -28,7 +28,7 @@ class MyMarkingsController extends Controller
         $last_day   = Fecha::now()->endOfWeek()->format('Y-m-d');
 
         //defino la consulta con sus filtros
-        $query = $employee->markings()->whereDate('markings.check_in','>=',$first_day)->whereDate('markings.check_out','<=',$last_day)->orderBy('markings.check_in', 'ASC')->get();
+        $query = $employee->markings()->where('serialno',$employee->cod_terminal)->whereDate('markings.check_in','>=',$first_day)->whereDate('markings.check_out','<=',$last_day)->orderBy('markings.check_in', 'ASC')->get();
 
         //retorno una coleccion con los datos de sus marcaciones semanales
         return MyMarkings::collection($query);
