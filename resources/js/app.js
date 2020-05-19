@@ -8,6 +8,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 window.bus = new Vue();
+window.moment = require('moment');
 
 import VModal from 'vue-js-modal'
 Vue.use(VModal)

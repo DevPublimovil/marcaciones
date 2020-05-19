@@ -13,7 +13,7 @@ const path        = require('path');
  |
  */
 
-mix.browserSync(process.env.APP_URL || 'http://localhost:8000');
+//mix.browserSync(process.env.APP_URL || 'http://localhost:8000');
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')

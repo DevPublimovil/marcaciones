@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Employee;
 use App\User;
 use App\Marking;
-use App\CompanyResource;
+use App\Http\Resources\EmployeeResource;
 use Auth;
 use DataTables;
 use Carbon\Carbon as Fecha;
@@ -22,7 +22,8 @@ class MarkingsController extends Controller
 
      public function index()
      {
-        return view('markings.index');
+        $columns = Employee::$columns;
+        return view('markings.index', compact('columns'));
      }
 
     /**
@@ -30,15 +31,15 @@ class MarkingsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getAllMarkings()
+    public function getAllMarkings(Request $request)
     {
-        $model = Employee::SearchPaginateAndOrder();
-        $columns = Employee::$columns;
+        $column = $this->selectColumn($request->column);
+        $searchcolumn = $this->selectColumn($request->search_column);
+        $model = Employee::SearchPaginateAndOrder($column, $searchcolumn);
 
-        return response()->json([
-            'model' => $model,
-            'columns'   => $columns
-        ]);
+        $query = EmployeeResource::collection($model);
+        
+        return $query;
         /* $user = User::find(Auth::id());
         $resource = $user->companiesResources()->orderBy('id','ASC')->first();
 
@@ -82,5 +83,33 @@ class MarkingsController extends Controller
              'extra_hours'  => $extra_hours,
              'late_arrivals'   => $late_arrivals,
          ],200);
+     }
+
+     public function selectColumn($column)
+     {
+        switch ($column) {
+            case 'apellidos':
+                return 'surname_employee';
+                break;
+            case 'codigo':
+                return 'cod_marking';
+                break;
+            case 'tipo':
+                return 'type_employee';
+                break;
+            case 'compañia':
+                return 'company_id';
+                break;
+            case 'departamento':
+                return 'departament_id';
+                break;
+            case 'codigo':
+                return 'cod_marking';
+                break;
+            
+            default:
+                return 'name_employee';
+                break;
+        }
      }
 }
