@@ -33,11 +33,13 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/markings-month/{id}', 'MyMarkingsController@showMonthDials')->name('markings.month');
     Route::get('/percent/{id}', 'MyMarkingsController@showPercent')->name('markings.percent');
     Route::resource('/employees', 'EmployeeController');
-    Route::get('/getemployees', 'EmployeeController@getEmployees')->name('employees.getall');
-    Route::get('/getemployeesope', 'EmployeeController@getempOpe')->name('employees.ope');
+    Route::get('/employees/markings/{employee}', 'EmployeeController@markings')->name('employees.markings');
+    Route::get('/apiemployees', 'Resources\EmployeeJsonController@index')->name('apiemployees.index');
+    Route::put('/apiemployees/markings/{id}', 'Resources\EmployeeJsonController@markings')->name('apiemployees.markings');
     Route::get('/marcaciones/index', 'MarkingsController@index')->name('marcaciones.index');
     Route::get('/marcaciones-all', 'MarkingsController@getAllMarkings')->name('marcaciones.getall');
     Route::get('/marcaciones/horas/semanales/{id}', 'MarkingsController@calcHoursWeekly')->name('marcaciones.horassemanales');
+    Route::post('/reports', 'ReportsController@index')->name('reports.index');
 });
 
 

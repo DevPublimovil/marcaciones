@@ -1,25 +1,32 @@
 <template>
     <div class="dv text-base">
         <div class="flex w-11/12 mx-auto">
-            <div class="flex-1 text-gray-700 text-left  px-2 py-2">
-                <p class="left-0 inline-block">{{ title }}</p>
+            <div class="flex-1 text-gray-700 text-left px-2 pt-5">
+               <h2 class="text-xl">{{ title}}</h2>
             </div>
-            <div class="flex-1 text-gray-700 text-right  px-4 py-2">
+            <div class="flex-1 text-gray-700 text-right py-2">
                <div class="flex items-center">
                    <div>
                        <span class="mx-1">Desde: </span>
                    </div>
                    <div>
-                        <datepicker :language="es" input-class="form-input h-6" v-model="start_date"  placeholder="Selecciona la fecha"></datepicker>
+                        <datepicker :language="es" input-class="form-input" @selected="changeDate()" v-model="start_date"  placeholder="Selecciona la fecha"></datepicker>
                    </div>
                    <div>
                        <span class="mx-1">Hasta: </span>
                    </div>
                    <div>
-                        <datepicker :language="es" input-class="form-input h-6 " v-model="end_date"  placeholder="Selecciona la fecha"></datepicker>
+                        <datepicker :language="es" input-class="form-input " @selected="changeDate()" v-model="end_date"  placeholder="Selecciona la fecha"></datepicker>
                    </div>
                    <div>
-                       <button class="text-xs bg-primary hover:bg-primaryhover ml-1 h-6 text-white font-semibold py-1 px-4 border border-gray-400 rounded shadow">Ir</button>
+                        <form action="/reports" method="POST" target="_blank">
+                            <input type="hidden" name="_token" :value="token">
+                            <input type="hidden" name="start" :value="start_date">
+                            <input type="hidden" name="end" :value="end_date">
+                            <button type="submit" class="inline-block align-top text-xs h-full bg-white hover:bg-blue-100 text-gray-800 font-semibold px-4 border border-gray-400 rounded" >
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
                    </div>
                </div>
             </div>
@@ -29,7 +36,7 @@
                 <div class="dv-header flex justify-between p-0">
                     <div>
                         <span class="inline-block align-middle">Mostrar</span>
-                        <select class="ml-2 mr-2 border border-gray-400 cursor-pointer h-6 w-12 align-bottom rounded" v-model="query.per_page" @change="fetchIndexData()">
+                        <select class="form-select" v-model="query.per_page" @change="fetchIndexData()">
                             <option value="10" selected>10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -38,12 +45,9 @@
                         <span class="inline-block align-middle">empleados</span>
                     </div>
                     <div>
-                        <select class="inline-block border border-gray-400 cursor-pointer h-6 w-auto align-bottom rounded" v-model="query.search_column"> 
-                            <option v-for="(column, index) in columns" :key="index">{{ column }}</option>
-                        </select>
-                        <input type="text" class="inline-block h-6 border border-gray-400 rounded p-1" placeholder="Buscar" 
+                        <input type="text" class="inline-block form-input" placeholder="Buscar" 
                         v-model="query.search_input" @keyup.enter="fetchIndexData()">
-                        <button type="button" class="inline-block align-top text-xs h-6 bg-white hover:bg-gray-100 text-gray-800 font-semibold px-4 border border-gray-400 rounded" @click="fetchIndexData()">
+                        <button type="button" class="inline-block align-top text-xs h-full bg-white hover:bg-blue-100 text-gray-800 font-semibold px-4 border border-gray-400 rounded" @click="fetchIndexData()">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -52,32 +56,39 @@
                     <table class="table-auto w-full text-center">
                         <thead>
                             <th></th>
-                            <th class="cursor-pointer" v-for="(column, index) in columns" :key="index" @click="toggleOrder(column)">
+                            <th class="cursor-pointer px-4 py-2" v-for="(column, index) in columns" :key="index" @click="toggleOrder(column)">
                                 <span>{{ column }}</span>
                                 <span class="dv-table-column" v-if="column === query.column">
                                     <span v-if="query.direction == 'asc'">&uarr;</span>
                                     <span v-if="query.direction == 'desc'">&darr;</span>
                                 </span>
                             </th>
+                            <th></th>
                         </thead>
                         <tbody class="text-gray-700 shadow-inner">
                             <template v-for="(row, index) in model">
-                                <tr class="py-2 hover:bg-primaryhover hover:text-white cursor-pointer" :class="{ 'bg-primary text-white': opened.includes(index) }" @click="details(index)" :key="index">
+                                <tr class="hover:bg-primaryhover hover:text-white cursor-pointer" :class="{ 'bg-primary text-white': opened.includes(index) }" @click="details(index)" :key="index">
                                     <td v-if="opened.includes(index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></td>
                                     <td v-else><i class="fa fa-plus-circle" aria-hidden="true"></i></td>
-                                    <td>{{ row.first_name }}</td>
+                                    <td class="px-4 py-2">{{ row.first_name }}</td>
                                     <td>{{ row.last_name }}</td>
                                     <td>{{ row.cod }}</td>
                                     <td>{{ row.position }}</td>
                                     <td>{{ row.type }}</td>
                                     <td>{{ row.company }}</td>
                                     <td>{{ row.departament }}</td>
+                                    <td>
+                                        <span>
+                                            <a href=""><i class="fa fa-id-card-o" aria-hidden="true"></i></a>
+                                        </span>
+                                        <span><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
+                                    </td>
                                 </tr>
-                                <tr class="text-left text-xs" v-if="opened.includes(index)" :key="row.id+index">
-                                    <td colspan="8">
-                                        <span><b>Horas trabajadas: </b>{{ row.hoursworked }}</span><br>
-                                        <span><b>Horas extras: </b>{{ row.extrahours }}</span><br>
-                                        <span><b>llegadas tarde: </b>{{ row.latearrivals }}</span>
+                                <tr class="text-left text-base" v-if="opened.includes(index)" >
+                                    <td colspan="8" class="pl-4">
+                                        <span><b>Horas trabajadas: </b>{{ markings.hours_worked }}</span><br>
+                                        <span><b>Horas extras: </b>{{ markings.extra_hours }}</span><br>
+                                        <span><b>llegadas tarde: </b>{{ markings.late_arrivals }}</span>
                                     </td>
                                 </tr>
                             </template>
@@ -89,8 +100,8 @@
                         <span>Mostrando  {{ meta.from }} - {{ meta.to }} de {{ meta.total }} empleados</span>
                     </div>
                     <div>
-                        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" @click="prev()"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-                        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" @click="next()"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                        <button type="button" class="bg-white hover:bg-blue-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" @click="prev()" :disabled="links.prev == null"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                        <button class="bg-white hover:bg-blue-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" @click="next()" :disabled="links.next == null"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -101,26 +112,28 @@
 import Datepicker from 'vuejs-datepicker';
 import {en, es} from 'vuejs-datepicker/dist/locale';
 export default {
-    props:['title','source','columns'],
+    props:['title','source','columns','start','end'],
     components: {
         Datepicker
     },
     data(){
         return{
-            start_date: moment().startOf('week').toString(),
-            end_date: moment().endOf('week').toString(),
             en: en,
             es: es,
             model: [],
             meta:[],
             links:[],
             opened: [],
+            markings:[],
+            start_date:'',
+            token:'',
+            end_date:'',
+            titulo: '',
             query:{
                 page: 1,
                 column: 'nombre',
                 direction: 'desc',
                 per_page: 10,
-                search_column: 'nombre',
                 search_operator: 'equal',
                 search_input: ''
             },
@@ -146,6 +159,7 @@ export default {
                 this.query.page++
                 this.fetchIndexData()
                 this.opened = []
+                this.markings = []
             }
         },
         prev(){
@@ -154,15 +168,29 @@ export default {
                 this.query.page--
                 this.fetchIndexData()
                 this.opened = []
+                this.markings = []
             }
         },
         details(employee){
+            let vm = this
+            let url = '/apiemployees/markings/' + this.model[employee].id
             const index = this.opened.indexOf(employee);
             if (index > -1) {
+                vm.markings = []
                 this.opened.splice(index, 1)
             } else {
+                axios.put(url,{
+                    start_date: this.start_date,
+                    end_date: this.end_date
+                }).then(response => {
+                    vm.markings = response.data
+                })
                 this.opened.push(employee)
             }
+        },
+        changeDate(){
+            this.markings = []
+            this.opened = []
         },
         toggleOrder(column){
             if(column === this.query.column)
@@ -186,12 +214,17 @@ export default {
         fetchIndexData(){
             let vm = this
             axios.get(`${this.source}?column=${this.query.column}&direction=${this.query.direction}&page=${this.query.page}
-            &per_page=${this.query.per_page}&search_column=${this.query.search_column}&search_input=${this.query.search_input}`).then(response =>{
+            &per_page=${this.query.per_page}&search_input=${this.query.search_input}`).then(response =>{
                 vm.model = response.data.data
                 vm.meta = response.data.meta
                 vm.links = response.data.links
             })
         },
+    },
+    mounted() {
+        this.start_date = this.start
+        this.end_date = this.end
+        this.token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     },
 }
 </script>

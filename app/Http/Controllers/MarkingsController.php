@@ -8,7 +8,6 @@ use App\User;
 use App\Marking;
 use App\Http\Resources\EmployeeResource;
 use Auth;
-use DataTables;
 use Carbon\Carbon as Fecha;
 use Illuminate\Support\Facades\DB;
 
@@ -33,24 +32,12 @@ class MarkingsController extends Controller
      */
     public function getAllMarkings(Request $request)
     {
-        $column = $this->selectColumn($request->column);
-        $searchcolumn = $this->selectColumn($request->search_column);
-        $model = Employee::SearchPaginateAndOrder($column, $searchcolumn);
-
-        $query = EmployeeResource::collection($model);
         
-        return $query;
-        /* $user = User::find(Auth::id());
-        $resource = $user->companiesResources()->orderBy('id','ASC')->first();
+        
 
-        $query = Employee::where('company_id',$resource->company_id)->with(['user','departament:id,display_name','company:id,display_name'])->orderBy('surname_employee','ASC')->get();
-
-        return DataTables::of($query)
-        ->addColumn('actions', function($row){
-            $profile = $row->markings()->sum('hours_worked');
-            return view('partials.info', compact('profile'));
-        })
-        ->make(true); */
+      /*   'hoursworked' => $this->markings()->whereBetween('check_in',[$start_week, $end_week])->sum('hours_worked'),
+                'extrahours' => $this->markings()->whereBetween('check_in',[$start_week, $end_week])->sum('extra_hours'),
+                'latearrivals' => $this->markings()->whereBetween('check_in',[$start_week, $end_week])->sum('late_arrivals'), */
     }
 
     /**
@@ -85,31 +72,5 @@ class MarkingsController extends Controller
          ],200);
      }
 
-     public function selectColumn($column)
-     {
-        switch ($column) {
-            case 'apellidos':
-                return 'surname_employee';
-                break;
-            case 'codigo':
-                return 'cod_marking';
-                break;
-            case 'tipo':
-                return 'type_employee';
-                break;
-            case 'compañia':
-                return 'company_id';
-                break;
-            case 'departamento':
-                return 'departament_id';
-                break;
-            case 'codigo':
-                return 'cod_marking';
-                break;
-            
-            default:
-                return 'name_employee';
-                break;
-        }
-     }
+     
 }

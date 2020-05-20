@@ -93,41 +93,8 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getEmployees()
-    {
-        $user = User::find(Auth::id());
-        $resource = $user->companiesResources()->orderBy('id','ASC')->first();
-
-        $query = Employee::where('company_id',$resource->company_id)->with(['user','departament:id,display_name','company:id,display_name'])->orderBy('surname_employee','ASC')->get();
-
-        return DataTables::of($query)
-        ->addColumn('avatar', function($row){
-            $image =  $row->user->avatar;
-            return view('partials.avatar', compact('image'));
-        })
-        ->addColumn('actions', function($row){
-            $profile = route('employees.show', $row->id);
-            return view('partials.actions', compact('profile'));
-        })
-        ->make(true);
-    }
-    /**
-     * retorna todos los empleados operativos
-     * 
-     * @return \Illuminate\Http\Response
-     */
-
-    public function getempOpe()
-    {
-        return DataTables::of(User::all())
-        ->addColumn('avatar', function($row){
-            $image =  $row->avatar;
-            return view('partials.avatar', compact('image'));
-        })
-        ->addColumn('actions', function($row){
-            $profile = route('employees.show', $row->id);
-            return view('partials.actions', compact('profile'));
-        })
-        ->make(true);
-    }
+     public function markings(Request $request)
+     {
+        return view('markings.details');
+     }
 }

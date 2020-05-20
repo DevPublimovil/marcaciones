@@ -17,7 +17,7 @@ trait DataViewer
         'like' => 'LIKE'
     ]; */
 
-    public function scopeSearchPaginateAndOrder($query, $columnsformatter, $searchcolumn)
+    public function scopeSearchPaginateAndOrder($query, $columnsformatter, $company)
     {
         $request = app()->make('request');
         $v = Validator::make($request->only([
@@ -36,33 +36,13 @@ trait DataViewer
         }
         return $query
             ->orderBy($columnsformatter,$request->direction)
-            ->where(function($query) use ($request,$searchcolumn){
+            ->where('company_id',$company)
+            ->where(function($query) use($request){
                 if($request->search_input)
                 {
-                    if($searchcolumn == 'type_employee')
-                    {
-                        $query->typeemployee()->where($searchcolumn, 'LIKE', '%' . $request->search_input . '%');
-                    }else if($searchcolumn == 'company_id')
-                    {
-                        $query->join('companies','companies.id','employees.company_id')->where('companies.display_name', 'LIKE', '%' . $request->search_input . '%');
-                    }
-                    else if($searchcolumn == 'departament_id')
-                    {
-                        $query->departament()->where($searchcolumn, 'LIKE', '%' . $request->search_input . '%');
-                    }
-                    else
-                    {
-                        $query->where($searchcolumn, 'LIKE', '%' . $request->search_input . '%');
-                    }
-                    /* if ($request->search_operator == 'in') 
-                    {
-                        $query->whereIn($request->search_column,explode(',', $request->search_input));
-                    } */
-                    /* else
-                    {
-                        $query->where($request->search_column, $this->operators[$request->search_operator],
-                            $request->search_input);
-                    } */
+                    return $query->where('name_employee', 'LIKE', '%' . $request->search_input . '%')
+                        ->orWhere('surname_employee', 'LIKE', '%' . $request->search_input . '%')
+                        ->orWhere('employees.cod_marking', 'LIKE', '%' . $request->search_input . '%');
                 }
             })
             ->paginate($request->per_page);
