@@ -35,11 +35,14 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('/employees', 'EmployeeController');
     Route::get('/employees/markings/{employee}', 'EmployeeController@markings')->name('employees.markings');
     Route::get('/apiemployees', 'Resources\EmployeeJsonController@index')->name('apiemployees.index');
+    Route::get('/apiemployees/show/{employee}', 'Resources\EmployeeJsonController@showEmployees')->name('apiemployees.show');
     Route::put('/apiemployees/markings/{id}', 'Resources\EmployeeJsonController@markings')->name('apiemployees.markings');
     Route::get('/marcaciones/index', 'MarkingsController@index')->name('marcaciones.index');
     Route::get('/marcaciones-all', 'MarkingsController@getAllMarkings')->name('marcaciones.getall');
     Route::get('/marcaciones/horas/semanales/{id}', 'MarkingsController@calcHoursWeekly')->name('marcaciones.horassemanales');
-    Route::post('/reports', 'ReportsController@index')->name('reports.index');
+    Route::get('/reports', 'ReportsController@index')->name('reports.index');
+    Route::get('/reports/create/{employee}', 'ReportsController@create')->name('reports.create');
+    Route::get('/apiassists/show/{id}', 'Resources\ReportsJsonController@showAssistsDetails')->name('apiassists.show');
 });
 
 

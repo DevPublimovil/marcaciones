@@ -8,7 +8,7 @@ use App\Helper\DataViewer;
 
 class Employee extends Model
 {
-    use DataViewer;
+    use DataViewer; 
 
     public static $columns = [
         'nombre', 'apellidos', 'codigo', 'cargo', 'tipo','compañia','departamento'

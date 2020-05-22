@@ -49,6 +49,14 @@
                             </p>
                             </a>
                         </li>
+                        <li class="nav-item rounded w-full mx-auto h-10 hover:bg-primaryhover">
+                            <a href="/reports" class="nav-link">
+                            <i class="text-white nav-icon fa fa-id-card" aria-hidden="true"></i>
+                            <p class="text-white">
+                                Tarjeta
+                            </p>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

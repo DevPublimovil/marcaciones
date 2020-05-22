@@ -13,6 +13,7 @@ module.exports = {
   },
   variants: {},
   plugins: [
-    require('@tailwindcss/custom-forms')
+    require('@tailwindcss/custom-forms'),
+    require('tailwindcss-plugins/pagination')
   ],
 }

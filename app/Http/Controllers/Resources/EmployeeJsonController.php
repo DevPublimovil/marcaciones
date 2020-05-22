@@ -43,6 +43,16 @@ class EmployeeJsonController extends Controller
         ]);
     }
 
+    public function showEmployees(){
+
+        $user = User::find(Auth::id());
+        $resource = $user->companiesResources->first();
+
+        $employees = Employee::where('company_id',$resource->company_id)->orderBy('name_employee','ASC')->paginate(1);
+
+        return response()->json($employees)
+    }
+
     public function selectColumn($column)
      {
         switch ($column) {

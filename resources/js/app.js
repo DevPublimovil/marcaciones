@@ -28,6 +28,8 @@ Vue.component('menu-component', require('./components/MenuComponent.vue').defaul
 Vue.component('my-markings', require('./components/MyMarkings.vue').default);
 Vue.component('bad-progress', require('./components/BadProgress.vue').default);
 Vue.component('my-modal-component', require('./components/MyModal.vue').default);
+Vue.component('data-table-component', require('./components/DataTable.vue').default);
+Vue.component('details-markings-component', require('./components/DetailsMarkings.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -41,4 +43,8 @@ const app = new Vue({
     components:{
         DataViewer
     },
+    data:{
+        start:'',
+        end: '',
+    }
 });
