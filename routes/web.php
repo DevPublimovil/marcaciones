@@ -29,6 +29,7 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 Route::group(['middleware' => ['auth']], function(){
+    Route::resource('/actions', 'ActionController');
     Route::get('/markings-weekly/{id}', 'MyMarkingsController@showWeeklyDials')->name('markings.weekly');
     Route::get('/markings-month/{id}', 'MyMarkingsController@showMonthDials')->name('markings.month');
     Route::get('/percent/{id}', 'MyMarkingsController@showPercent')->name('markings.percent');

@@ -34,7 +34,7 @@
         </a>
     @endif
     <div class="block items-center justify-center text-center">
-        <button class="w-1/2 mt-8 bg-orange-500 hover:bg-orange-400 h-10 rounded-lg m-2 outline-none border-none text-white uppercase" type="submit">{{ __('Iniciar sesión') }}</button>
+        <button class="w-1/2 mt-8 bg-blue-800 hover:bg-blue-900 h-10 rounded-lg m-2 outline-none border border-blue-600 text-white uppercase" type="submit">{{ __('Iniciar sesión') }}</button>
     </div>
 </form>
 @endsection

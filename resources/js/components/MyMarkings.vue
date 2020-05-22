@@ -1,20 +1,28 @@
-<<template>
+<template>
     <div class="mis-marcaciones ">
         <div class="bg-white rounded overflow-hidden shadow-md p-1">
             <div class="flex w-full justify-between mb-2">
+                <div class="flex items-center border-b border-b-2 border-blue-700 py-2 ml-4">
+                    <span><i class="fa fa-search" aria-hidden="true"></i></span>
+                    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" aria-label="Busqueda">
+                </div>
+                <!--<input v-model="date" class="form-input" name="search" id="search" type="search" placeholder="Buscar">-->
                 <div class="flex ">
                     <div class="flex-initial pl-1">
-                        <a href="" class="transition duration-500 ease-in-out button text-xs bg-gray-300 text-primary border-b-4 border-gray-400 transform hover:-translate-y-1 hover:scale-100 ..." >
+                        <span class="cursor-pointer transition duration-500 ease-in-out button bg-gray-300 text-blue-700 border-b-4 border-gray-400 transform hover:-translate-y-1 hover:scale-100 " :class="{'union-btn-active' : period == 'semanal', 'text-white' : period == 'semanal'}" @click="showModal = true">{{ action }}</span>
+                    </div>
+                    <div class="flex-initial">
+                        <a href="/actions/create" class="transition duration-500 ease-in-out button bg-blue-600 text-white border-b-4 border-blue-700 transform hover:-translate-y-1 hover:scale-100 " >
                             Crear acción de personal
                         </a>
                     </div>
-                    <div class="flex-initial">
-                         <span class="transition duration-500 ease-in-out button button-one text-xs border-b-4 border-primaryshadow transform hover:-translate-y-1 hover:scale-100" :class="{'union-btn-active' : period == 'semanal', 'text-white' : period == 'semanal'}" @click="showModal = true">{{ action }}</span>
-                    </div>
                 </div>
-                <input v-model="date" class="shadow appearance-none border border-indigo-400 sm:block hidden rounded w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-none text-xs" name="search" id="search" type="search" placeholder="Buscar">
             </div>
-            <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-1">
+            <div class="w-1/2 mx-auto" v-if="searchDay.length == 0">
+                <img src="/images/empty.svg">
+                <p class="text-gray-500 font-bold text-center mb-4">No se encontró ningún registro</p>
+            </div>
+            <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-1" v-else>
                 <thead>
                     <tr class="border-b border-gray-400 border-t border-gray-400">
                         <th class="px-4 py-2 text-gray-700 ">Día</th>
@@ -32,7 +40,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
         <my-modal-component v-if="showModal" @close="showModal = false">
             <div slot="body">
                 <div class="flex">
@@ -46,6 +53,7 @@
             </div>
             <h3 slot="header">custom header</h3>
         </my-modal-component>
+        </div>
     </div>
 </template>
 

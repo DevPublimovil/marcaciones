@@ -41,18 +41,21 @@ class MakeMarkings extends Command
      */
     public function handle()
     {
-
+/* 
         $date_start = Fecha::now()->subHours(24)->format('Y-m-d H:i:s');
-        $date_end   = Fecha::now()->format('Y-m-d H:i:s');
+        $date_end   = Fecha::now()->format('Y-m-d H:i:s'); */
+        
+        $date_start = '2020-05-13 06:00:00';
+        $date_end   = '2020-05-14 06:00:00';
         
         $markings = Webster_checkinout::whereBetween('checktime',[$date_start, $date_end])->orderBy('checktime','ASC')->get();
         //Log::info($markings->count());
         
         foreach ($markings as $key => $marking) {
-            $marcacion = Marking::where('cod_marking',$marking->userid)->whereNotNull('check_in')->whereNull('check_out')->whereDate('created_at',Fecha::parse($date_end)->format('Y-m-d'))->exists();
+            $marcacion = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereNull('check_out')->whereDate('created_at',Fecha::parse($date_end)->format('Y-m-d'))->exists();
             if($marcacion)
             {
-                $marc = Marking::where('cod_marking',$marking->userid)->whereNotNull('check_in')->whereNull('check_out')->whereDate('created_at',Fecha::parse($date_end)->format('Y-m-d'))->first();
+                $marc = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereNull('check_out')->whereDate('created_at',Fecha::parse($date_end)->format('Y-m-d'))->first();
                 $marc->update([
                     'check_out' => $marking->checktime,
                 ]);

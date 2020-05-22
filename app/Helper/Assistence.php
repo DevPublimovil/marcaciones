@@ -24,14 +24,15 @@ class Assistence {
             $marking = Marking::where('serialno',$employee->cod_terminal)->where('cod_marking',$employee->cod_marking)->checktime($value)->first();
             if($marking)
             {
+                $late = ($marking->late_arrivals > 60) ? self::convertMinutes($marking->late_arrivals) : null;
                 $markings[] = [
                     'date' => Fecha::parse($value)->format('d/m/Y'),
                     'day'   => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
                     'in' => Fecha::parse($marking->check_in)->format('H:i a'),
                     'out'    => Fecha::parse($marking->check_out)->format('H:i a'),
-                    'hours_worked' => $marking->hours_worked ?? 0,
-                    'extra_hours' => ($marking->extra_hours) ?? 0,
-                    'late_arrivals' => $marking->late_arrivals ?? 0,
+                    'hours_worked' => $marking->hours_worked ?? null,
+                    'extra_hours' => $marking->extra_hours ?? null,
+                    'late_arrivals' => $late ?? $marking->late_arrivals,
                 ];
             }else{
                 $markings[] = [
@@ -39,9 +40,9 @@ class Assistence {
                     'day'   => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
                     'in' => 'sin marcacion',
                     'out'    => 'sin marcacion',
-                    'hours_worked' => 0,
-                    'extra_hours' => 0,
-                    'late_arrivals' => 0,
+                    'hours_worked' => null,
+                    'extra_hours' => null,
+                    'late_arrivals' => null,
                 ];
             }
         }
@@ -100,6 +101,6 @@ class Assistence {
         $time = floor($total / 60);
         $total -= $time * 60;
 
-        return  sprintf('%02d:%02d', $time, $total);;
+        return  sprintf('%02d:%02d', $time, $total);
     }
 }

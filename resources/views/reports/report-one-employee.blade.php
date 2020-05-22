@@ -75,9 +75,12 @@
                         <td>{{ $marking['day'] }}</td>
                         <td>{{ $marking['in'] }}</td>
                         <td>{{ $marking['out'] }}</td>
-                        <td>{{ $markings['total_hours_worked'] }}</td>
+                        <td>{{ $marking['hours_worked'] }}</td>
+                        <td>{{ $marking['extra_hours'] }}</td>
+                        <td>{{ $marking['late_arrivals'] }}</td>
+                       {{--  <td>{{ $markings['total_hours_worked'] }}</td>
                         <td>{{ $markings['total_extra_hours'] }}</td>
-                        <td>{{ $markings['total_late_arrivals'] }}</td>
+                        <td>{{ $markings['total_late_arrivals'] }}</td> --}}
                     </tr>
                 @endforeach
             </tbody>

@@ -116,3 +116,14 @@
 .dataTables_wrapper .dataTables_filter input{
     @apply text-gray-700 mx-2 px-2 leading-tight border-2 border-gray-200 rounded py-1
 }
+
+
+  .btn {
+    @apply font-bold py-2 px-4 rounded;
+  }
+  .btn-blue {
+    @apply bg-blue-600 text-white;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }

@@ -6,7 +6,10 @@
 
 body{
     font-family: 'Poppins', sans-serif;
-    background-color: #302df1;
+    background: #1488CC;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2B32B2, #1488CC);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2B32B2, #1488CC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
 }
 
 .wave{
@@ -68,13 +71,13 @@ form h2{
 }
 
 .input-div.focus .i i{
-    color: #5a67d8;
+    color: #ebf8ff;
 }
 
 .input-div.focus div h5{
     top: -5px;
     font-size: 15px;
-    color: #a3bffa;
+    color: #ebf8ff;
 }
 
 .input-div.focus::after, .input-div.focus::before{
@@ -96,7 +99,7 @@ form h2{
 }
 
 .i i{
-    color: #d9d9d9;
+    color: #fff;
     transition: .3s;
 }
 
@@ -110,7 +113,7 @@ form h2{
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
+    color: #fff;
     font-size: 18px;
     transition: .3s;
 }
@@ -139,5 +142,5 @@ a{
 }
 
 a:hover{
-    color: #5a67d8;
+    color: #bee3f8;
 }
