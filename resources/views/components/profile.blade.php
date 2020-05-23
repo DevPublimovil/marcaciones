@@ -22,9 +22,6 @@
             <p class="text-base mb-2">
                 <strong class="text-blue-800"><i class="fa fa-building" aria-hidden="true"></i></strong> {{ $employee->company->display_name }}
             </p>
-            <p class="text-base mb-2">
-                <strong class="text-blue-800"><i class="fa fa-id-card" aria-hidden="true"></i></strong> {{ $employee->typeemployee->name_type_employee }}
-            </p>
             <p class="flex text-primary text-base justify-end items-end">
                 <a href="" class="btn-circle">
                     <i class="fa fa-pencil"></i>

@@ -26,7 +26,7 @@
                             </a>
                         </li>
                         <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                            <a href="/acciones" class="nav-link">
+                            <a href="/actions" class="nav-link">
                             <i class="text-white nav-icon fa fa-history"></i>
                             <p class="text-white">
                                 Historial

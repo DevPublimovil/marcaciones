@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\ActionType;
+use App\Action;
+use App\PersonalAction;
 
 class ActionController extends Controller
 {
@@ -16,7 +18,9 @@ class ActionController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::find(Auth::id());
+        $personal_actions = $user->employee->actions()->orderBy('created_at','DESC')->paginate(6);
+        return view('personalactions.history', compact('user','personal_actions'));
     }
 
     /**
@@ -39,7 +43,23 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $action = Action::create([
+            'other_action'  => $request->other_action ?? null,
+            'description'   => $request->description,
+            'employee_id'   => $request->employee,
+        ]);
+
+        if($request->actions)
+        {
+            foreach ($action as $key => $value) {
+                PersonalAction::create([
+                    'action_id'         => $action->id,
+                    'type_action_id'    => $value
+                ]);
+            }
+        }
+
+        return redirect()->route('home')->with('message', 'Tu acción de personal se ha creado con exitó, puedes revisar su estado en tu historial');
     }
 
     /**

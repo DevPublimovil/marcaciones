@@ -42,7 +42,7 @@ class CalculateHours extends Command
      */
     public function handle()
     {
-        $markings_local = Marking::whereDate('created_at',Fecha::now())->get();
+        $markings_local = Marking::whereDate('created_at','2020-05-15')->get();
         foreach ($markings_local as $key => $marking) {
             $employee = Employee::where('cod_marking', $marking->cod_marking)->first();
             

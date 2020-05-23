@@ -30,6 +30,7 @@ Vue.component('bad-progress', require('./components/BadProgress.vue').default);
 Vue.component('my-modal-component', require('./components/MyModal.vue').default);
 Vue.component('data-table-component', require('./components/DataTable.vue').default);
 Vue.component('details-markings-component', require('./components/DetailsMarkings.vue').default);
+Vue.component('history-component', require('./components/Historycomponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -46,5 +47,10 @@ const app = new Vue({
     data:{
         start:'',
         end: '',
-    }
+    },
+    mounted() {
+        setTimeout(function() {
+            $("#notification").fadeOut(1500);
+        },3000);
+    },
 });

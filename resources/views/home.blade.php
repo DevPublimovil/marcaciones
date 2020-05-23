@@ -1,6 +1,20 @@
 @extends('layouts.app')
+@section('styles')
+    
+<style>
+    .alert{
+        z-index: 500;
+        position: fixed;
+        top: 0;
+        right: 0;
+    }
+</style>
+@endsection
 
 @section('content')
+@if (session('message'))
+    <x-alert :message="session('message')"></x-alert>
+@endif
 {{-- <form action="{{ route('logout') }}" method="POST">
 @csrf
 <button type="submit">salir</button>

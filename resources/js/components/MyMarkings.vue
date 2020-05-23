@@ -22,7 +22,7 @@
                 <img src="/images/empty.svg">
                 <p class="text-gray-500 font-bold text-center mb-4">No se encontró ningún registro</p>
             </div>
-            <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-1" v-else>
+            <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-4" v-else>
                 <thead>
                     <tr class="border-b border-gray-400 border-t border-gray-400">
                         <th class="px-4 py-2 text-gray-700 ">Día</th>
