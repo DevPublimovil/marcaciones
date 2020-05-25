@@ -74,8 +74,9 @@
 </head>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed sidebar-collapse">
     <div class="wrapper" id="app" >
+        <x-menu-component></x-menu-component>
         <header-component :avatar="'{{ Auth::user()->avatar }}'"></header-component>
-        <menu-component></menu-component>
+        {{-- <menu-component></menu-component> --}}
         <div class="content-wrapper">
             <div class="loader-bg">
                 <div class="loader"></div>

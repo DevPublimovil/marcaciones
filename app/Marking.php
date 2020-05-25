@@ -10,6 +10,6 @@ class Marking extends Model
 
     public function scopeChecktime($query, $date)
     {
-        return $query->whereDate('check_in',$date)->orwhereDate('check_out',$date);
+        return $query->whereDate('check_in',$date)->orWhereDate('check_out',$date);
     }
 }

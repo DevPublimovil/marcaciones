@@ -3,6 +3,7 @@ namespace App\Helper;
 use App\Employee;
 use \Carbon\Carbon as Fecha;
 use App\Marking;
+use App\Action;
 
 class Assistence {
     
@@ -22,6 +23,8 @@ class Assistence {
 
         foreach ($period as $key => $value) {
             $marking = Marking::where('serialno',$employee->cod_terminal)->where('cod_marking',$employee->cod_marking)->checktime($value)->first();
+            $action = Action::where('employee_id', $employee->id)->whereDate('created_At',Fecha::parse($value)->format('Y-m-d'))->first();
+            $permission = ($action) ? 'SI' : 'AUSENTE';
             if($marking)
             {
                 $late = ($marking->late_arrivals > 60) ? self::convertMinutes($marking->late_arrivals) : null;
@@ -33,16 +36,18 @@ class Assistence {
                     'hours_worked' => $marking->hours_worked ?? null,
                     'extra_hours' => $marking->extra_hours ?? null,
                     'late_arrivals' => $late ?? $marking->late_arrivals,
+                    'permission' => ($marking->check_in && $marking->check_out) ? '' : $permission
                 ];
             }else{
                 $markings[] = [
                     'date' => Fecha::parse($value)->format('d/m/Y'),
                     'day'   => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
-                    'in' => 'sin marcacion',
-                    'out'    => 'sin marcacion',
+                    'in' => 'sin marcación',
+                    'out'    => 'sin marcación',
                     'hours_worked' => null,
                     'extra_hours' => null,
                     'late_arrivals' => null,
+                    'permission' => $permission
                 ];
             }
         }

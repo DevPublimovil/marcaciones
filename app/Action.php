@@ -13,4 +13,40 @@ class Action extends Model
     {
         return $this->hasMany(PersonalAction::class);
     }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function scopeNoCheckGte($query){
+        $query->where('check_gte',0);
+    }
+
+    public function scopeCheckGte($query){
+        $query->where('check_gte',1);
+    }
+
+    public function scopeNoCheckRh($query){
+        $query->where('check_rh',0);
+    }
+
+    public function scopeCheckRh($query){
+        $query->where('check_rh',1);
+    }
+
+    public function scoperCheck($query)
+    {
+        $query->where('check_gte',1)->where('check_rh',1);
+    }
+
+    public function scopeOrNoCheck($query)
+    {
+        $query->where('check_gte',0)->orWhere('check_rh',0);
+    }
+
+    protected $casts = [
+        'check_gte' => 'boolean',
+        'check_rh' => 'boolean'
+    ];
 }

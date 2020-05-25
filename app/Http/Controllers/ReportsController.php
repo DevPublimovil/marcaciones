@@ -20,9 +20,17 @@ class ReportsController extends Controller
     public function index(Request $request)
     {
         $user = User::find(Auth::id());
+       if($user->role->name == 'rrhh')
+       {
         $resource = $user->companiesResources->first();
 
         $employees = Employee::where('company_id',$resource->company_id)->orderBy('name_employee','ASC')->paginate(1);
+       }
+       else if($user->role->name == 'gerente')
+       {
+           $employees = $user->employee->workers()->orderBy('name_employee','ASC')->paginate(1);
+       }
+       
         return view('reports.details', compact('employees'));
     }
 
@@ -33,7 +41,9 @@ class ReportsController extends Controller
 
         $data = [
             'employee' => $employee,
-            'markings' => $markings
+            'markings' => $markings,
+            'start' => $request->start_date,
+            'end' => $request->end_date
         ];
 
         $pdf = PDF::loadView('reports.report-one-employee', $data)->setPaper('letter','landscape');

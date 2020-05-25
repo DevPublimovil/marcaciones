@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+USE Illuminate\Contracts\Translation\HasLocalePreference;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -47,4 +48,9 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasMany(CompanyResource::class);
     }
+
+    /* public function preferredLocale()
+    {
+        return $this->locale;
+    } */
 }

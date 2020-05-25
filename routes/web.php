@@ -30,8 +30,8 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('/actions', 'ActionController');
-    Route::get('/apiactions/pending', 'Resources\ActionsJsonController@showPendingActions')->name('apiactions.showpending');
-    Route::get('/apiactions/approved', 'Resources\ActionsJsonController@showApprovedActions')->name('apiactions.showapproved');
+    Route::get('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
+    Route::get('/apiactions/{type}', 'Resources\ActionsJsonController@showActions')->name('apiactions.show');
     Route::get('/markings-weekly/{id}', 'MyMarkingsController@showWeeklyDials')->name('markings.weekly');
     Route::get('/markings-month/{id}', 'MyMarkingsController@showMonthDials')->name('markings.month');
     Route::get('/percent/{id}', 'MyMarkingsController@showPercent')->name('markings.percent');

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-lg pt-2 w-11/12 rounded-lg mx-auto shadow-lg">
+    <div class="container-lg mx-auto py-2 w-11/12">
         <history-component></history-component>
     </div>
 @endsection

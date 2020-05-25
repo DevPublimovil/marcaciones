@@ -6,9 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{$employee->name_employee . ' ' . $employee->surname_employee }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap');
         @page{
             margin: 0%;
-            padding: 0%;
+            padding: 0.5cm;
+            font-family: 'Source Code Pro', monospace;
+        }
+        body{
+            padding: 0.5cm
         }
         .table{
             width: 100%
@@ -30,34 +35,55 @@
         .uppercase{
             text-transform: uppercase
         }
+        .text-gray{
+            color: #4a5568
+        }
+        table {
+            border-collapse: collapse;
+        }
+
+        td,th {
+            border: 1px solid #4a5568;
+            border-top: none;
+            border-left: none;
+        }
+        .bnone{
+            border-right: none;
+        }
+        .btop{
+            border-top: 1px solid #4a5568;
+        }
+        .mt-4{
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
     <header>
-        <table class="table t-header">
+        <table class="table t-header ">
             <thead>
-                <th class="text-left">Lista de asistencia se mamanal</th>
-                <th class="text-right">{{ Carbon\Carbon::now()->format('d/m/Y H:i a') }}</th>
+                <th class="text-left bnone">Lista de asistencia {{  Carbon\Carbon::parse($start)->format('d/m/Y') }} - {{ Carbon\Carbon::parse($end)->format('d/m/Y') }}</th>
+                <th class="text-right bnone">{{ Carbon\Carbon::now()->format('d/m/Y H:i a') }}</th>
             </thead>
         </table>
     </header>
     <main>
-        <table class="table">
+        <table class="table table-markings mt-4">
             <thead>
-                <th class="text-left" style="width:30%">
-                    {{ $employee->cod_marking}}
+                <th class="text-left bnone" style="width:30%">
+                   <strong>Código:</strong> {{ $employee->cod_marking}}
                 </th>
-                <th class="text-center uppercase" style="width:40%">
+                <th class="text-center uppercase bnone" style="width:40%">
                     {{ $employee->name_employee . ' ' . $employee->surname_employee }}
                 </th>
-                <th class="text-right uppercase" style="width:30%">
+                <th class="text-right uppercase bnone" style="width:30%">
                     {{ $employee->departament->display_name }} | {{ $employee->company->display_name }}
                 </th>
             </thead>
         </table>
 
-        <table class="table">
-            <thead>
+        <table class="table mt-4">
+            <thead class="btop">
                 <tr>
                     <th>Fecha</th>
                     <th>Día</th>
@@ -66,9 +92,10 @@
                     <th>Horas Trabajadas</th>
                     <th>Horas Extras</th>
                     <th>Minutos Tarde</th>
+                    <th class="bnone">Permiso Tomado</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center text-gray">
                 @foreach ($markings['markings'] as $marking)
                     <tr>
                         <td>{{ $marking['date'] }}</td>
@@ -78,12 +105,26 @@
                         <td>{{ $marking['hours_worked'] }}</td>
                         <td>{{ $marking['extra_hours'] }}</td>
                         <td>{{ $marking['late_arrivals'] }}</td>
-                       {{--  <td>{{ $markings['total_hours_worked'] }}</td>
-                        <td>{{ $markings['total_extra_hours'] }}</td>
-                        <td>{{ $markings['total_late_arrivals'] }}</td> --}}
+                        <td class="bnone">{{ $marking['permission'] }}</td>
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <th>TOTAL:</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                    {{ $markings['total_hours_worked'] }}
+                </th>
+                <th>
+                    {{ $markings['total_extra_hours'] }}
+                </th>
+                <th>
+                    {{ $markings['total_late_arrivals'] }}
+                </th>
+                <th class="bnone"></th>
+            </tfoot>
         </table>
     </main>
     <footer>

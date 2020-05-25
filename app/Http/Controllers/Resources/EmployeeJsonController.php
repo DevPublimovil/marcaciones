@@ -50,7 +50,7 @@ class EmployeeJsonController extends Controller
 
         $employees = Employee::where('company_id',$resource->company_id)->orderBy('name_employee','ASC')->paginate(1);
 
-        return response()->json($employees)
+        return response()->json($employees);
     }
 
     public function selectColumn($column)

@@ -10,22 +10,91 @@ use App\Employee;
 use App\Action;
 use App\PersonalAction;
 use App\Http\Resources\ActionResource;
+use App\CompanyResource;
 
 class ActionsJsonController extends Controller
 {
-    public function showPendingActions()
-    {
-        $user = User::find(Auth::id());
 
-        $data = ActionResource::collection(Action::all());
-        return response()->json($data, 200);
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 
-    public function showApprovedActions()
+    public function showActions($type)
     {
         $user = User::find(Auth::id());
+        if($type == 1)
+        {
+            return $this->showPendingActions($user);
+        }else if($type == 2){
+            return $this->showApprovedActions($user);
+        }
+    }
 
-        $data = ActionResource::collection(Employee::all());
-        return response()->json($data, 200);
+
+    public function showPendingActions($user)
+    {
+        if($user->role->name == "rrhh"){
+            $company = CompanyResource::where('user_id',$user->id)->first();
+            $query = Action::whereHas('employee', function ($query) use ($company) {
+                $query->where('company_id',$company->company_id);
+            })->CheckGte()
+                ->NoCheckRh()
+                ->with(['employee'])
+                ->orderBy('actions.created_at','ASC')->get();
+        }
+        else if($user->role->name == "gerente")
+        {
+            $query = Action::whereHas('employee', function ($query) use ($user) {
+                $query->where('jefe_id',$user->employee->id);
+            })->NoCheckGte()
+                ->with(['employee'])
+                ->orderBy('actions.created_at','ASC')->get();
+        }
+        else{
+            $employee = Employee::where('user_id',$user->id)->first();
+            $query = $employee->actions()->OrNoCheck()->get();
+        }
+
+        $data = ActionResource::collection($query);
+        return response()->json([
+            'actions' => $data,
+            'user' => $user
+        ], 200);
+    }
+
+    public function showApprovedActions($user)
+    {
+        if($user->role->name == "rrhh"){
+            $company = CompanyResource::where('user_id',$user->id)->first();
+            $query = Action::whereHas('employee', function ($query) use ($company) {
+                $query->where('company_id',$company->company_id);
+            })->CheckRh()
+                ->with(['employee'])
+                ->orderBy('actions.created_at','ASC')->get();
+        }
+        else if($user->role->name == "gerente")
+        {
+            $query = Action::whereHas('employee', function ($query) use ($user) {
+                $query->where('jefe_id',$user->employee->id);
+            })->CheckGte()
+                ->with(['employee'])
+                ->orderBy('actions.created_at','ASC')->get();
+        }
+        else{
+            $employee = Employee::where('user_id',$user->id)->first();
+            $query = $employee->actions()->CheckGte()->CheckRh()->get();
+        }
+
+        $data = ActionResource::collection($query);
+        return response()->json([
+            'actions' => $data,
+            'user' => $user
+             ], 200);
     }
 }

@@ -8,6 +8,9 @@ use App\User;
 use App\ActionType;
 use App\Action;
 use App\PersonalAction;
+use Illuminate\Support\Facades\Hash;
+use App\Notifications\ApprovedAction;
+use App\Notifications\NoApprovedAction;
 
 class ActionController extends Controller
 {
@@ -18,9 +21,7 @@ class ActionController extends Controller
      */
     public function index()
     {
-        $user = User::find(Auth::id());
-        $personal_actions = $user->employee->actions()->orderBy('created_at','DESC')->paginate(6);
-        return view('personalactions.history', compact('user','personal_actions'));
+        return view('personalactions.history');
     }
 
     /**
@@ -81,7 +82,24 @@ class ActionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $action = Action::find($id);
+        $user = User::find(Auth::id());
+        $employee = $action->employee->user;
+        if($user->role->name == 'gerente')
+        {
+            $action->update([
+                'check_gte' => 1
+            ]);
+        }else if($user->role->name == 'rrhh')
+        {
+            $action->update([
+                'check_rh' => 1
+            ]);
+        }
+
+        $employee->notify(new ApprovedAction);
+
+        return back()->with('message', '¡' . $employee->name . 'ha sido notificado!');
     }
 
     /**
@@ -105,5 +123,17 @@ class ActionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function noApproved($id)
+    {
+        
+        $action = Action::find($id);
+        $user = User::find(Auth::id());
+        $employee = $action->employee->user;
+
+        $employee->notify(new NoApprovedAction);
+
+        return back()->with('message', '¡' . $employee->name . 'ha sido notificado!');
     }
 }
