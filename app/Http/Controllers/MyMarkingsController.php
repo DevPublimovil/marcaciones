@@ -8,6 +8,7 @@ use App\User;
 use App\Employee;
 use App\Marking;
 use Carbon\Carbon as Fecha;
+use Storage;
 use App\Http\Resources\MarkingsEmployee as MyMarkings;
 
 class MyMarkingsController extends Controller
@@ -40,14 +41,15 @@ class MyMarkingsController extends Controller
      * @param int id
      * @return \Illuminate\Http\Response
      */
-    public function showMonthDials($id) 
+    public function showPeriod(Request $request, $id) 
     {
         //busco el empleadoñ
         $employee = Employee::find($id);
 
         //establezco los filtros de mes
-        $first_day = Fecha::now()->startOfMonth()->format('Y-m-d');
-        $last_day = Fecha::now()->endOfMonth()->format('Y-m-d');
+        $first_day = Fecha::parse($request->startDate)->format('Y-m-d');
+        $last_day = Fecha::parse($request->endDate)->format('Y-m-d');
+
 
         //defino la consulta con sus filtros
         $query = $employee->markings()->whereDate('markings.check_in','>=',$first_day)->whereDate('markings.check_out','<=',$last_day)->orderBy('markings.check_in', 'ASC')->get();

@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "moment": "^2.25.3",
+        "sweetalert": "^2.1.2",
         "tailwindcss": "^1.4.5",
         "vue-js-modal": "^2.0.0-rc.3",
         "vuejs-datepicker": "^1.6.2"

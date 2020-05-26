@@ -46,7 +46,7 @@ class ActionsJsonController extends Controller
             })->CheckGte()
                 ->NoCheckRh()
                 ->with(['employee'])
-                ->orderBy('actions.created_at','ASC')->get();
+                ->orderBy('actions.created_at','DESC')->get();
         }
         else if($user->role->name == "gerente")
         {
@@ -54,11 +54,11 @@ class ActionsJsonController extends Controller
                 $query->where('jefe_id',$user->employee->id);
             })->NoCheckGte()
                 ->with(['employee'])
-                ->orderBy('actions.created_at','ASC')->get();
+                ->orderBy('actions.created_at','DESC')->get();
         }
         else{
             $employee = Employee::where('user_id',$user->id)->first();
-            $query = $employee->actions()->OrNoCheck()->get();
+            $query = $employee->actions()->OrNoCheck()->orderBy('created_at','DESC')->get();
         }
 
         $data = ActionResource::collection($query);
@@ -76,7 +76,7 @@ class ActionsJsonController extends Controller
                 $query->where('company_id',$company->company_id);
             })->CheckRh()
                 ->with(['employee'])
-                ->orderBy('actions.created_at','ASC')->get();
+                ->orderBy('actions.created_at','DESC')->get();
         }
         else if($user->role->name == "gerente")
         {
@@ -84,11 +84,11 @@ class ActionsJsonController extends Controller
                 $query->where('jefe_id',$user->employee->id);
             })->CheckGte()
                 ->with(['employee'])
-                ->orderBy('actions.created_at','ASC')->get();
+                ->orderBy('actions.created_at','DESC')->get();
         }
         else{
             $employee = Employee::where('user_id',$user->id)->first();
-            $query = $employee->actions()->CheckGte()->CheckRh()->get();
+            $query = $employee->actions()->CheckGte()->CheckRh()->orderBy('created_at','DESC')->get();
         }
 
         $data = ActionResource::collection($query);

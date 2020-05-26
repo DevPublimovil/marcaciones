@@ -6,24 +6,24 @@
                 {{ $employee->name_employee . ' ' . $employee->surname_employee }}
             </p>
         </div>
-        <div class="relative px-4 py-4 text-gray-600">
-            <p class="text-base mb-2">
+        <div class="relative px-4 py-4 text-gray-600 text-sm">
+            <p class="mb-2">
                 <strong class="text-blue-800"><i class="fa fa-envelope" aria-hidden="true"></i> </strong> {{ $employee->user->email }}
             </p>
-            <p class="text-base mb-2">
+            <p class="mb-2">
                 <strong class="text-blue-800"><i class="fa fa-briefcase" aria-hidden="true"></i></strong> {{ $employee->position }}
             </p>
-            <p class="text-base mb-2">
+            <p class="mb-2">
                 <strong class="text-blue-800"><i class="fa fa-flag" aria-hidden="true"></i> </strong> {{ $employee->company->country->name }}
             </p>
-            <p class="text-base mb-2">
+            <p class="mb-2">
                 <strong class="text-blue-800"><i class="fa fa-users" aria-hidden="true"></i></strong> {{ $employee->departament->display_name }}
             </p>
-            <p class="text-base mb-2">
+            <p class="mb-2">
                 <strong class="text-blue-800"><i class="fa fa-building" aria-hidden="true"></i></strong> {{ $employee->company->display_name }}
             </p>
-            <p class="flex text-primary text-base justify-end items-end">
-                <a href="" class="btn-circle">
+            <p class="flex text-primary justify-end items-end">
+                <a href="{{ route('employees.edit', Auth::id()) }}" class="btn-circle">
                     <i class="fa fa-pencil"></i>
                 </a>
             </p>

@@ -15,6 +15,6 @@ class PersonalAction extends Model
 
     public function typeactions()
     {
-        return $this->belongsTo(ActionType::class);
+        return $this->belongsTo('App\ActionType', 'type_action_id', 'id');
     }
 }

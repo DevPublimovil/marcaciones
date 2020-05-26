@@ -5,7 +5,7 @@
                 <div class="w-full py-2">
                     <p class="text-xs text-orange-500 mb-1">Porcentaje de llegadas tardías</p>
                     <div class="rounded bg-gray-500">
-                        <div class="bg-barprogress rounded text-xs leading-none hover:bg-red-600 cursor-pointer py-1 text-center text-white" :style="{width:50+'%'}">
+                        <div class="bg-barprogress rounded text-xs leading-none hover:bg-red-600 cursor-pointer py-1 text-center text-white" :style="{width:percent+'%'}">
                             {{percent + '%'}}
                         </div>
                     </div>

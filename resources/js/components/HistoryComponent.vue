@@ -23,7 +23,7 @@
                             </div>
                             <div class="mt-2">
                                 <div class="timeline-item rounded-lg border border-gray-400 text-gray-600 ml-16 p-0 mt-0 relative">
-                                    <div class="flex justify-between">
+                                    <!--<div class="flex justify-between">
                                         <div>
                                             <h3 class="timeline-header text-xl text-gray-800 leading-loose p-1 m-0" v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
                                                 {{ action.name_employee }}
@@ -38,24 +38,50 @@
                                                 <i class="fa fa-clock-o"></i> {{ action.diffHumans }}
                                             </span>
                                         </div>
-                                    </div>
+                                    </div>-->
                 
                                     <div class="timeline-body p-2">
-                                        <p class="mb-3">{{ action.description }}</p>
+                                    <div class="progress">
+                                        <div class="circle done">
+                                            <span class="label">1</span>
+                                            <span class="title">Personal</span>
+                                        </div>
+                                        <span class="bar done"></span>
+                                        <div class="circle done">
+                                            <span class="label">2</span>
+                                            <span class="title">Address</span>
+                                        </div>
+                                        <span class="bar half"></span>
+                                        <div class="circle active">
+                                            <span class="label">3</span>
+                                            <span class="title">Payment</span>
+                                        </div>
+                                        <span class="bar"></span>
+                                        <div class="circle">
+                                            <span class="label">4</span>
+                                            <span class="title">Review</span>
+                                        </div>
+                                        <span class="bar"></span>
+                                        <div class="circle">
+                                            <span class="label">5</span>
+                                            <span class="title">Finish</span>
+                                        </div>
+                                        </div>
+                                        <!--<p class="mb-3">{{ action.description }}</p>-->
                                         <div class="flex justify-end">
-                                            <a :href="'/actions/' + action.id" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1">
+                                            <a :href="'/actions/' + action.id" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1" target="_blank">
                                                 Ver pdf <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                             </a>
                                             <a :href="'/actions/'+ action.id + '/edit'" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1" v-if="role.role.name == 'empleado' && isPending">
                                                 Editar
                                             </a>
                                             <template v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
-                                                <a :href="'/actions/noapproved/'+ action.id" class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1" v-if="isPending">
+                                                <button class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1" v-if="isPending" @click="changeNoApproved(action.id)">
                                                     No aprobar
-                                                </a>
-                                                <a :href="'/actions/'+ action.id + '/edit'" class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1" v-if="isPending">
+                                                </button>
+                                                <button class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1" v-if="isPending" @click="changeApproved(action.id)">
                                                     Aprobar
-                                                </a>
+                                                </button>
                                             </template>
                                         </div>
                                     </div>
@@ -82,11 +108,13 @@ export default {
             actions: [],
             isPending: true,
             isApproved: false,
-            role: []
+            role: [],
+            token: ''
         }
     },
     created(){
         this.fetchPending();
+        //this.token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     },
     methods: {
         fetchPending(){
@@ -105,6 +133,93 @@ export default {
                 this.isApproved = true
             })
         },
+        changeApproved(action){
+            axios.put('/actions/approved/' + action).then(response => {
+                this.fetchPending()
+                console.log(response.data)
+            })
+        },
+        changeNoApproved(action){
+            axios.put('/actions/noapproved/' + action).then(response => {
+                this.fetchPending()
+                console.log(response.data)
+            })
+        }
     },
 }
 </script>
+<style>
+*, *:after, *:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* Form Progress */
+.progress {
+  width: 1000px;
+  margin: 20px auto;
+  text-align: center;
+}
+.progress .circle,
+.progress .bar {
+  display: inline-block;
+  background: #fff;
+  width: 40px; height: 40px;
+  border-radius: 40px;
+  border: 1px solid #d5d5da;
+}
+.progress .bar {
+  position: relative;
+  width: 80px;
+  height: 6px;
+  top: -33px;
+  margin-left: -5px;
+  margin-right: -5px;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+.progress .circle .label {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 32px;
+  margin-top: 3px;
+  color: #b5b5ba;
+  font-size: 17px;
+}
+.progress .circle .title {
+  color: #b5b5ba;
+  font-size: 13px;
+  line-height: 30px;
+  margin-left: -5px;
+}
+
+/* Done / Active */
+.progress .bar.done,
+.progress .circle.done {
+  background: #eee;
+}
+.progress .bar.active {
+  background: linear-gradient(to right, #EEE 40%, #FFF 60%);
+}
+.progress .circle.done .label {
+  color: #FFF;
+  background: #8bc435;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+.progress .circle.done .title {
+  color: #444;
+}
+.progress .circle.active .label {
+  color: #FFF;
+  background: #0c95be;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+.progress .circle.active .title {
+  color: #0c95be;
+}
+</style>

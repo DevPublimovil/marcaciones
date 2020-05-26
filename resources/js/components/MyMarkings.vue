@@ -1,10 +1,12 @@
 <template>
     <div class="mis-marcaciones ">
-        <div class="bg-white rounded overflow-hidden shadow-md p-1">
+        <div class="bg-white rounded overflow-hidden shadow-md px-6 py-4">
             <div class="flex w-full justify-between mb-2">
-                <div class="flex items-center border-b border-b-2 border-blue-700 py-2 ml-4">
-                    <span><i class="fa fa-search" aria-hidden="true"></i></span>
-                    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" aria-label="Busqueda">
+                <div class="flex items-center border-b border-b-2 border-blue-700 py-2" >
+                    <template v-if="searchDay.length > 0">
+                        <span><i class="fa fa-search" aria-hidden="true"></i></span>
+                        <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" v-model="date" aria-label="Busqueda">
+                    </template>
                 </div>
                 <!--<input v-model="date" class="form-input" name="search" id="search" type="search" placeholder="Buscar">-->
                 <div class="flex ">
@@ -40,20 +42,29 @@
                     </tr>
                 </tbody>
             </table>
-        <my-modal-component v-if="showModal" @close="showModal = false">
-            <div slot="body">
-                <div class="flex">
-                    <div class="flex-1">
-                        <datepicker :language="es" input-class="form-input" v-model="start_date"  placeholder="Selecciona la fecha"></datepicker>
+        </div>
+         <my-modal-component v-if="showModal" @close="showModal = false">
+            <template v-slot:header-modal>
+                <p class="text-2xl font-bold">Elige un rango de fechas</p>
+            </template>
+            <template v-slot:body-modal>
+                <div class="flex justify-between">
+                    <div class="flex-1 px-1">
+                        <span class="font-bold">Desde:</span>
+                        <input type="date" class="form-input w-full" name="" id="" v-model="startDate" min="2019-12-31">
                     </div>
-                    <div class="flex-1">
-                        <datepicker :language="es" input-class="form-input" v-model="end_date" placeholder="Selecciona la fecha"></datepicker>
+                    <div class="flex-1 px-1">
+                    <span class="font-bold text-left">Hasta:</span>
+                        <input type="date" class="form-input w-full" name="" id="" v-model="endDate" value="2020-05-21">
                     </div>
                 </div>
-            </div>
-            <h3 slot="header">custom header</h3>
-        </my-modal-component>
-        </div>
+            </template>
+            <template v-slot:footer-modal>
+                <button class="focus:outline-none btn border border-gray-600 mx-1 hover:bg-gray-200" @click="showModal = false">Cancelar</button>
+                <button
+                    class="focus:outline-none btn border border-blue-700 bg-blue-600 text-white hover:bg-blue-500 mx-1" @click="changePeriod()">Aceptar</button>
+            </template>
+         </my-modal-component>
     </div>
 </template>
 
@@ -71,13 +82,13 @@ export default {
         return{
             markings: [],
             period: 1,
-            showModal: false,
             date: '',
             action:'Periodo',
-            start_date: '',
-            end_date:'',
             en: en,
-            es: es
+            es: es,
+            showModal:false,
+            startDate: '',
+            endDate: ''
         }
     },
     computed: {
@@ -92,15 +103,27 @@ export default {
                 this.markings = response.data.data
             })
         },
-        getMarkings(){
-            this.period = 2
-            axios.get('/markings-month/' + this.employee).then(response => {
-                this.markings = response.data.data
-            })
+        customFormatter(date) {
+            return moment(date).format('YYYY-MM-DD');
         },
+        changePeriod(){
+            this.period = 2
+            let vm = this
+            axios.get('/markings/period/' + this.employee,{
+                params:{
+                    startDate: vm.startDate,
+                    endDate: vm.endDate
+                }
+            }).then(response => {
+                this.markings = response.data.data
+                this.showModal = false
+            })
+        }
     },
     mounted() {
         this.getMarkingsWeekly();
+        this.startDate = moment().startOf('week').format('YYYY-MM-DD');
+        this.endDate = moment().endOf('week').format('YYYY-MM-DD');
     },
 }
 </script>

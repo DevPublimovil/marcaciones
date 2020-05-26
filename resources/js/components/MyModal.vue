@@ -1,97 +1,42 @@
 <template>
-    <div>
-        <transition name="modal">
-            <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container mt-40">
-
-                <div class="modal-header">
-                    <slot name="header">
-                    default header
-                    </slot>
-                </div>
-
-                <div class="modal-body">
-                    <slot name="body">
-                    default body
-                    </slot>
-                </div>
-
-                <div class="modal-footer">
-                    <slot name="footer">
-                    default footer
-                    <button class="modal-default-button" @click="$emit('close')">
-                        OK
-                    </button>
-                    </slot>
-                </div>
+    <div class="modal-component">
+        <div class="main-modal fixed w-full h-100 inset-0 overflow-hidden flex justify-center items-center animated fadeIn faster"
+		style="background: rgba(0,0,0,.7);">
+            <div class="border border-teal-500 shadow-lg modal-container bg-white w-11/12 xl:max-w-2xl mx-auto rounded shadow-lg overflow-y-auto">
+                <div class="modal-content py-4 text-left px-6">
+                    <div class="flex justify-between items-center pb-3">
+                        <slot name="header-modal"></slot>
+                        <div class="modal-close cursor-pointer z-50" @click="$emit('close')">
+                            <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 18 18">
+                                <path
+                                    d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="my-5">
+                       <slot name="body-modal"></slot>
+                    </div>
+                    <div class="flex justify-end pt-2">
+                       <slot name="footer-modal"></slot>
+                    </div>
                 </div>
             </div>
-            </div>
-        </transition>
+        </div>
     </div>
 </template>
+<script>
+export default {
+    data(){
+        return{
+            
+        }
+    }
+}
+</script>
 <style>
-    .modal-mask {
-        position: fixed;
-        z-index: 9998;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .5);
-        display: table;
-        transition: opacity .3s ease;
-    }
-
-    /* .modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
-    } */
-
-    .modal-container {
-    width: 50%;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-    transition: all .3s ease;
-    font-family: Helvetica, Arial, sans-serif;
-    }
-
-    .modal-header h3 {
-    margin-top: 0;
-    color: #42b983;
-    }
-
-    .modal-body {
-    margin: 20px 0;
-    }
-
-    .modal-default-button {
-    float: right;
-    }
-
-    /*
-    * The following styles are auto-applied to elements with
-    * transition="modal" when their visibility is toggled
-    * by Vue.js.
-    *
-    * You can easily play with the modal transition by editing
-    * these styles.
-    */
-
-    .modal-enter {
-    opacity: 0;
-    }
-
-    .modal-leave-active {
-    opacity: 0;
-    }
-
-    .modal-enter .modal-container,
-    .modal-leave-active .modal-container {
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
+    .animated {
+        z-index: 1050;
     }
 </style>

@@ -64,12 +64,10 @@
 <script>
 import Datepicker from 'vuejs-datepicker';
 import {en, es} from 'vuejs-datepicker/dist/locale';
-import DataTable from './DataTable.vue'
 export default {
     props:['employee','startdate','enddate'],
     components: {
         Datepicker,
-        DataTable
     },
     data(){
         return{

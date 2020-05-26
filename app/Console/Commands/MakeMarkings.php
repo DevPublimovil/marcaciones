@@ -42,11 +42,11 @@ class MakeMarkings extends Command
     public function handle()
     {
 
-        $date_start = Fecha::now()->subHours(24)->format('Y-m-d H:i:s');
-        $date_end   = Fecha::now()->format('Y-m-d H:i:s');
+        /* $date_start = Fecha::now()->subHours(24)->format('Y-m-d H:i:s');
+        $date_end   = Fecha::now()->format('Y-m-d H:i:s'); */
         
-       /*  $date_start = '2020-05-21 06:00:00';
-        $date_end   = '2020-05-22 06:00:00'; */
+        $date_start = '2020-05-25 06:00:00';
+        $date_end   = '2020-05-26 06:00:00';
         
         $markings = Webster_checkinout::whereBetween('checktime',[$date_start, $date_end])->orderBy('checktime','ASC')->get();
         //Log::info($markings->count());
@@ -59,7 +59,8 @@ class MakeMarkings extends Command
                 $marc->update([
                     'check_out' => $marking->checktime,
                 ]);
-            }else
+            }
+            else
             {
                 Marking::create([
                     'cod_marking'       => $marking->userid,

@@ -11,6 +11,7 @@ use App\PersonalAction;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\ApprovedAction;
 use App\Notifications\NoApprovedAction;
+use PDF;
 
 class ActionController extends Controller
 {
@@ -44,15 +45,16 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
+        $user = User::find(Auth::id());
         $action = Action::create([
-            'other_action'  => $request->other_action ?? null,
+            'other_action'  => $request->otherAction ?? null,
             'description'   => $request->description,
-            'employee_id'   => $request->employee,
+            'employee_id'   => $user->employee->id,
         ]);
 
         if($request->actions)
         {
-            foreach ($action as $key => $value) {
+            foreach ($request->actions as $key => $value) {
                 PersonalAction::create([
                     'action_id'         => $action->id,
                     'type_action_id'    => $value
@@ -60,7 +62,11 @@ class ActionController extends Controller
             }
         }
 
-        return redirect()->route('home')->with('message', 'Tu acción de personal se ha creado con exitó, puedes revisar su estado en tu historial');
+        if($action){
+            return 'exito';
+        }else{
+            return 'exito';
+        }
     }
 
     /**
@@ -71,7 +77,18 @@ class ActionController extends Controller
      */
     public function show($id)
     {
-        //
+        $action = Action::find($id);
+        $employee = $action->employee;
+        $company = $employee->company;
+        $resource = $company->resourceCompany()->first();
+        $rh =  $resource->user;
+        $personal_actions = $action->personalaction;
+        $pdf = PDF::loadView('reports.actionpdf',[
+            'action' => $action,
+            'rh' => $rh,
+            'personal_actions' => $personal_actions,
+        ])->setPaper('letter','portrait');
+        return $pdf->stream($employee->name_employee . '.pdf');
     }
 
     /**
@@ -82,24 +99,7 @@ class ActionController extends Controller
      */
     public function edit($id)
     {
-        $action = Action::find($id);
-        $user = User::find(Auth::id());
-        $employee = $action->employee->user;
-        if($user->role->name == 'gerente')
-        {
-            $action->update([
-                'check_gte' => 1
-            ]);
-        }else if($user->role->name == 'rrhh')
-        {
-            $action->update([
-                'check_rh' => 1
-            ]);
-        }
-
-        $employee->notify(new ApprovedAction);
-
-        return back()->with('message', '¡' . $employee->name . 'ha sido notificado!');
+        
     }
 
     /**
@@ -132,8 +132,43 @@ class ActionController extends Controller
         $user = User::find(Auth::id());
         $employee = $action->employee->user;
 
+        if($user->role->name == 'gerente')
+        {
+            $action->update([
+                'check_gte' => 3
+            ]);
+        }else if($user->role->name == 'rrhh')
+        {
+            $action->update([
+                'check_rh' => 3
+            ]);
+        }
+
         $employee->notify(new NoApprovedAction);
 
-        return back()->with('message', '¡' . $employee->name . 'ha sido notificado!');
+        return 'todo bien';
+    }
+
+    public function approved($id)
+    {
+        
+        $action = Action::find($id);
+        $user = User::find(Auth::id());
+        $employee = $action->employee->user;
+        if($user->role->name == 'gerente')
+        {
+            $action->update([
+                'check_gte' => 1
+            ]);
+        }else if($user->role->name == 'rrhh')
+        {
+            $action->update([
+                'check_rh' => 1
+            ]);
+        }
+
+        $employee->notify(new ApprovedAction);
+
+        return 'todo bien';
     }
 }

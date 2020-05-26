@@ -50,4 +50,9 @@ class Employee extends Model
     {
         return $this->hasMany('App\Employee', 'jefe_id', 'id');
     }
+
+    public function jefe()
+    {
+        return $this->belongsTo('App\Employee', 'jefe_id', 'id');
+    }
 }

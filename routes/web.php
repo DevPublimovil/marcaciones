@@ -30,12 +30,16 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('/actions', 'ActionController');
-    Route::get('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
+    Route::put('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
+    Route::put('/actions/approved/{action}', 'ActionController@approved')->name('actions.approved');
     Route::get('/apiactions/{type}', 'Resources\ActionsJsonController@showActions')->name('apiactions.show');
     Route::get('/markings-weekly/{id}', 'MyMarkingsController@showWeeklyDials')->name('markings.weekly');
-    Route::get('/markings-month/{id}', 'MyMarkingsController@showMonthDials')->name('markings.month');
+    Route::get('/markings/period/{id}', 'MyMarkingsController@showPeriod')->name('markings.period');
     Route::get('/percent/{id}', 'MyMarkingsController@showPercent')->name('markings.percent');
     Route::resource('/employees', 'EmployeeController');
+    Route::put('/employees/avatar/{employee}', 'EmployeeController@changeAvatar')->name('employees.avatar');
+    Route::get('/employees/firm/{employee}', 'EmployeeController@editFirm')->name('employees.editfirm');
+    Route::put('/employees/firm/{employee}', 'EmployeeController@updateFirm')->name('employees.updatefirm');
     Route::get('/employees/markings/{employee}', 'EmployeeController@markings')->name('employees.markings');
     Route::get('/apiemployees', 'Resources\EmployeeJsonController@index')->name('apiemployees.index');
     Route::get('/apiemployees/show/{employee}', 'Resources\EmployeeJsonController@showEmployees')->name('apiemployees.show');

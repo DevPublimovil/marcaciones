@@ -17,4 +17,9 @@ class Company extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function resourceCompany()
+    {
+        return $this->hasMany('App\CompanyResource', 'company_id', 'id');
+    }
 }
