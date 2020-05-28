@@ -22,7 +22,8 @@ class ActionController extends Controller
      */
     public function index()
     {
-        return view('personalactions.history');
+        $user = User::find(Auth::id());
+        return view('personalactions.history', compact('user'));
     }
 
     /**
@@ -34,7 +35,13 @@ class ActionController extends Controller
     {
         $typeactions = ActionType::all();
         $user = User::find(Auth::id());
-        return view('personalactions.new-personal-action', compact('user','typeactions'));
+        $salary = $user->employee->salary;
+        $firm = $user->firm;
+        if(!$salary || !$firm){
+            return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes proporcionar tu salario y tener una firma');
+        }else{
+            return view('personalactions.new-personal-action', compact('user','typeactions'));
+        }
     }
 
     /**
@@ -77,6 +84,7 @@ class ActionController extends Controller
      */
     public function show($id)
     {
+        
         $action = Action::find($id);
         $employee = $action->employee;
         $company = $employee->company;

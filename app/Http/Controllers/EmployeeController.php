@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Employee;
 use App\CompanyResource;
+use App\Departament;
+use App\Company;
 use App\User;
 use Image;
 use Storage;
-use DataTables;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreEmployee;
 
 class EmployeeController extends Controller
 {
@@ -20,7 +23,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('employees.index');
+        $columns = Employee::$columns;
+        return view('employees.index', compact('columns'));
     }
 
     /**
@@ -30,7 +34,10 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        $companies = Company::orderBy('name','ASC')->get();
+        $departaments = Departament::orderBy('name','ASC')->get();
+        $managers = User::where('role_id',2)->orderBy('name','ASC')->get();
+        return view('employees.add-edit-employee', compact('companies','departaments','managers'));
     }
 
     /**
@@ -39,9 +46,29 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployee $request)
     {
-        //
+        $user = User::create([
+            'name' => $request->nameemployee . ' ' . $request->surnameemployee,
+            'email' => $request->email,
+            'password' => Hash::make('publimovil'),
+            'role_id' => 1
+        ]);
+
+        $user->employee()->create([
+            'name_employee' => $request->nameemployee,
+            'surname_employee' => $request->surnameemployee,
+            'cod_marking' => $request->codemployee,
+            'cod_terminal' => '3213555',
+            'salary' => $request->salaryemployee,
+            'position' => $request->positionemployee,
+            'company_id' => $request->company,
+            'departament_id' => $request->departament,
+            'type_employee' => $request->typeemployee,
+            'jefe_id' => $request->boss
+        ]);
+
+        return back();
     }
 
     /**
@@ -52,7 +79,11 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employee = Employee::find($id);
+        $companies = Company::orderBy('name','ASC')->get();
+        $departaments = Departament::orderBy('name','ASC')->get();
+        $managers = User::where('role_id',2)->orderBy('name','ASC')->get();
+        return view('employees.add-edit-employee', compact('employee','companies','departaments','managers'));
     }
 
     /**
@@ -76,7 +107,30 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        if($request->password)
+        {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
+        }
+        else if($request->salary)
+        {
+            $user->employee->update([
+                'salary' => $request->salary
+            ]);
+        }
+        else
+        {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email
+            ]);
+        }
+
+        return redirect()->route('home')->with('message', '¡Tus datos se han guardado correctamente!');
     }
 
     /**

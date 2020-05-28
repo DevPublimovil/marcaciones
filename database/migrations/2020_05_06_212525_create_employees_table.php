@@ -34,7 +34,7 @@ class CreateEmployeesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
-            $table->foreign('jefe_id')->references('id')->on('employees')
+            $table->foreign('jefe_id')->references('id')->on('users')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
             $table->foreign('company_id')->references('id')->on('companies')

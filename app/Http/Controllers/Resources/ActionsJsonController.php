@@ -56,10 +56,6 @@ class ActionsJsonController extends Controller
                 ->with(['employee'])
                 ->orderBy('actions.created_at','DESC')->get();
         }
-        else{
-            $employee = Employee::where('user_id',$user->id)->first();
-            $query = $employee->actions()->OrNoCheck()->orderBy('created_at','DESC')->get();
-        }
 
         $data = ActionResource::collection($query);
         return response()->json([
@@ -86,15 +82,21 @@ class ActionsJsonController extends Controller
                 ->with(['employee'])
                 ->orderBy('actions.created_at','DESC')->get();
         }
-        else{
-            $employee = Employee::where('user_id',$user->id)->first();
-            $query = $employee->actions()->CheckGte()->CheckRh()->orderBy('created_at','DESC')->get();
-        }
 
         $data = ActionResource::collection($query);
         return response()->json([
             'actions' => $data,
             'user' => $user
              ], 200);
+    }
+
+    public function show($id)
+    {
+        $user = User::find($id);
+        $employee = $user->employee;
+        $query = $employee->actions()->orderBy('created_at','DESC')->get();
+        $data = ActionResource::collection($query);
+
+        return response()->json($data, 200);
     }
 }

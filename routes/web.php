@@ -32,7 +32,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('/actions', 'ActionController');
     Route::put('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
     Route::put('/actions/approved/{action}', 'ActionController@approved')->name('actions.approved');
-    Route::get('/apiactions/{type}', 'Resources\ActionsJsonController@showActions')->name('apiactions.show');
+    Route::get('/apiactions/employee/{empoyee}', 'Resources\ActionsJsonController@show')->name('apiactions.show');
+    Route::get('/apiactions/{type}', 'Resources\ActionsJsonController@showActions')->name('apiactions.showactions');
     Route::get('/markings-weekly/{id}', 'MyMarkingsController@showWeeklyDials')->name('markings.weekly');
     Route::get('/markings/period/{id}', 'MyMarkingsController@showPeriod')->name('markings.period');
     Route::get('/percent/{id}', 'MyMarkingsController@showPercent')->name('markings.percent');

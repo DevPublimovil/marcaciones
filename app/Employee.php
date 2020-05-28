@@ -46,13 +46,8 @@ class Employee extends Model
         return $this->belongsTo('App\EmployeeType', 'type_employee', 'id');
     }
 
-    public function workers()
-    {
-        return $this->hasMany('App\Employee', 'jefe_id', 'id');
-    }
-
     public function jefe()
     {
-        return $this->belongsTo('App\Employee', 'jefe_id', 'id');
+        return $this->belongsTo('App\User', 'jefe_id', 'id');
     }
 }

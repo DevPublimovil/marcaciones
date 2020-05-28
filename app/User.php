@@ -49,6 +49,11 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasMany(CompanyResource::class);
     }
 
+    public function workersGte()
+    {
+        return $this->hasMany('App\Employee', 'jefe_id', 'id');
+    }
+
     /* public function preferredLocale()
     {
         return $this->locale;

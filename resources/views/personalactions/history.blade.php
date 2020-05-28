@@ -2,7 +2,12 @@
 
 @section('content')
     <div class="container-lg mx-auto py-2 w-11/12">
-        <history-component></history-component>
+        @if ($user->role->name == 'empleado')
+            <status-action-component :user="{{ $user }}"></status-action-component>
+        @else
+            <history-component></history-component>
+        @endif
     </div>
+    
 @endsection
 

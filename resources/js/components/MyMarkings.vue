@@ -3,7 +3,7 @@
         <div class="bg-white rounded overflow-hidden shadow-md px-6 py-4">
             <div class="flex w-full justify-between mb-2">
                 <div class="flex items-center border-b border-b-2 border-blue-700 py-2" >
-                    <template v-if="searchDay.length > 0">
+                    <template v-if="markings.length > 0">
                         <span><i class="fa fa-search" aria-hidden="true"></i></span>
                         <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" v-model="date" aria-label="Busqueda">
                     </template>

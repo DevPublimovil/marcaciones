@@ -158,12 +158,12 @@
         <table class="table text-center text-sm" style="table-layout:fixed">
             <tr>
                 <td>
-                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">{{$action->employee->jefe->name_employee . ' ' . $action->employee->jefe->surname_employee}}</p>
-                    <p style="padding:0%;margin:0%">{{$action->employee->jefe->position}}</p>
+                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">{{ $action->employee->jefe->name }}</p>
+                    <p style="padding:0%;margin:0%">Jefe inmediato</p>
                 </td>
                 <td class="text-center firma">
                     @if ($action->check_gte)
-                    <img src="{{public_path('storage/'.$action->employee->jefe->user->firm)}}" class="image_firma" alt="">
+                    <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
                     @endif
                 </td>
             </tr>

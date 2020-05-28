@@ -12,6 +12,11 @@ return [
             'icon' => 'fa-history',
             'route' => '/actions'
         ],
+        [
+            'name' => 'Empleados',
+            'icon' => 'fa-users',
+            'route' => '/employees'
+        ],
     ],
 
     'menu-employee' => [

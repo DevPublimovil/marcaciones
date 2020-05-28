@@ -1,34 +1,11 @@
 <template>
-    <div class="dv text-base">
-        <div class="flex w-11/12 mx-auto">
-            <div class="flex-1 text-gray-700 text-left px-2 pt-5">
-               <h2 class="text-xl">{{ title}}</h2>
+    <div class="dv text-base py-6">
+        <div class="flex justify-between align-center items-center align-middle content-center w-11/12 mx-auto mb-4">
+            <div class="flex-1 text-blue-900 text-left">
+               <h2 class="text-xl">{{ title }}</h2>
             </div>
-            <div class="flex-1 text-gray-700 text-right py-2">
-               <div class="flex items-center">
-                   <div>
-                       <span class="mx-1">Desde: </span>
-                   </div>
-                   <div>
-                        <datepicker :language="es" input-class="form-input" @selected="changeDate()" v-model="start_date"  placeholder="Selecciona la fecha"></datepicker>
-                   </div>
-                   <div>
-                       <span class="mx-1">Hasta: </span>
-                   </div>
-                   <div>
-                        <datepicker :language="es" input-class="form-input " @selected="changeDate()" v-model="end_date"  placeholder="Selecciona la fecha"></datepicker>
-                   </div>
-                   <div>
-                        <form action="/reports" method="POST" target="_blank">
-                            <input type="hidden" name="_token" :value="token">
-                            <input type="hidden" name="start" :value="start_date">
-                            <input type="hidden" name="end" :value="end_date">
-                            <button type="submit" class="inline-block align-top text-xs h-full bg-white hover:bg-blue-100 text-gray-800 font-semibold px-4 border border-gray-400 rounded" >
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
-                   </div>
-               </div>
+            <div class="flex-1 text-right">
+                <a href="/employees/create" class="btn bg-blue-500 text-white">Nuevo empleado <i class="fa fa-user-plus" aria-hidden="true"></i></a>
             </div>
         </div>
         <section class="w-11/12 mx-auto rounded overflow-hidden shadow-lg bg-white">
@@ -55,7 +32,6 @@
                 <div class="dv-body flex">
                     <table class="table-auto w-full text-center">
                         <thead>
-                            <th></th>
                             <th class="cursor-pointer px-4 py-2" v-for="(column, index) in columns" :key="index" @click="toggleOrder(column)">
                                 <span>{{ column }}</span>
                                 <span class="dv-table-column" v-if="column === query.column">
@@ -63,13 +39,10 @@
                                     <span v-if="query.direction == 'desc'">&darr;</span>
                                 </span>
                             </th>
-                            <th></th>
                         </thead>
                         <tbody class="text-gray-700 shadow-inner">
                             <template v-for="(row, index) in model">
-                                <tr class="hover:bg-primaryhover hover:text-white cursor-pointer" :class="{ 'bg-primary text-white': opened.includes(index) }" @click="details(index)" :key="index">
-                                    <td v-if="opened.includes(index)"><i class="fa fa-minus-circle" aria-hidden="true"></i></td>
-                                    <td v-else><i class="fa fa-plus-circle" aria-hidden="true"></i></td>
+                                <tr class="hover:bg-primaryhover hover:text-white cursor-pointer" @click="showProfile(row.id)"  :key="index">
                                     <td class="px-4 py-2">{{ row.first_name }}</td>
                                     <td>{{ row.last_name }}</td>
                                     <td>{{ row.cod }}</td>
@@ -77,20 +50,14 @@
                                     <td>{{ row.type }}</td>
                                     <td>{{ row.company }}</td>
                                     <td>{{ row.departament }}</td>
-                                    <td>
-                                        <span>
-                                            <a href=""><i class="fa fa-id-card-o" aria-hidden="true"></i></a>
-                                        </span>
-                                        <span><i class="fa fa-user-circle-o" aria-hidden="true"></i></span>
-                                    </td>
                                 </tr>
-                                <tr class="text-left text-base" v-if="opened.includes(index)" >
+                                <!-- <tr class="text-left text-base" v-if="opened.includes(index)" >
                                     <td colspan="8" class="pl-4">
                                         <span><b>Horas trabajadas: </b>{{ markings.hours_worked }}</span><br>
                                         <span><b>Horas extras: </b>{{ markings.extra_hours }}</span><br>
                                         <span><b>llegadas tarde: </b>{{ markings.late_arrivals }}</span>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </template>
                         </tbody>
                     </table>
@@ -110,25 +77,16 @@
 </template>
 <script>
 import Datepicker from 'vuejs-datepicker';
-import {en, es} from 'vuejs-datepicker/dist/locale';
 export default {
-    props:['title','source','columns','start','end'],
-    components: {
-        Datepicker
-    },
+    props:['title','source','columns'],
     data(){
         return{
-            en: en,
-            es: es,
             model: [],
             meta:[],
             links:[],
             opened: [],
             markings:[],
-            start_date:'',
             token:'',
-            end_date:'',
-            titulo: '',
             query:{
                 page: 1,
                 column: 'nombre',
@@ -220,6 +178,9 @@ export default {
                 vm.links = response.data.links
             })
         },
+        showProfile(employee){
+            window.location.href = "/employees/" + employee
+        }
     },
     mounted() {
         this.start_date = this.start

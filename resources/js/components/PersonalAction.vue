@@ -14,7 +14,7 @@
                                 </label>
                             </div>
                             <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="form-checkbox bg-gray-400" @click="showOther ? showOther = false : showOther = true">
+                                <input type="checkbox" class="form-checkbox bg-gray-400" @click="otherAction()">
                                 <span class="ml-2">Otros</span>
                             </label>
                         </div>
@@ -89,6 +89,17 @@ export default {
                 this.createPersonalAction()
             }
 
+        },
+        otherAction(){
+            if(this.showOther)
+            {
+                this.showOther = false
+            }
+            else
+            {
+                this.showOther = true
+                this.other = ''
+            }
         }
     },
 }

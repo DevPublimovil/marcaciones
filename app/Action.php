@@ -45,8 +45,8 @@ class Action extends Model
         $query->where('check_gte',0)->orWhere('check_rh',0);
     }
 
-    protected $casts = [
+    /* protected $casts = [
         'check_gte' => 'boolean',
         'check_rh' => 'boolean'
-    ];
+    ]; */
 }
