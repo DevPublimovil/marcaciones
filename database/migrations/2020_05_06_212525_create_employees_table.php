@@ -26,6 +26,8 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('jefe_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('departament_id')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->unsignedBigInteger('timetable_id')->nullable();
             $table->timestamps();
             
             $table->foreign('type_employee')->references('id')->on('employee_types')
@@ -41,6 +43,9 @@ class CreateEmployeesTable extends Migration
                 ->onDelete('set null')
                 ->onUpdate('cascade');
             $table->foreign('departament_id')->references('id')->on('departaments')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
+            $table->foreign('timetable_id')->references('id')->on('timetables')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
         });

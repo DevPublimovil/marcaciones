@@ -24,7 +24,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="text-xs text-center md:text-base">Accion creada</div>
+                                                <div class="text-xs text-center md:text-base">Accion de personal enviada</div>
                                             </div>
 
                                             <div class="w-1/4">

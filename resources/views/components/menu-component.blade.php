@@ -13,77 +13,13 @@
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
                     @if ($user->role->name == 'rrhh')
-                        @foreach (config('iclock.menu-rh') as $item)
-                            <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                                <a href="{{$item['route']}}" class="nav-link">
-                                <i class="text-white nav-icon fa {{$item['icon']}}"></i>
-                                <p class="text-white">
-                                    {{ $item['name'] }}
-                                </p>
-                                </a>
-                            </li>
-                        @endforeach
+                        {{menu('rrhh', 'my_menu')}}
                     @elseif($user->role->name == 'empleado')
-                        @foreach (config('iclock.menu-employee') as $item)
-                            <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                                <a href="{{$item['route']}}" class="nav-link">
-                                <i class="text-white nav-icon fa {{$item['icon']}}"></i>
-                                <p class="text-white">
-                                    {{ $item['name'] }}
-                                </p>
-                                </a>
-                            </li>
-                        @endforeach
+                        {{menu('employee', 'my_menu')}}
                     @elseif($user->role->name == 'gerente')
-                        @foreach (config('iclock.menu-gte') as $item)
-                            <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                                <a href="{{$item['route']}}" class="nav-link">
-                                <i class="text-white nav-icon fa {{$item['icon']}}"></i>
-                                <p class="text-white">
-                                    {{ $item['name'] }}
-                                </p>
-                                </a>
-                            </li>
-                        @endforeach
+                        {{menu('manager', 'my_menu')}}
                     @endif
-                    
-                    {{-- <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                        <a href="/actions" class="nav-link">
-                        <i class="text-white nav-icon fa fa-history"></i>
-                        <p class="text-white">
-                            Historial
-                        </p>
-                        </a>
-                    </li>
-                    <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                        <a href="/marcaciones/index" class="nav-link">
-                        <i class="text-white nav-icon fa fa-check-circle-o"></i>
-                        <p class="text-white">
-                            Asistencia
-                        </p>
-                        </a>
-                    </li>
-                    <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                        <a href="/employees" class="nav-link">
-                        <i class="text-white nav-icon fa fa-users"></i>
-                        <p class="text-white">
-                            Empleados
-                        </p>
-                        </a>
-                    </li>
-                    <li class="nav-item rounded w-full mx-auto h-10 hover:bg-blue-500">
-                        <a href="/reports" class="nav-link">
-                        <i class="text-white nav-icon fa fa-id-card" aria-hidden="true"></i>
-                        <p class="text-white">
-                            Tarjeta
-                        </p>
-                        </a>
-                    </li> --}}
-                </ul>
             </nav>
             <!-- /.sidebar-menu -->
         </div>

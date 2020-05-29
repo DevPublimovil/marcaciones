@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateEmployeesStatus extends Migration
+class CreateTimetablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class UpdateEmployeesStatus extends Migration
      */
     public function up()
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->tinyInteger('status')->after('position')->default(1);
+        Schema::create('timetables', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->time('hour_in');
+            $table->time('hout_out');
+            $table->timestamps();
         });
     }
 
@@ -25,6 +29,6 @@ class UpdateEmployeesStatus extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('timetables');
     }
 }

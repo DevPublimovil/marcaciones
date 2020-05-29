@@ -50,10 +50,12 @@
                                             <a :href="'/actions/'+ action.id + '/edit'" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1" v-if="role.role.name == 'empleado' && isPending">
                                                 Editar
                                             </a>
-                                            <template v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
+                                            <template v-if="role.role.name == 'gerente'">
                                                 <button class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1" v-if="isPending" @click="changeNoApproved(action.id)">
                                                     No aprobar
                                                 </button>
+                                            </template>
+                                            <template v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
                                                 <button class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1" v-if="isPending" @click="changeApproved(action.id)">
                                                     Aprobar
                                                 </button>

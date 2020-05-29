@@ -42,7 +42,7 @@ class CalculateHours extends Command
      */
     public function handle()
     {
-        $markings_local = Marking::whereDate('created_at','2020-05-26')->get();
+        $markings_local = Marking::whereDate('created_at','2020-05-20')->get();
         foreach ($markings_local as $key => $marking) {
             $employee = Employee::where('cod_marking', $marking->cod_marking)->first();
             
@@ -77,16 +77,24 @@ class CalculateHours extends Command
     
     public function hoursWorked($employee, $marking, $marking_update)
     {
+        //verifico el tipo de usuario y determino el tiempo en minutos para restar
         $sub = ($employee->type_employee == 1) ? 90 : 60;
-        $hours_worked = Fecha::parse($marking->check_out)->diffInMinutes($marking->check_in);
-        $hours =  intval(($hours_worked - $sub) / 60);
-        $explode = explode('.',(($hours_worked - $sub) / 60));
-        $decimal = '0.'.$explode[1];
-        $decimal = intval($decimal * 60);
-        $hours_worked = (intval($hours) .'.'.$decimal);
-        $marking_update->update([
-            'hours_worked'  => $hours_worked,
-            'extra_hours'   => ($hours_worked > 8.00) ? round($hours_worked - 8.00) : null,
-        ]);
+        //verifico que la marcacion de salida no este vacia
+        if($marking->check_out){
+            //calculo la diferencia de minutos en la entrada y salida
+            $hours_worked = Fecha::parse($marking->check_out)->diffInMinutes($marking->check_in);
+            //verifico que la hora de salida sea mayor a dos de la tarde
+            if(strtotime($marking->check_out)){
+                $hours =  intval(($hours_worked - $sub) / 60);
+                $explode = explode('.',(($hours_worked - $sub) / 60));
+                $decimal = '0.'.$explode[1];
+                $decimal = intval($decimal * 60);
+                $hours_worked = (intval($hours) .'.'.$decimal);
+                $marking_update->update([
+                    'hours_worked'  => $hours_worked,
+                    'extra_hours'   => ($hours_worked > 8.00) ? round($hours_worked - 8.00) : null,
+                ]);
+            }
+        }
     }
 }

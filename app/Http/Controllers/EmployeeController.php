@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Employee;
 use App\CompanyResource;
 use App\Departament;
 use App\Company;
 use App\User;
+use App\Terminal;
 use Image;
 use Storage;
 use Illuminate\Support\Facades\Hash;
@@ -34,10 +36,11 @@ class EmployeeController extends Controller
      */
     public function create()
     {
+        $terminals = Terminal::orderBy('description','ASC')->get();
         $companies = Company::orderBy('name','ASC')->get();
         $departaments = Departament::orderBy('name','ASC')->get();
         $managers = User::where('role_id',2)->orderBy('name','ASC')->get();
-        return view('employees.add-edit-employee', compact('companies','departaments','managers'));
+        return view('employees.add-edit-employee', compact('companies','departaments','managers','terminals'));
     }
 
     /**
@@ -48,27 +51,52 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployee $request)
     {
-        $user = User::create([
-            'name' => $request->nameemployee . ' ' . $request->surnameemployee,
-            'email' => $request->email,
-            'password' => Hash::make('publimovil'),
-            'role_id' => 1
+        
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|unique:users|max:255',
+            'nameemployee' => 'required',
+            'surnameemployee' => 'required',
+            'codemployee' => 'required',
         ]);
 
-        $user->employee()->create([
-            'name_employee' => $request->nameemployee,
-            'surname_employee' => $request->surnameemployee,
-            'cod_marking' => $request->codemployee,
-            'cod_terminal' => '3213555',
-            'salary' => $request->salaryemployee,
-            'position' => $request->positionemployee,
-            'company_id' => $request->company,
-            'departament_id' => $request->departament,
-            'type_employee' => $request->typeemployee,
-            'jefe_id' => $request->boss
-        ]);
+        if ($validator->fails()) {
+            return back()
+                        ->withErrors($validator)
+                        ->withInput();
+                    }else{
+                        $employee = Employee::where('cod_marking',$request->codemployee)->where('company_id',$request->company)->where('cod_terminal',$request->terminal)->first();
+                        if($employee){
+                            if($employee->status){
+                                return back()->with('message','Al parecer ya existe un empleado activo con el codigo ' . $request->codemployee)->withInput();
+                            }
+                        }
+                        else{
+                            $type = $request->typeemployee;
+                            if($type){
+                                $user = User::create([
+                                    'name' => $request->nameemployee . ' ' . $request->surnameemployee,
+                                    'email' => $request->email,
+                                    'password' => Hash::make('publimovil'),
+                                    'role_id' => 1
+                                ]);
+                            }
+                            $employee = Employee::create([
+                                'name_employee' => $request->nameemployee,
+                                'surname_employee' => $request->surnameemployee,
+                                'cod_marking' => $request->codemployee,
+                                'cod_terminal' => $request->terminal,
+                                'salary' => $request->salaryemployee,
+                                'position' => $request->positionemployee,
+                                'company_id' => $request->company,
+                                'user_id' => ($type) ? $user->id : null,
+                                'departament_id' => $request->departament,
+                                'type_employee' => $request->typeemployee,
+                                'jefe_id' => $request->boss
+                            ]);
+                        }
+                    }
 
-        return back();
+            return redirect()->route('employees.index')->with('message','¡El empleado ha sido agregado correctamente!');
     }
 
     /**
@@ -79,11 +107,12 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
+        $terminals = Terminal::orderBy('description','ASC')->get();
         $employee = Employee::find($id);
         $companies = Company::orderBy('name','ASC')->get();
         $departaments = Departament::orderBy('name','ASC')->get();
         $managers = User::where('role_id',2)->orderBy('name','ASC')->get();
-        return view('employees.add-edit-employee', compact('employee','companies','departaments','managers'));
+        return view('employees.add-edit-employee', compact('employee','companies','departaments','managers','terminals'));
     }
 
     /**
@@ -107,30 +136,52 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        if($request->password)
-        {
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]);
-        }
-        else if($request->salary)
-        {
-            $user->employee->update([
-                'salary' => $request->salary
-            ]);
-        }
-        else
-        {
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email
-            ]);
-        }
+        $emp = Employee::find($id);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|unique:users,email,'.$emp->user->id,
+            'nameemployee' => 'required',
+            'surnameemployee' => 'required',
+            'codemployee' => 'required',
+        ]);
 
-        return redirect()->route('home')->with('message', '¡Tus datos se han guardado correctamente!');
+        if ($validator->fails()) {
+            return back()
+                        ->withErrors($validator)
+                        ->withInput();
+                    }else{
+                        $employee = Employee::where('cod_marking',$request->codemployee)->where('company_id',$request->company)->where('cod_terminal',$request->terminal)->first();
+                        if($employee){
+                            if($employee->id == $emp->id)
+                            {
+                                $type = $request->typeemployee;
+                                if($type){
+                                    $emp->user->update([
+                                        'name' => $request->nameemployee . ' ' . $request->surnameemployee,
+                                        'email' => $request->email,
+                                    ]);
+                                }
+                            }else{
+                                if($employee->status){
+                                    return back()->with('message','Al parecer ya existe un empleado activo con el codigo ' . $request->codemployee)->withInput();
+                                }
+                            }
+                        }
+                    }
+                    
+                $emp->update([
+                    'name_employee' => $request->nameemployee,
+                    'surname_employee' => $request->surnameemployee,
+                    'cod_marking' => $request->codemployee,
+                    'cod_terminal' => $request->terminal,
+                    'salary' => $request->salaryemployee,
+                    'position' => $request->positionemployee,
+                    'company_id' => $request->company,
+                    'departament_id' => $request->departament,
+                    'type_employee' => $request->typeemployee,
+                    'jefe_id' => $request->boss
+                ]);
+
+            return redirect()->route('employees.index')->with('message','¡El empleado ha sido actualizado correctamente!');
     }
 
     /**

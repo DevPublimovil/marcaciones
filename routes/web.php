@@ -26,10 +26,13 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+    Route::post('/iclock/upload', 'AdminController@uploadData')->name('admin.upload');
+    Route::get('/iclock', 'AdminController@index')->name('admin.index');
 });
 
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('/actions', 'ActionController');
+    Route::resource('/timestables', 'TimestableController');
     Route::put('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
     Route::put('/actions/approved/{action}', 'ActionController@approved')->name('actions.approved');
     Route::get('/apiactions/employee/{empoyee}', 'Resources\ActionsJsonController@show')->name('apiactions.show');
