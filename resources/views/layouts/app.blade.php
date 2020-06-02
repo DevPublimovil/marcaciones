@@ -18,7 +18,6 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" defer>
 
     <style>
         body{
@@ -96,7 +95,6 @@
             $('.loader-bg').fadeToggle();
         },1500);
     </script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js" defer></script>
     @yield('scripts')
 </body>
 </html>

@@ -36,7 +36,9 @@ trait DataViewer
         }
         return $query
             ->orderBy($columnsformatter,$request->direction)
+            ->where('jefe_id',45)
             ->where('company_id',$company)
+            ->where('timetable_id',$request->time)
             ->where(function($query) use($request){
                 if($request->search_input)
                 {

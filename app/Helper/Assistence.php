@@ -23,7 +23,7 @@ class Assistence {
 
         foreach ($period as $key => $value) {
             $marking = Marking::where('serialno',$employee->cod_terminal)->where('cod_marking',$employee->cod_marking)->checktime($value)->first();
-            $action = Action::where('employee_id', $employee->id)->whereDate('created_At',Fecha::parse($value)->format('Y-m-d'))->first();
+            $action = Action::where('created_by', $employee->id)->whereDate('created_At',Fecha::parse($value)->format('Y-m-d'))->first();
             $permission = ($action) ? 'SI' : 'AUSENTE';
             if($marking)
             {

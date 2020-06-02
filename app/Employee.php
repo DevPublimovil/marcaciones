@@ -4,14 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Marking;
-use App\Helper\DataViewer;
 
 class Employee extends Model
-{
-    use DataViewer; 
+{ 
 
     public static $columns = [
-        'nombre', 'apellidos', 'codigo', 'cargo', 'tipo','compañia','departamento'
+        'nombre', 'apellidos', 'codigo', /* 'cargo', 'tipo','compañia','departamento' */
     ];
 
     protected $guarded = [];
@@ -33,7 +31,7 @@ class Employee extends Model
 
     public function actions()
     {
-        return $this->hasMany(Action::class);
+        return $this->hasMany('App\Action','created_by','id');
     }
 
     public function markings()
@@ -49,5 +47,18 @@ class Employee extends Model
     public function jefe()
     {
         return $this->belongsTo('App\User', 'jefe_id', 'id');
+    }
+
+    public function searchDatatable($column, $request)
+    {
+        return $query->orderBy($column, $request->direction)
+        ->where(function($query) use($request){
+            if($request->search_input)
+            {
+                return $query->where('name_employee', 'LIKE', '%' . $request->search_input . '%')
+                    ->orWhere('surname_employee', 'LIKE', '%' . $request->search_input . '%')
+                    ->orWhere('employees.cod_marking', 'LIKE', '%' . $request->search_input . '%');
+            }
+        })->paginate($request->per_page);
     }
 }

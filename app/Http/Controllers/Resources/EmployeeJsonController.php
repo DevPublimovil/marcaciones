@@ -17,15 +17,26 @@ class EmployeeJsonController extends Controller
     public function index(Request $request)
     {
         $user = User::find(Auth::id());
-        $resource = $user->companiesResources->first();
-        //$query = Employee::where('company_id',$resource->company_id);
-
         $column = $this->selectColumn($request->column);
-        $model = Employee::SearchPaginateAndOrder($column, $resource->company_id);
+        if($user->role->name == 'gerente')
+        {
+            $resource =  $user->workersGte();
+        }else{
+            $resource = $user->companiesResources->company->employees();
+        }
 
-        $query = EmployeeResource::collection($model);
-        
-        return $query;
+        $model = $resource->where('timetable_id',$request->time)->orderBy($column, $request->direction)
+                ->where(function($query) use($request){
+                    if($request->search_input)
+                    {
+                        return $query->where('name_employee', 'LIKE', '%' . $request->search_input . '%')
+                            ->orWhere('surname_employee', 'LIKE', '%' . $request->search_input . '%')
+                            ->orWhere('employees.cod_marking', 'LIKE', '%' . $request->search_input . '%');
+                    }
+                })->paginate($request->per_page);
+
+        return  EmployeeResource::collection($model);
+
     }
 
     public function markings(Request $request, $id)

@@ -33,6 +33,7 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['middleware' => ['auth']], function(){
     Route::resource('/actions', 'ActionController');
     Route::resource('/timestables', 'TimestableController');
+    Route::post('/timestables/change', 'TimestableController@changeTimesEmployee')->name('timestable.change');
     Route::put('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
     Route::put('/actions/approved/{action}', 'ActionController@approved')->name('actions.approved');
     Route::get('/apiactions/employee/{empoyee}', 'Resources\ActionsJsonController@show')->name('apiactions.show');
@@ -54,6 +55,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/reports', 'ReportsController@index')->name('reports.index');
     Route::get('/reports/create/{employee}', 'ReportsController@create')->name('reports.create');
     Route::get('/apiassists/show/{id}', 'Resources\ReportsJsonController@showAssistsDetails')->name('apiassists.show');
+    Route::get('/apitime', 'Resources\TimestableJsonController@index')->name('apitime.index');
+    Route::get('/myaccount', 'MyAccountController@index')->name('myaccount.index');
+    Route::put('/myaccount{user}', 'MyAccountController@update')->name('myaccount.update');
 });
 
 

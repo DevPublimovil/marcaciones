@@ -56,7 +56,7 @@ class ActionController extends Controller
         $action = Action::create([
             'other_action'  => $request->otherAction ?? null,
             'description'   => $request->description,
-            'employee_id'   => $user->employee->id,
+            'created_by'   => $user->employee->id,
         ]);
 
         if($request->actions)
@@ -139,22 +139,13 @@ class ActionController extends Controller
         $action = Action::find($id);
         $user = User::find(Auth::id());
         $employee = $action->employee->user;
-
-        if($user->role->name == 'gerente')
-        {
-            $action->update([
-                'check_gte' => 3
-            ]);
-        }else if($user->role->name == 'rrhh')
-        {
-            $action->update([
-                'check_rh' => 3
-            ]);
-        }
+        $action->update([
+            'check_gte' => 3
+        ]);
 
         $employee->notify(new NoApprovedAction);
 
-        return 'todo bien';
+        return 'Has descartado la accion de personal';
     }
 
     public function approved($id)
@@ -177,6 +168,6 @@ class ActionController extends Controller
 
         $employee->notify(new ApprovedAction);
 
-        return 'todo bien';
+        return 'La acción de personal ha sido aprobada ';
     }
 }

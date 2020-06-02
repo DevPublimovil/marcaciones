@@ -111,16 +111,38 @@ export default {
             })
         },
         changeApproved(action){
-            axios.put('/actions/approved/' + action).then(response => {
+            axios.put('/actions/approved/' + action).then(({data}) => {
                 this.fetchPending()
-                console.log(response.data)
+                swal(data,{
+                        icon: "success",
+                        timer: 2000,
+                        button: false
+                    });
             })
         },
         changeNoApproved(action){
-            axios.put('/actions/noapproved/' + action).then(response => {
-                this.fetchPending()
-                console.log(response.data)
-            })
+            let vm = this
+            swal({
+                title: "¿Estás seguro que deseas descartar la acción de personal?",
+                icon: "warning",
+                buttons: true,
+                buttons:  ["Cancelar", "Aceptar"],
+                dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    axios.put('/actions/noapproved/' + action).then(response => {
+                        vm.fetchPending()
+                        swal(data,{
+                            icon: "warning",
+                            timer: 2000,
+                            button: false
+                        });
+                    })
+                } else {
+                    swal("¡Aun puedes aprobar la acción de personal!");
+                }
+                });
         }
     },
 }

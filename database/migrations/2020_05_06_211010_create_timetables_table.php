@@ -15,10 +15,12 @@ class CreateTimetablesTable extends Migration
     {
         Schema::create('timetables', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
             $table->time('hour_in');
-            $table->time('hout_out');
+            $table->time('hour_out');
+            $table->unsignedBigInteger('created_by')->nulleable();
             $table->timestamps();
+
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 
