@@ -22,7 +22,7 @@ class EmployeeJsonController extends Controller
         {
             $resource =  $user->workersGte();
         }else{
-            $resource = $user->companiesResources->company->employees();
+            $resource = $user->appcompany->company->employees();
         }
 
         $model = $resource->where('timetable_id',$request->time)->orderBy($column, $request->direction)
@@ -57,11 +57,13 @@ class EmployeeJsonController extends Controller
     public function showEmployees(){
 
         $user = User::find(Auth::id());
-        $resource = $user->companiesResources->first();
-
-        $employees = Employee::where('company_id',$resource->company_id)->orderBy('name_employee','ASC')->paginate(1);
-
-        return response()->json($employees);
+        if($user->role->name == 'gerente')
+        {
+           $employees = $user->workersGte()->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
+        }else{
+            $employees = $user->appcompany->company->employees()->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
+        }
+        return response()->json($employees,200);
     }
 
     public function selectColumn($column)

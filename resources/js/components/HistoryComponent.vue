@@ -133,7 +133,7 @@ export default {
                 if (willDelete) {
                     axios.put('/actions/noapproved/' + action).then(response => {
                         vm.fetchPending()
-                        swal(data,{
+                        swal(response.data,{
                             icon: "warning",
                             timer: 2000,
                             button: false

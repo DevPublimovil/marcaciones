@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Notifications\ApprovedAction;
 use App\Notifications\NoApprovedAction;
 use PDF;
+use App\Notifications\NewPersonalAction;
 
 class ActionController extends Controller
 {
@@ -23,7 +24,11 @@ class ActionController extends Controller
     public function index()
     {
         $user = User::find(Auth::id());
-        return view('personalactions.history', compact('user'));
+        if($user->firm){
+            return view('personalactions.history', compact('user'));
+        }else{
+            return redirect()->route('employees.editfirm', $user->id);
+        }
     }
 
     /**
@@ -68,6 +73,11 @@ class ActionController extends Controller
                 ]);
             }
         }
+    
+        $boss = $user->employee->jefe;
+        
+
+        $boss->notify(new NewPersonalAction($user->employee));
 
         if($action){
             return 'exito';
@@ -144,6 +154,7 @@ class ActionController extends Controller
         ]);
 
         $employee->notify(new NoApprovedAction);
+        
 
         return 'Has descartado la accion de personal';
     }
@@ -159,14 +170,22 @@ class ActionController extends Controller
             $action->update([
                 'check_gte' => 1
             ]);
+
+            $employee->notify(new ApprovedAction($user->name));
+
+            $rh = $user->companiesResources()->first();
+            $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
+
+            $rh->notify(new NewPersonalAction($action->employee));
+
         }else if($user->role->name == 'rrhh')
         {
             $action->update([
                 'check_rh' => 1
             ]);
-        }
 
-        $employee->notify(new ApprovedAction);
+            $employee->notify(new ApprovedAction($user->name));
+        }
 
         return 'La acción de personal ha sido aprobada ';
     }

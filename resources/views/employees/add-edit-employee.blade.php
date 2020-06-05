@@ -96,7 +96,7 @@
                                 <div class="relative">
                                     <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="company" id="company">
                                         @foreach ($companies as $item)
-                                            <option value="{{ $item->id }}" @isset($employee) @if($employee->company_id == $item->id) selected @endif @endisset @empty($employee) {{ old('company') == $item->id ? 'selected' : '' }} @endempty>{{ $item->display_name }}</option>
+                                            <option value="{{ $item->id }}" @isset($employee) @if($employee->company_id == $item->id) selected @endif @endisset @empty($employee) {{ old('company') == $item->id ? 'selected' : '' }} @endempty>{{ $item->name }}</option>
                                         @endforeach
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">

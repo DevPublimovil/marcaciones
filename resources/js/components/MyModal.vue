@@ -2,7 +2,7 @@
     <div class="modal-component">
         <div class="main-modal fixed w-full h-100 inset-0 overflow-hidden flex justify-center items-center animated fadeIn faster"
 		style="background: rgba(0,0,0,.7);">
-            <div class="border border-teal-500 shadow-lg modal-container bg-white w-11/12 xl:max-w-2xl mx-auto rounded shadow-lg overflow-y-auto">
+            <div class="border border-teal-500 shadow-lg modal-container bg-white w-11/12 xl:max-w-2xl mx-auto h-auto rounded shadow-lg overflow-y-auto">
                 <div class="modal-content py-4 text-left px-6">
                     <div class="flex justify-between items-center pb-3">
                         <slot name="header-modal"></slot>

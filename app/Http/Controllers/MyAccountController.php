@@ -53,4 +53,10 @@ class MyAccountController extends Controller
         $user = User::find(Auth::id());
         return view('employees.edit-profile',compact('user'));
     }
+
+    public function show()
+    {
+        $user = User::find(Auth::id());
+        return $user;
+    }
 }

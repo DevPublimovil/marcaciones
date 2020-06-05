@@ -42,26 +42,32 @@ class CalculateHours extends Command
      */
     public function handle()
     {
-        $markings_local = Marking::whereDate('created_at','2020-05-20')->get();
-        foreach ($markings_local as $key => $marking) {
-            $employee = Employee::where('cod_marking', $marking->cod_marking)->first();
-            
-            $marking_update = Marking::find($marking->id);
-            if($employee){
-                $sub = ($employee->type_employee == 1) ? 90 : 60;
-                
-                if($marking->check_out != null){
-                    $hours_worked = $this->hoursWorked($employee, $marking, $marking_update);
-                }
+        $markings_local = Marking::whereDate('created_at','2020-06-05')->get();
 
-                $timein = Fecha::create($marking->check_in);
-                $time_correct = $timein->copy()->startOfDay()->addHours(8);
-                $time_correct_night = $timein->copy()->startOfDay()->addHours(17);
-                if($timein > $time_correct || $timein > $time_correct_night){
-                    $late_arrivals = Fecha::parse($time_correct)->diffInMinutes($marking->check_in);
-                    $marking_update->update(['late_arrivals' => ($late_arrivals > 0) ? $late_arrivals : null]);
+        foreach ($markings_local as $key => $marking) {
+            $employee = Employee::where('cod_marking', $marking->cod_marking)->where('cod_terminal',$marking->serialno)->first();
+            if($employee){
+                $hour = Fecha::parse($employee->timestable->hour_in)->format('H:i');
+                $realhour = Fecha::parse($marking->check_in)->format('H:i');
+                if($realhour > $hour)
+                {
+                    $late_arrivals = $this->lateArrivals($hour, $realhour);
+                    $marking->update([
+                        'late_arrivals' => $late_arrivals
+                    ]);
                 }
+                
+                if($marking->check_out != null && $marking->check_in != null){
+                    $hours_worked = $this->hoursWorked($employee, $marking);
+                    Log::info($hours_worked);
+                    /* $marking->update([
+                        'hours_worked' => $hours_worked
+                    ]); */
+                }
+                
             }
+            //$arrival_time = Fecha::parse($employee->timestable->hour_in)->format('H:i')->diffInMinutes($marking->check_in);
+           
         }
     }
 
@@ -75,26 +81,28 @@ class CalculateHours extends Command
      */
 
     
-    public function hoursWorked($employee, $marking, $marking_update)
+    public function hoursWorked($employee, $marking)
     {
         //verifico el tipo de usuario y determino el tiempo en minutos para restar
-        $sub = ($employee->type_employee == 1) ? 90 : 60;
-        //verifico que la marcacion de salida no este vacia
-        if($marking->check_out){
-            //calculo la diferencia de minutos en la entrada y salida
-            $hours_worked = Fecha::parse($marking->check_out)->diffInMinutes($marking->check_in);
-            //verifico que la hora de salida sea mayor a dos de la tarde
-            if(strtotime($marking->check_out)){
-                $hours =  intval(($hours_worked - $sub) / 60);
-                $explode = explode('.',(($hours_worked - $sub) / 60));
-                $decimal = '0.'.$explode[1];
-                $decimal = intval($decimal * 60);
-                $hours_worked = (intval($hours) .'.'.$decimal);
-                $marking_update->update([
-                    'hours_worked'  => $hours_worked,
-                    'extra_hours'   => ($hours_worked > 8.00) ? round($hours_worked - 8.00) : null,
-                ]);
-            }
-        }
+        $sub = ($employee->type_employee == 1) ? '01:30' : '01:00';
+
+        $horaInicio = new \DateTime($marking->check_in);
+        $horaTermino = new \DateTime($marking->check_out);
+
+        $interval = $horaInicio->diff($horaTermino);
+        $interval =  $interval->format('%H.%i');
+        return $interval;
+    }
+    public function lateArrivals($hour, $realHour)
+    {
+        $horaInicio = new \DateTime($hour);
+        $horaTermino = new \DateTime($realHour);
+
+        $interval = $horaInicio->diff($horaTermino);
+        return $interval->format('%H.%i');
+       /*  $cal_chour = explode(':', $hour);
+        $cal_real_chour = explode(':', $realHour);
+
+        return sprintf('%02d.%02d',$cal_real_chour[0] - $cal_chour[0],$cal_real_chour[1] - $cal_chour[1]); */
     }
 }

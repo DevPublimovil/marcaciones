@@ -46,7 +46,7 @@ class User extends \TCG\Voyager\Models\User
 
     public function companiesResources()
     {
-        return $this->hasOne(CompanyResource::class);
+        return $this->hasMany(CompanyResource::class);
     }
 
     public function workersGte()
@@ -57,5 +57,9 @@ class User extends \TCG\Voyager\Models\User
     public function timetables()
     {
         return $this->hasMany('App\Timetable','created_by','id');
+    }
+
+    public function appcompany(){
+        return $this->hasOne(AppSession::class);
     }
 }

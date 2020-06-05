@@ -12,16 +12,7 @@
                         </div>
                         <div class="flex-auto justify-end">
                             <div class="flex justify-end">
-                                <div>
-                                    <form action="{{route('reports.create', $employee->id)}}" method="GET" target="_blank" class="p-0 m-0 h-full">
-                                        @csrf
-                                        <input type="hidden" name="start_date" v-model="start">
-                                        <input type="hidden" name="end_date" v-model="end">
-                                        <button class="bg-blue-600 h-full hover:bg-blue-500 font-semibold text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                                            Generar reporte  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                <form-report :start="start" :end="end" :token="'{{ csrf_token() }}'" :emp="{{$employee}}"></form-report>
                                 <div class="pl-2">
                                     {{ $employees->links('pagination.pagination') }}
                                 </div>

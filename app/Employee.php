@@ -49,16 +49,8 @@ class Employee extends Model
         return $this->belongsTo('App\User', 'jefe_id', 'id');
     }
 
-    public function searchDatatable($column, $request)
+    public function timestable()
     {
-        return $query->orderBy($column, $request->direction)
-        ->where(function($query) use($request){
-            if($request->search_input)
-            {
-                return $query->where('name_employee', 'LIKE', '%' . $request->search_input . '%')
-                    ->orWhere('surname_employee', 'LIKE', '%' . $request->search_input . '%')
-                    ->orWhere('employees.cod_marking', 'LIKE', '%' . $request->search_input . '%');
-            }
-        })->paginate($request->per_page);
+        return $this->belongsTo('App\Timetable','timetable_id','id');
     }
 }

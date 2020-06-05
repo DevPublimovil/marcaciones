@@ -7,21 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ApprovedAction extends Notification implements ShouldQueue
+class NewPersonalAction extends Notification
 {
     use Queueable;
 
-    private $type;
+    private $employee;
     private $url;
-    
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($type)
+    public function __construct($employee)
     {
-        $this->type = $type;
+        $this->employee = $employee;
         $this->url = '/actions';
     }
 
@@ -45,13 +45,13 @@ class ApprovedAction extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Acción de personal Aprobada')
-                    ->greeting('¡Hola '. $notifiable->name .'!')
-                    ->line('Tu acción de personal ha sido aprobada por ' . $this->type)
-                    ->line('Puedes ingresar a la aplicación para revisar su estado')
-                    ->action('Ingresar', url($this->url))
-                    ->line('¡Gracias por usar nuestra Aplicación!')
-                    ->salutation('¡Saludos!');
+            ->subject('Nueva acción de personal')
+            ->greeting('¡Hola '. $notifiable->name .'!')
+            ->line('Tienes una nueva accion de personal')
+            ->line('de tu empleado ' . $this->employee->name_employee . ' ' . $this->employee->surname_employee)
+            ->action('Revisar', url($this->url))
+            ->line('¡Gracias por usar nuestra Aplicación!')
+            ->salutation('¡Saludos!');
     }
 
     /**

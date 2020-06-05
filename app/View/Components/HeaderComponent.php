@@ -4,22 +4,19 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Auth;
-use App\Employee;
-use App\Marking;
 use App\User;
 
-class Assists extends Component
+class HeaderComponent extends Component
 {
-
-    public $employe;
+    public $user;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($employee)
+    public function __construct()
     {
-        $this->employee = $employee;
+        $this->user = User::find(Auth::id());
     }
 
     /**
@@ -29,7 +26,6 @@ class Assists extends Component
      */
     public function render()
     {
-        $varo = 'hola';
-        return view('components.assists', compact('varo'));
+        return view('components.header-component');
     }
 }

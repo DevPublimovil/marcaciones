@@ -117,6 +117,7 @@
                <h3 class="text-xl text-center">Dibuja tu firma en el recuadro blanco</h3>
            </div>
            <div class="card-firm-body bg-white p-4">
+               <h3 id="message" class="text-red-500 text-center hidden">La firma no es válida</h3>
                 <canvas id="draw-canvas" class="mx-auto" width="900" height="400">
                     Tu navegador no es compatible
                 </canvas>
@@ -178,11 +179,11 @@
     var dataUrl = canvas.toDataURL();
 	drawText.innerHTML = dataUrl;
 	drawImage.setAttribute("src", dataUrl);
-    if(dataUrl.length > 18674)
+    if(dataUrl.length > 5674)
     {
         document.getElementById('form-data-url').submit();
     }else{
-        console.log('la firma no es valida');
+        document.getElementById('message').style.display = "block"
     }
 	 }, false);
 

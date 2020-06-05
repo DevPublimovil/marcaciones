@@ -80,7 +80,7 @@
             <div class="flex">
                 <div class="image flex flex-wrap content-center justify-end h-screen lg:w-1/2 md:w-1/2 sm:w-0 w-0">
                     <div class="w-4/6">
-                        <img src="{{ asset('images/checklist.svg') }}" alt="">
+                        {{-- <img src="{{ asset('images/checklist.svg') }}" alt=""> --}}
                     </div>
                 </div>
                 <div class="flex flex-wrap content-center justify-center lg:w-1/2 md:w-1/2 sm:w-full w-full">
@@ -96,15 +96,6 @@
    {{--  <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
     <script>
-         document.addEventListener("DOMContentLoaded", function(event) {
-            let email = document.getElementById("email");
-        
-           
-            if(email.value != ""){
-                console.log(email)
-                email.focus();
-            }
-        });
         const inputs = document.querySelectorAll('input');
 
         function focusFunc(){
@@ -124,5 +115,6 @@
             input.addEventListener('blur', blurFunc);
         });
     </script>
+    @yield('scripts')
 </body>
 </html>

@@ -47,21 +47,24 @@ Route::group(['middleware' => ['auth']], function(){
     Route::put('/employees/firm/{employee}', 'EmployeeController@updateFirm')->name('employees.updatefirm');
     Route::get('/employees/markings/{employee}', 'EmployeeController@markings')->name('employees.markings');
     Route::get('/apiemployees', 'Resources\EmployeeJsonController@index')->name('apiemployees.index');
-    Route::get('/apiemployees/show/{employee}', 'Resources\EmployeeJsonController@showEmployees')->name('apiemployees.show');
+    Route::get('/apiemployees/show', 'Resources\EmployeeJsonController@showEmployees')->name('apiemployees.show');
     Route::put('/apiemployees/markings/{id}', 'Resources\EmployeeJsonController@markings')->name('apiemployees.markings');
     Route::get('/marcaciones/index', 'MarkingsController@index')->name('marcaciones.index');
     Route::get('/marcaciones-all', 'MarkingsController@getAllMarkings')->name('marcaciones.getall');
     Route::get('/marcaciones/horas/semanales/{id}', 'MarkingsController@calcHoursWeekly')->name('marcaciones.horassemanales');
+    Route::post('/reports/create', 'ReportsController@createAll')->name('reports.createall');
     Route::get('/reports', 'ReportsController@index')->name('reports.index');
     Route::get('/reports/create/{employee}', 'ReportsController@create')->name('reports.create');
     Route::get('/apiassists/show/{id}', 'Resources\ReportsJsonController@showAssistsDetails')->name('apiassists.show');
     Route::get('/apitime', 'Resources\TimestableJsonController@index')->name('apitime.index');
     Route::get('/myaccount', 'MyAccountController@index')->name('myaccount.index');
-    Route::put('/myaccount{user}', 'MyAccountController@update')->name('myaccount.update');
+    Route::put('/myaccount/{user}', 'MyAccountController@update')->name('myaccount.update');
+    Route::get('/myaccount/employee', 'MyAccountController@show')->name('myaccount.show');
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::post('/home/company/', 'HomeController@selectCompany')->name('home.company');
 });
 
 
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

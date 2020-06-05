@@ -234,6 +234,11 @@ class EmployeeController extends Controller
             ]);
         }
         //Retorno un mensaje con la respuesta
-        return redirect()->route('employees.edit', $id)->with('mensaje','¡Su firma se actualizó correctamente!');
+        if($user->role->name != 'empleado'){
+            return redirect()->route('actions.index');
+        }else{
+            return redirect()->route('employees.edit', $id)->with('mensaje','¡Su firma se actualizó correctamente!');
+        }
+        
      }
 }

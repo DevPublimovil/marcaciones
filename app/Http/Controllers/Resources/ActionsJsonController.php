@@ -11,6 +11,7 @@ use App\Action;
 use App\PersonalAction;
 use App\Http\Resources\ActionResource;
 use App\CompanyResource;
+use App\AppSession;
 
 class ActionsJsonController extends Controller
 {
@@ -40,7 +41,7 @@ class ActionsJsonController extends Controller
     public function showPendingActions($user)
     {
         if($user->role->name == "rrhh"){
-            $company = CompanyResource::where('user_id',$user->id)->first();
+            $company = AppSession::where('user_id',$user->id)->first();
             $query = Action::whereHas('employee', function ($query) use ($company) {
                 $query->where('company_id',$company->company_id);
             })->CheckGte()
@@ -67,7 +68,7 @@ class ActionsJsonController extends Controller
     public function showApprovedActions($user)
     {
         if($user->role->name == "rrhh"){
-            $company = CompanyResource::where('user_id',$user->id)->first();
+            $company = AppSession::where('user_id',$user->id)->first();
             $query = Action::whereHas('employee', function ($query) use ($company) {
                 $query->where('company_id',$company->company_id);
             })->CheckRh()

@@ -17,6 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->id();
             $table->string('name',100);
             $table->string('display_name',100);
+            $table->string('image',255)->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->timestamps();
 

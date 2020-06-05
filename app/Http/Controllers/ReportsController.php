@@ -28,7 +28,7 @@ class ReportsController extends Controller
        }
        else if($user->role->name == 'gerente')
        {
-           $employees = $user->employee->workers()->orderBy('name_employee','ASC')->paginate(1);
+           $employees = $user->workersGte()->orderBy('name_employee','ASC')->paginate(1);
        }
        
         return view('reports.details', compact('employees'));
@@ -49,5 +49,37 @@ class ReportsController extends Controller
         $pdf = PDF::loadView('reports.report-one-employee', $data)->setPaper('letter','landscape');
 
         return $pdf->stream($employee->name_employee . '.pdf');
+    }
+
+    public function createAll(Request $request)
+    {
+        ini_set("max_execution_time", 3600);
+        $user = User::find(Auth::id());
+        if($request->employees){
+            $employees = explode(',',$request->employees);
+        }else{
+            if($user->role->name == 'gerente'){
+                $employees = $user->workersGte;
+            }else{
+                $employees = $user->companiesResources->company->employees;
+            }
+        }
+        
+        foreach ($employees as $key => $employee) {
+            $markings = Assistence::showAssists($request, $employee->id ?? $employee);
+
+            $data[] = [
+                'employee' => Employee::find($employee->id ?? $employee),
+                'markings' => $markings,
+            ];
+        }
+
+        $pdf = PDF::loadView('reports.report-all-employees', [
+            'data' => $data,
+            'start' => $request->start_date,
+            'end' => $request->end_date
+        ])->setPaper('letter','landscape');
+
+        return $pdf->stream('reporte de asistencias.pdf');
     }
 }
