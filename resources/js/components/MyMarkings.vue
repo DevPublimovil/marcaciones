@@ -11,7 +11,7 @@
                 <!--<input v-model="date" class="form-input" name="search" id="search" type="search" placeholder="Buscar">-->
                 <div class="flex ">
                     <div class="flex-initial pl-1">
-                        <span class="cursor-pointer transition duration-500 ease-in-out button bg-gray-300 text-blue-700 border-b-4 border-gray-400 transform hover:-translate-y-1 hover:scale-100 " :class="{'union-btn-active' : period == 'semanal', 'text-white' : period == 'semanal'}" @click="showModal = true">{{ action }}</span>
+                        <span class="cursor-pointer transition duration-500 ease-in-out button bg-gray-300 text-blue-700 border-b-4 border-gray-400 transform hover:-translate-y-1 hover:scale-100 " @click="showModal = true">{{ action }}</span>
                     </div>
                     <div class="flex-initial">
                         <a href="/actions/create" class="transition duration-500 ease-in-out button bg-blue-600 text-white border-b-4 border-blue-700 transform hover:-translate-y-1 hover:scale-100 " >
@@ -48,7 +48,7 @@
                 <p class="text-2xl font-bold">Elige un rango de fechas</p>
             </template>
             <template v-slot:body-modal>
-                <div class="flex justify-between">
+                <div class="flex justify-between mb-4">
                     <div class="flex-1 px-1">
                         <span class="font-bold">Desde:</span>
                         <input type="date" class="form-input w-full" name="" id="" v-model="startDate" min="2019-12-31">
@@ -58,11 +58,14 @@
                         <input type="date" class="form-input w-full" name="" id="" v-model="endDate" value="2020-05-21">
                     </div>
                 </div>
+                <p class="text-center text-red-400">{{ message }}</p>
             </template>
             <template v-slot:footer-modal>
                 <button class="focus:outline-none btn border border-gray-600 mx-1 hover:bg-gray-200" @click="showModal = false">Cancelar</button>
-                <button
-                    class="focus:outline-none btn border border-blue-700 bg-blue-600 text-white hover:bg-blue-500 mx-1" @click="changePeriod()">Aceptar</button>
+                <button class="focus:outline-none btn border border-blue-700 bg-blue-600 text-white hover:bg-blue-500 mx-1" @click="changePeriod()">
+                    <i class="fa fa-spinner fa-spin" aria-hidden="true" v-if="loading"></i>
+                    Aceptar
+                </button>
             </template>
          </my-modal-component>
     </div>
@@ -81,14 +84,16 @@ export default {
     data(){
         return{
             markings: [],
-            period: 1,
             date: '',
             action:'Periodo',
             en: en,
             es: es,
             showModal:false,
             startDate: '',
-            endDate: ''
+            endDate: '',
+            loading:false,
+            message:'',
+            weekly: true
         }
     },
     computed: {
@@ -98,7 +103,6 @@ export default {
     },
     methods: {
         getMarkingsWeekly(){
-            this.period = 1
             axios.get('/markings-weekly/' + this.employee).then(response => {
                 this.markings = response.data.data
             })
@@ -107,17 +111,33 @@ export default {
             return moment(date).format('YYYY-MM-DD');
         },
         changePeriod(){
-            this.period = 2
             let vm = this
-            axios.get('/markings/period/' + this.employee,{
-                params:{
-                    startDate: vm.startDate,
-                    endDate: vm.endDate
-                }
-            }).then(response => {
-                this.markings = response.data.data
-                this.showModal = false
-            })
+            if(moment(vm.endDate) > moment(vm.startDate))
+            {
+                vm.loading = true
+                axios.get('/markings/period/' + this.employee,{
+                    params:{
+                        startDate: vm.startDate,
+                        endDate: vm.endDate
+                    }
+                }).then(response => {
+                    this.markings = response.data.data
+                    this.showModal = false
+                    if(this.startDate == moment().startOf('week').format('YYYY-MM-DD') && this.endDate == moment().endOf('week').format('YYYY-MM-DD'))
+                    {
+                        this.$root.showBar = true
+                    }else{
+                        this.$root.showBar = false
+                    }
+                }).catch(error => {
+                    vm.message = 'No se encontro ningun registro'
+                    vm.loading = false
+                }).finally(()=>{
+                    vm.loading = false
+                })
+            }else{
+                vm.message = 'La fecha fin debe ser mayor'
+            }
         }
     },
     mounted() {

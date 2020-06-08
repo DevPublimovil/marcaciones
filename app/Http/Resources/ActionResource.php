@@ -22,7 +22,7 @@ class ActionResource extends JsonResource
             'check_gte' => $this->check_gte,
             'check_rh' => $this->check_rh,
             'diffHumans' => Fecha::parse($this->created_at)->diffForHumans(),
-            'name_employee' => $this->employee->name_employee . ' ' . $this->employee->surname_employee
+            'name_employee' => $this->employee->name_employee . ' ' . $this->employee->surname_employee,
         ];
     }
 }

@@ -52,7 +52,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/marcaciones/index', 'MarkingsController@index')->name('marcaciones.index');
     Route::get('/marcaciones-all', 'MarkingsController@getAllMarkings')->name('marcaciones.getall');
     Route::get('/marcaciones/horas/semanales/{id}', 'MarkingsController@calcHoursWeekly')->name('marcaciones.horassemanales');
-    Route::post('/reports/create', 'ReportsController@createAll')->name('reports.createall');
+    Route::get('/reports/create', 'ReportsController@createAll')->name('reports.createall');
     Route::get('/reports', 'ReportsController@index')->name('reports.index');
     Route::get('/reports/create/{employee}', 'ReportsController@create')->name('reports.create');
     Route::get('/apiassists/show/{id}', 'Resources\ReportsJsonController@showAssistsDetails')->name('apiassists.show');

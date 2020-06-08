@@ -53,4 +53,9 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Timetable','timetable_id','id');
     }
+
+    public function scopeSearchEmployee($query, $employee)
+    {
+        return $query->where('name_employee','LIKE','%'.$employee.'%')->orWhere('surname_employee','LIKE','%'.$employee.'%');
+    }
 }

@@ -1,9 +1,9 @@
 <template>
     <div class="form-personal-action">
-         <div class="container-lg mx-auto py-4">
-            <div class="w-11/12 mx-auto shadow-lg uppercase pt-2 bg-gray-300 rounded">
-                <h5 class="text-xl text-right py-2 px-4 text-blue-900">Accion de personal</h5>
-                <div class="bg-white p-6">
+         <div class="container mx-auto py-4">
+            <div class="w-11/12 mx-auto">
+                <h5 class="text-xl py-2 px-2 text-blue-900 font-bold">Nueva acción de personal</h5>
+                <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
                         <h4 class="text-xl text-center text-gray-700">Faltas cometidas</h4>
                         <div class="form-control-ic text-base grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -31,6 +31,7 @@
                                 Cancelar
                             </a>
                             <button type="button" class="btn btn-blue mx-2" @click="checkForm()">
+                               <i class="fa fa-spinner fa-spin" aria-hidden="true" v-if="loading"></i>
                                 Aceptar
                             </button>
                         </div>
@@ -49,15 +50,16 @@ export default {
         return{
             typeactions:[],
             other:'',
+            loading:false,
             description:'',
             errors: [],
-            classButton: 'bg-blue-700 btnsweet',
             showOther: false
         }
     },
     methods: {
         createPersonalAction(){
             let vm = this
+            vm.loading = true
             axios.post('/actions/',{
                 actions: vm.typeactions,
                 otherAction: vm.other,
@@ -66,10 +68,12 @@ export default {
                 swal(response.data, "Puedes revisar su estado en tu historial", "success").then((value) =>{
                     if(value)
                     {
-                        window.location.href = "/home"
+                        window.location.href = "/actions"
                     }
                 })
-            })
+            }).catch(error => {
+                toastr.error('Ocurrió un problema, intentalo de nuevo')
+            }).finally(() => vm.loading = false)
         },
         showAlert(message){
            swal({
@@ -104,12 +108,21 @@ export default {
     },
 }
 </script>
-
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+
+.loading {
+  border-top-color: #f1f0ef;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
+
+@-webkit-keyframes spinner {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

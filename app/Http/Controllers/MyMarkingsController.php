@@ -43,7 +43,7 @@ class MyMarkingsController extends Controller
      */
     public function showPeriod(Request $request, $id) 
     {
-        //busco el empleadoñ
+        //busco el empleado
         $employee = Employee::find($id);
 
         //establezco los filtros de mes

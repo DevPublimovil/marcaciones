@@ -79,11 +79,7 @@ class ActionController extends Controller
 
         $boss->notify(new NewPersonalAction($user->employee));
 
-        if($action){
-            return 'exito';
-        }else{
-            return 'exito';
-        }
+        return response()->json('Tu acción de personal se creó con éxito',200);
     }
 
     /**

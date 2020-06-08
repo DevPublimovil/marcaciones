@@ -11,7 +11,9 @@
                    <div class="text-left">
                     <select class="form-select cursor-pointer w-full" name="company" id="company">
                         @foreach($companies as $company)
-                            <option value="{{$company->company->id }}" @if ($company->company->id == $user->appcompany->company_id) selected @endif>{{$company->company->display_name }}</option>
+                            <option value="{{$company->company->id }}"  @if ($user->appcompany()->first())
+                                @if ($company->company->id == $user->appcompany->company_id) selected @endif
+                            @endif>{{$company->company->display_name }}</option>
                         @endforeach
                     </select>
                    </div>

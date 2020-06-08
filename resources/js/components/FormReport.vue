@@ -11,7 +11,7 @@
                     </div>
                 </template>
                 <template v-slot:body-modal >
-                    <form :action="'/reports/create'" method="POST" target="_blank" id="mi-form-report" class="p-0 m-0 h-full">
+                    <form :action="'/reports/create'" method="GET" target="_blank" id="mi-form-report" class="p-0 m-0 h-full">
                         <div class="flex">
                             <div class="flex-1">
                                  <input type="hidden" name="_token" :value="token">

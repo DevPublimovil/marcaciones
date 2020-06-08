@@ -14,6 +14,7 @@ use App\Action;
 use App\ActionType;
 use App\PersonalAction;
 use App\Helper\Assistence;
+use \Carbon\Carbon as Fecha;
 
 class ReportsController extends Controller
 {
@@ -22,13 +23,13 @@ class ReportsController extends Controller
         $user = User::find(Auth::id());
        if($user->role->name == 'rrhh')
        {
-        $resource = $user->companiesResources->first();
+        $resource = $user->appcompany->first();
 
-        $employees = Employee::where('company_id',$resource->company_id)->orderBy('name_employee','ASC')->paginate(1);
+        $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
        }
        else if($user->role->name == 'gerente')
        {
-           $employees = $user->workersGte()->orderBy('name_employee','ASC')->paginate(1);
+           $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
        }
        
         return view('reports.details', compact('employees'));
@@ -54,6 +55,7 @@ class ReportsController extends Controller
     public function createAll(Request $request)
     {
         ini_set("max_execution_time", 3600);
+        $name = Fecha::now()->toDateString();
         $user = User::find(Auth::id());
         if($request->employees){
             $employees = explode(',',$request->employees);
@@ -80,6 +82,6 @@ class ReportsController extends Controller
             'end' => $request->end_date
         ])->setPaper('letter','landscape');
 
-        return $pdf->stream('reporte de asistencias.pdf');
+        return $pdf->stream($name . '.pdf');
     }
 }

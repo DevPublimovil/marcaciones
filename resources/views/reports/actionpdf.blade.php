@@ -149,7 +149,9 @@
                     <p><strong>Descripcion:</strong> {{$action->description}}</p>
                 </td>
                 <td class="text-center column firma">
-                    <img src="{{public_path('storage/'.$action->employee->user->firm)}}" class="image_firma" alt="">
+                    @if ($action->employee->user->firm)
+                        <img src="{{public_path('storage/'.$action->employee->user->firm)}}" class="image_firma" alt="">
+                    @endif
                     Empleado
                 </td>
             </tr>
@@ -162,8 +164,8 @@
                     <p style="padding:0%;margin:0%">Jefe inmediato</p>
                 </td>
                 <td class="text-center firma">
-                    @if ($action->check_gte)
-                    <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
+                    @if ($action->check_gte == 1 && $action->employee->jefe->firm)
+                        <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
                     @endif
                 </td>
             </tr>
@@ -191,7 +193,7 @@
                     <p style="padding:0%;margin:0%">Recursos Humano</p>
                 </td>
                 <td class="text-center firma">
-                    @if ($action->check_rh)
+                    @if ($action->check_rh == 1 && $rh->firm)
                     <img src="{{public_path('storage/'.$rh->firm)}}" class="image_firma" alt="">
                     @endif
                 </td>

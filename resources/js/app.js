@@ -16,6 +16,7 @@ import Multiselect from 'vue-multiselect';
 import VModal from 'vue-js-modal'
 Vue.component('multiselect', Multiselect);
 Vue.use(VModal)
+window.toastr = require('toastr');
 
 /**
  * The following block of code may be used to automatically register your
@@ -51,6 +52,8 @@ const app = new Vue({
     data:{
         start:'',
         end: '',
+        showBar: true,
+        showModal: false,
     },
     mounted() {
         setTimeout(function() {

@@ -40,7 +40,8 @@ class EmployeeController extends Controller
         $companies = Company::orderBy('name','ASC')->get();
         $departaments = Departament::orderBy('name','ASC')->get();
         $managers = User::where('role_id',2)->orderBy('name','ASC')->get();
-        return view('employees.add-edit-employee', compact('companies','departaments','managers','terminals'));
+        $user = User::find(Auth::id());
+        return view('employees.add-edit-employee', compact('user','companies','departaments','managers','terminals'));
     }
 
     /**
@@ -91,6 +92,7 @@ class EmployeeController extends Controller
                                 'user_id' => ($type) ? $user->id : null,
                                 'departament_id' => $request->departament,
                                 'type_employee' => $request->typeemployee,
+                                'timetable_id' => $request->timestable,
                                 'jefe_id' => $request->boss
                             ]);
                         }
@@ -112,7 +114,8 @@ class EmployeeController extends Controller
         $companies = Company::orderBy('name','ASC')->get();
         $departaments = Departament::orderBy('name','ASC')->get();
         $managers = User::where('role_id',2)->orderBy('name','ASC')->get();
-        return view('employees.add-edit-employee', compact('employee','companies','departaments','managers','terminals'));
+        $user = User::find(Auth::id());
+        return view('employees.add-edit-employee', compact('user','employee','companies','departaments','managers','terminals'));
     }
 
     /**
@@ -178,6 +181,7 @@ class EmployeeController extends Controller
                     'company_id' => $request->company,
                     'departament_id' => $request->departament,
                     'type_employee' => $request->typeemployee,
+                    'timetable_id' => $request->timestable,
                     'jefe_id' => $request->boss
                 ]);
 

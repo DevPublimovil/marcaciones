@@ -21,7 +21,7 @@ class CreateMarkingsTable extends Migration
             $table->dateTime('check_out')->nullable();
             $table->decimal('hours_worked',8,2)->nullable();
             $table->decimal('extra_hours',8,2)->nullable();
-            $table->integer('late_arrivals')->nullable();
+            $table->decimal('late_arrivals',8,2)->nullable();
             $table->timestamps();
         });
     }

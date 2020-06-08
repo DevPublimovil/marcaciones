@@ -47,16 +47,15 @@
                                             <a :href="'/actions/' + action.id" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1" target="_blank">
                                                 Ver pdf <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                             </a>
-                                            <a :href="'/actions/'+ action.id + '/edit'" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1" v-if="role.role.name == 'empleado' && isPending">
-                                                Editar
-                                            </a>
                                             <template v-if="role.role.name == 'gerente'">
                                                 <button class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1" v-if="isPending" @click="changeNoApproved(action.id)">
+                                                    <i class="fa fa-spinner fa-spin" aria-hidden="true" v-if="loadingNoApproved"></i>
                                                     No aprobar
                                                 </button>
                                             </template>
                                             <template v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
                                                 <button class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1" v-if="isPending" @click="changeApproved(action.id)">
+                                                    <i class="fa fa-spinner fa-spin" aria-hidden="true" v-if="loadingApproved"></i>
                                                     Aprobar
                                                 </button>
                                             </template>
@@ -86,7 +85,9 @@ export default {
             isPending: true,
             isApproved: false,
             role: [],
-            token: ''
+            token: '',
+            loadingApproved: false,
+            loadingNoApproved: false,
         }
     },
     created(){
@@ -111,6 +112,8 @@ export default {
             })
         },
         changeApproved(action){
+            this.loadingApproved = true
+            toastr.info('¡espera un momento, tus cambios se estan guardando!')
             axios.put('/actions/approved/' + action).then(({data}) => {
                 this.fetchPending()
                 swal(data,{
@@ -118,6 +121,10 @@ export default {
                         timer: 2000,
                         button: false
                     });
+            }).catch(error => {
+                toastr.error('Ocurrió un problema, por favor intentelo de nuevo')
+            }).finally(()=>{
+                this.loadingApproved = false
             })
         },
         changeNoApproved(action){
@@ -131,6 +138,8 @@ export default {
                 })
                 .then((willDelete) => {
                 if (willDelete) {
+                    vm.loadingNoApproved = true
+                    toastr.info('¡espera un momento, tus cambios se estan guardando!')
                     axios.put('/actions/noapproved/' + action).then(response => {
                         vm.fetchPending()
                         swal(response.data,{
@@ -138,6 +147,10 @@ export default {
                             timer: 2000,
                             button: false
                         });
+                    }).catch(error => {
+                        toastr.error('Ocurrió un problema, por favor intentelo de nuevo')
+                    }).finally(()=>{
+                        this.loadingNoApproved = false
                     })
                 } else {
                     swal("¡Aun puedes aprobar la acción de personal!");

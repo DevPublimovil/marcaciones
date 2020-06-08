@@ -16,7 +16,7 @@
             {{ session('message') }}
         </div>
     @endif
-    <h3 class="text-xl text-blue-900 mb-3 font-bold">Editar perfil</h3>
+    <h3 class="text-xl text-blue-900 mb-3 font-bold">Editar pérfil</h3>
     <div class="shadow-lg rounded-lg border border-gray-300 bg-white">
         <div class="flex justify-between p-2">
             <div class="flex-1 pl-4">

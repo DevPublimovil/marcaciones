@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('content')
-    <form action="{{ route('password.email') }}" class="mx-auto">
+    <form action="{{ route('password.email') }}" method="POST" class="mx-auto">
         @csrf
         <div class="input-div one">
             <div class="i">

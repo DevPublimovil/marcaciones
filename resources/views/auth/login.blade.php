@@ -20,7 +20,7 @@
         </div>
         <div>
             <h5>{{ __('Password') }}</h5>
-            <input class="input" type="password" name="password" id="password" minlength="8"  required>
+            <input class="input" type="password" name="password" id="password" minlength="8"   required>
         </div>
     </div>
     @error('email')
