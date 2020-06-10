@@ -20,19 +20,23 @@ class ReportsController extends Controller
 {
     public function index(Request $request)
     {
-        $user = User::find(Auth::id());
-       if($user->role->name == 'rrhh')
-       {
-        $resource = $user->appcompany->first();
+        if(Auth::user()->hasPermission('browse_reports')){
+            $user = User::find(Auth::id());
+            if($user->role->name == 'rrhh')
+            {
+                $resource = $user->appcompany->first();
 
-        $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
-       }
-       else if($user->role->name == 'gerente')
-       {
-           $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
-       }
-       
-        return view('reports.details', compact('employees'));
+                $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
+            }
+            else if($user->role->name == 'gerente')
+            {
+                $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
+            }
+        
+            return view('reports.details', compact('employees'));
+        }else{
+            abort(403);
+        }
     }
 
     public function create(Request $request, $id)
@@ -54,34 +58,38 @@ class ReportsController extends Controller
 
     public function createAll(Request $request)
     {
-        ini_set("max_execution_time", 3600);
-        $name = Fecha::now()->toDateString();
-        $user = User::find(Auth::id());
-        if($request->employees){
-            $employees = explode(',',$request->employees);
-        }else{
-            if($user->role->name == 'gerente'){
-                $employees = $user->workersGte;
+        if(Auth::user()->hasPermission('create_reports')){
+            ini_set("max_execution_time", 3600);
+            $name = Fecha::now()->toDateString();
+            $user = User::find(Auth::id());
+            if($request->employees){
+                $employees = explode(',',$request->employees);
             }else{
-                $employees = $user->companiesResources->company->employees;
+                if($user->role->name == 'gerente'){
+                    $employees = $user->workersGte;
+                }else{
+                    $employees = $user->appCompany->company->employees;
+                }
             }
+            
+            foreach ($employees as $key => $employee) {
+                $markings = Assistence::showAssists($request, $employee->id ?? $employee);
+
+                $data[] = [
+                    'employee' => Employee::find($employee->id ?? $employee),
+                    'markings' => $markings,
+                ];
+            }
+
+            $pdf = PDF::loadView('reports.report-all-employees', [
+                'data' => $data,
+                'start' => $request->start_date,
+                'end' => $request->end_date
+            ])->setPaper('letter','landscape');
+
+            return $pdf->stream($name . '.pdf');
+        }else{
+            abort(403);
         }
-        
-        foreach ($employees as $key => $employee) {
-            $markings = Assistence::showAssists($request, $employee->id ?? $employee);
-
-            $data[] = [
-                'employee' => Employee::find($employee->id ?? $employee),
-                'markings' => $markings,
-            ];
-        }
-
-        $pdf = PDF::loadView('reports.report-all-employees', [
-            'data' => $data,
-            'start' => $request->start_date,
-            'end' => $request->end_date
-        ])->setPaper('letter','landscape');
-
-        return $pdf->stream($name . '.pdf');
     }
 }

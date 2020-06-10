@@ -22,7 +22,7 @@ class Assistence {
         }
 
         foreach ($period as $key => $value) {
-            $marking = Marking::where('serialno',$employee->cod_terminal)->where('cod_marking',$employee->cod_marking)->checktime($value)->first();
+            $marking = Marking::where('serialno',$employee->cod_terminal)->where('cod_marking',$employee->cod_marking)->whereDate('created_at',$value)->first();
             $action = Action::where('created_by', $employee->id)->whereDate('created_At',Fecha::parse($value)->format('Y-m-d'))->first();
             $permission = ($action) ? 'SI' : 'AUSENTE';
             if($marking)
@@ -77,7 +77,7 @@ class Assistence {
             'markings' => $markings,
             'total_hours_worked' => self::AddPlayTime($filtered_worked),
             'total_extra_hours' => self::AddPlayTime($filtered_extra),
-            'total_late_arrivals' => self::convertMinutes($filtered_minutes)
+            'total_late_arrivals' => self::AddPlayTime($filtered_minutes)
         ]);
     }
 
@@ -96,7 +96,7 @@ class Assistence {
         return  sprintf('%02d:%02d', $hours, $minutes);
     }
 
-    public static function convertMinutes($times)
+   /*  public static function convertMinutes($times)
     {
         $total = 0;
         foreach ($times as  $time) {
@@ -107,5 +107,5 @@ class Assistence {
         $total -= $time * 60;
 
         return  sprintf('%02d:%02d', $time, $total);
-    }
+    } */
 }

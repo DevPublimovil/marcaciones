@@ -16,10 +16,24 @@ class MarkingsEmployee extends JsonResource
     public function toArray($request)
     {
         return [
-            'date'       => Fecha::parse($this->check_in)->isoFormat('dddd') . ' - ' . Fecha::parse($this->check_in)->format('d/m/Y'),
-            'in'   => Fecha::parse($this->check_in)->format('H:i a'),
-            'out'    => Fecha::parse($this->check_out)->format('H:i a'),
-            'minutes'   => $this->late_arrivals
+            'id'        => $this->id,
+            'date'      => Fecha::parse($this->created_at)->isoFormat('dddd') . ' - ' . Fecha::parse($this->created_at)->format('d/m/Y'),
+            'in'        => Fecha::parse($this->check_in)->format('H:i a'),
+            'out'       => ($this->check_out) ? Fecha::parse($this->check_out)->format('H:i a') : null,
+            'minutes'   => $this->formatTime($this->late_arrivals)
         ];
+    }
+
+    public function formatTime($time)
+    {
+        $newtime = explode('.',$time);
+        if($time > 1.00){
+            return $newtime[0]. ' Horas y ' . $newtime[1] . ' minutos';
+        }else if(!$time){
+            return 0 . ' minutos';
+        }else{
+            return $newtime[1] . ' minutos';
+        }
+        
     }
 }

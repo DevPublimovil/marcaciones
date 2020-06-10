@@ -21,24 +21,10 @@ class MarkingsController extends Controller
 
      public function index()
      {
+        $this->authorize('browse_markings');
         $columns = Employee::$columns;
         return view('markings.index', compact('columns'));
      }
-
-    /**
-     * retorna todas las marcaciones junto con sus empleados
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllMarkings(Request $request)
-    {
-        
-        
-
-      /*   'hoursworked' => $this->markings()->whereBetween('check_in',[$start_week, $end_week])->sum('hours_worked'),
-                'extrahours' => $this->markings()->whereBetween('check_in',[$start_week, $end_week])->sum('extra_hours'),
-                'latearrivals' => $this->markings()->whereBetween('check_in',[$start_week, $end_week])->sum('late_arrivals'), */
-    }
 
     /**
      * retorna los calculos de horas trabajadas y llegadas tarde

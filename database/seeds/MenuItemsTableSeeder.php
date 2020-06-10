@@ -173,5 +173,156 @@ class MenuItemsTableSeeder extends Seeder
                 'order'      => 14,
             ])->save();
         }
+
+        $menu = Menu::where('name', 'manager')->firstOrFail();
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Historial',
+            'url'     => '',
+            'route'   => 'actions.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-history',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 15,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Tarjeta',
+            'url'     => '',
+            'route'   => 'reports.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-id-card',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 16,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Empleados',
+            'url'     => '',
+            'route'   => 'employees.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-users',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 17,
+            ])->save();
+        }
+
+
+        $menu = Menu::where('name', 'rrhh')->firstOrFail();
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Historial',
+            'url'     => '',
+            'route'   => 'actions.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-history',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 18,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Tarjeta',
+            'url'     => '',
+            'route'   => 'reports.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-id-card',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 19,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Empleados',
+            'url'     => '',
+            'route'   => 'employees.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-users',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 20,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Mi cuenta',
+            'url'     => '',
+            'route'   => 'myaccount.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-user',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 21,
+            ])->save();
+        }
+
+        $menu = Menu::where('name', 'employee')->firstOrFail();
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Home',
+            'url'     => '',
+            'route'   => 'home',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-home',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 1,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Historial',
+            'url'     => '',
+            'route'   => 'actions.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-history',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 2,
+            ])->save();
+        }
     }
 }

@@ -45,17 +45,17 @@ class MakeMarkings extends Command
         /* $date_start = Fecha::now()->subHours(24)->format('Y-m-d H:i:s');
         $date_end   = Fecha::now()->format('Y-m-d H:i:s'); */
         
-        $date_start = '2020-06-04 06:00:00';
-        $date_end   = '2020-06-05 06:00:00';
+        $date_start = '2020-06-08 06:00:00';
+        $date_end   = '2020-06-09 06:00:00';
         
         $markings = Webster_checkinout::whereBetween('checktime',[$date_start, $date_end])->orderBy('checktime','ASC')->get();
         //Log::info($markings->count());
         
         foreach ($markings as $key => $marking) {
-            $marcacion = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereNull('check_out')->whereDate('created_at',Fecha::parse($date_end)->format('Y-m-d'))->exists();
+            $marcacion = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->exists();
             if($marcacion)
             {
-                $marc = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereNull('check_out')->whereDate('created_at',Fecha::parse($date_end)->format('Y-m-d'))->first();
+                $marc = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->first();
                 $marc->update([
                     'check_out' => $marking->checktime,
                 ]);
@@ -66,8 +66,12 @@ class MakeMarkings extends Command
                     'cod_marking'       => $marking->userid,
                     'check_in'          => $marking->checktime,
                     'serialno'          => $marking->serialno,
-                    'created_at'        => Fecha::parse($date_end)->format('Y-m-d'),
+                    'created_at'        => Fecha::parse($date_start)->format('Y-m-d'),
                 ]);
+            }
+
+            if ($marking->userid == 87) {
+                Log::info($marking->checktime);
             }
         }
     }

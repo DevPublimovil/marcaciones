@@ -16,6 +16,15 @@ class PermissionsTableSeeder extends Seeder
             'browse_database',
             'browse_media',
             'browse_compass',
+            'browse_actions_approved',
+            'browse_actions',
+            'edit_firm',
+            'browse_employees',
+            'browse_markings',
+            'browse_reports',
+            'create_reports',
+            'browse_timestables',
+            'store_timestables'
         ];
 
         foreach ($keys as $key) {
@@ -24,6 +33,7 @@ class PermissionsTableSeeder extends Seeder
                 'table_name' => null,
             ]);
         }
+
 
         Permission::generateFor('menus');
 

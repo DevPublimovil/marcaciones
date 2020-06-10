@@ -16,6 +16,12 @@
                     <div class="w-full rounded-lg border border-gray-300 text-gray-700 overflow-hidden shadow-lg bg-white py-6 px-4">
                         <h2 class="text-md font-bold h-12">Horarios</h2>
                         <time-component v-for="(time, index) in timestables" :time="time" :key="index" @update-timestable="updateTime" @list-employees="listEmployees"></time-component>
+                        <div class="flex justify-between">
+                            <div>Sin horario</div>
+                            <div>
+                                <p class="text-right"><span class="mx-2 cursor-pointer hover:text-blue-500" @click="noTimestables()" title="Empleados"><i class="fa fa-users" aria-hidden="true"></i></span></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <section class="w-3/4 bg-white text-gray-700 shadow-md rounded-lg border border-gray-300">
@@ -273,6 +279,11 @@ export default {
                 vm.meta = response.data.meta
                 vm.links = response.data.links
             })
+        },
+        noTimestables(){
+            let vm = this
+            vm.idtimestable = ''
+            vm.fetchIndexData()
         },
         fetchTimestable(){
             axios.get('/apitime').then(({data})=>{

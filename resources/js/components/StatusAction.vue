@@ -5,7 +5,7 @@
                 <div class="flex card-header-status align-center items-center align-middle content-center h-12">
                     <h3 class="font-bold text-xl text-blue-900 mx-2">Historial de acciones de personal</h3>
                 </div>
-                <div class="card-body-status flex bg-white border border-gray-200 rounded shadow">
+                <div class="card-body-status flex bg-white border border-gray-200 rounded shadow" v-if="actions.length > 0">
                     <div class="timeline w-full relative mt-5 mx-2 p-0" v-if="actions.length > 0">
                         <div v-for="(action, index) in actions" :key="index">
                             <div class="time-label">
@@ -42,7 +42,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="text-xs text-center md:text-base">Gte. aprobada</div>
+                                                <div class="text-xs text-center md:text-base">Gte. {{action.check_gte == 1 ? 'aprobada' : action.check_gte == 3 ? 'no aprobada' : 'pendiente'}}</div>
                                             </div>
 
                                             <div class="w-1/4">
@@ -60,7 +60,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="text-xs text-center md:text-base">RH. aprobada</div>
+                                                <div class="text-xs text-center md:text-base">RH. {{action.check_rh == 1 ? 'aprobada' : action.check_rh == 3 ? 'no aprobada' : 'pendiente'}}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -69,6 +69,12 @@
                         </div>
                     </div>
                 </div>
+                <template v-else>
+                    <div class="w-1/2 mx-auto m-4">
+                        <img src="/images/empty.svg">
+                        <p class="text-gray-500 font-bold text-center mb-4">No se encontró ningún registro</p>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

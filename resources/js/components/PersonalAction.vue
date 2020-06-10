@@ -88,7 +88,7 @@ export default {
             if(!this.typeactions.length && !this.other){
               this.showAlert('Por favor selecciona al menos una falta cometida o describela en "Otros"')
             }else if(!this.description){
-                this.showAlert('La descipcion de su accion de personal es obligatoria')
+                this.showAlert('La descripción de su accion de personal es obligatoria')
             }else{
                 this.createPersonalAction()
             }

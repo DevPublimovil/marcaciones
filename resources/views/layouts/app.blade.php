@@ -11,6 +11,7 @@
 
     <!-- font icon -->
     <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}">
+    <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

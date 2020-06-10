@@ -8,6 +8,7 @@ use App\Employee;
 use App\User;
 use Carbon\Carbon as Fecha;
 use App\AppSession;
+use App\Marking;
 
 class HomeController extends Controller
 {
@@ -28,7 +29,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
         $user = User::find(Auth::id());
         if($user->role->name == 'gerente')
         {

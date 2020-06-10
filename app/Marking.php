@@ -12,4 +12,9 @@ class Marking extends Model
     {
         return $query->whereDate('check_in',$date)->orWhereDate('check_out',$date);
     }
+
+    public function scopeMyMarkings($query, $cod_marking, $cod_terminal)
+    {
+        return $query->where('serialno',$cod_terminal)->where('cod_marking',$cod_marking);
+    }
 }

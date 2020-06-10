@@ -17,7 +17,9 @@ class TimestableController extends Controller
      */
     public function index()
     {
-        return view('timestables.index');
+        if(Auth::user()->hasPermission('browse_timestables')){
+            return view('timestables.index');
+        }
     }
 
     /**
@@ -38,14 +40,16 @@ class TimestableController extends Controller
      */
     public function store(Request $request)
     {
-        $rh = Auth::id();
-        $timestable = Timetable::create([
-            'hour_in' => $request->in,
-            'hour_out' => $request->out,
-            'created_by' => $rh
-        ]);
+        if(Auth::user()->hasPermission('store_timestables')){
+            $rh = Auth::id();
+            $timestable = Timetable::create([
+                'hour_in' => $request->in,
+                'hour_out' => $request->out,
+                'created_by' => $rh
+            ]);
 
-        return response()->json('!El horario ha sido creado con exito!', 200);
+            return response()->json('!El horario ha sido creado con exito!', 200);
+        }
     }
 
     /**
@@ -79,13 +83,15 @@ class TimestableController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $timestable = Timetable::find($id);
-        $timestable->update([
-            'hour_in' => $request->in,
-            'hour_out' => $request->out,
-        ]);
+        if(Auth::user()->hasPermission('update_timestables')){
+            $timestable = Timetable::find($id);
+            $timestable->update([
+                'hour_in' => $request->in,
+                'hour_out' => $request->out,
+            ]);
 
-        return response()->json('!El horario ha sido actualizado con éxito!', 200);
+            return response()->json('!El horario ha sido actualizado con éxito!', 200);
+        }
     }
 
     /**
@@ -101,14 +107,16 @@ class TimestableController extends Controller
 
     public function changeTimesEmployee(Request $request)
     {
-        $timestable = Timetable::find($request->timestable);
-        foreach ($request->employees as $key => $value) {
-            $employee = Employee::find($value);
-            $employee->update([
-                'timetable_id' => $timestable->id
-            ]);
-        }
+        if(Auth::user()->hasPermission('store_timestables')){
+            $timestable = Timetable::find($request->timestable);
+            foreach ($request->employees as $key => $value) {
+                $employee = Employee::find($value);
+                $employee->update([
+                    'timetable_id' => $timestable->id
+                ]);
+            }
 
-        return response()->json('!Se ha actualizado el horario para tus empleados con éxito!', 200);
+            return response()->json('!Se ha actualizado el horario para tus empleados con éxito!', 200);
+        }
     }
 }

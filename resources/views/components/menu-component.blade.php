@@ -3,9 +3,9 @@
     <aside class="main-sidebar bg-blue-600 text-white elevation-4">
         <!-- Brand Logo -->
         <a href="/home" class="brand-link">
-        <img src="" alt="Logo" class="brand-image rounded-full"
-            style="opacity: .8">
-        <span class="brand-text font-weight-light">ICLOCK</span>
+        {{-- <img src="" alt="Logo" class="brand-image rounded-full"
+            style="opacity: .8"> --}}
+        <span class="brand-text font-weight-light">CLOCKBOT</span>
         </a>
 
         <!-- Sidebar -->

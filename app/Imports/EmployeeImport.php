@@ -8,6 +8,7 @@ use App\Departament;
 use App\Company;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Timetable;
 
 class EmployeeImport implements ToModel
 {

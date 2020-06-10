@@ -85,7 +85,7 @@ export default {
         return{
             markings: [],
             date: '',
-            action:'Periodo',
+            action:'Historial',
             en: en,
             es: es,
             showModal:false,

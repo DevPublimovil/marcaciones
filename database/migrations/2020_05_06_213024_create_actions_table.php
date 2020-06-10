@@ -22,7 +22,7 @@ class CreateActionsTable extends Migration
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
-            $table->foreign('created_by')->references('id')->on('users')
+            $table->foreign('created_by')->references('id')->on('employees')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

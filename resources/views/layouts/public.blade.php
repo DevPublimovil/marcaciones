@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" type="image/x-icon">
 
 
     <!-- Fonts -->
@@ -80,7 +81,7 @@
             <div class="flex">
                 <div class="image flex flex-wrap content-center justify-end h-screen lg:w-1/2 md:w-1/2 sm:w-0 w-0">
                     <div class="w-4/6">
-                        {{-- <img src="{{ asset('images/checklist.svg') }}" alt=""> --}}
+                        <img src="{{ asset('images/checklist.svg') }}" class="h h-64" alt="">
                     </div>
                 </div>
                 <div class="flex flex-wrap content-center justify-center lg:w-1/2 md:w-1/2 sm:w-full w-full">
