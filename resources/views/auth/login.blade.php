@@ -3,7 +3,7 @@
 @section('content')
 <form method="POST" action="{{ route('login') }}" class="mx-auto p-2">
     @csrf
-    <h2 class="uppercase">ICLOCK</h2>
+    <h2 class="uppercase">{{ config('app.name', 'Laravel') }}</h2>
     <div class="input-div one">
         <div class="i">
             <i class="fa fa-envelope" aria-hidden="true"></i>

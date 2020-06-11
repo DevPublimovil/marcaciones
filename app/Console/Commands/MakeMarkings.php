@@ -15,7 +15,7 @@ class MakeMarkings extends Command
      *
      * @var string
      */
-    protected $signature = 'make:markings';
+    protected $signature = 'make:markings {date?}';
 
     /**
      * The console command description.
@@ -42,14 +42,12 @@ class MakeMarkings extends Command
     public function handle()
     {
 
-        /* $date_start = Fecha::now()->subHours(24)->format('Y-m-d H:i:s');
-        $date_end   = Fecha::now()->format('Y-m-d H:i:s'); */
-        
-        $date_start = '2020-06-08 06:00:00';
-        $date_end   = '2020-06-09 06:00:00';
+        $myday = $this->argument('date');
+
+        $date_start = ($myday) ? Fecha::parse($myday)->subDay()->format('Y-m-d') . ' 06:00:00' : Fecha::now()->subDay()->format('Y-m-d') . ' 06:00:00';
+        $date_end   = ($myday) ? $myday . ' 06:00:00' : Fecha::now()->format('Y-m-d') . ' 06:00:00';
         
         $markings = Webster_checkinout::whereBetween('checktime',[$date_start, $date_end])->orderBy('checktime','ASC')->get();
-        //Log::info($markings->count());
         
         foreach ($markings as $key => $marking) {
             $marcacion = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->exists();
@@ -73,6 +71,6 @@ class MakeMarkings extends Command
             if ($marking->userid == 87) {
                 Log::info($marking->checktime);
             }
-        }
+        } 
     }
 }

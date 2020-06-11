@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="text-2xl font-bold text-white">ICLOCK</h2>
+        <h2 class="text-2xl font-bold text-white">{{ config('app.name', 'Laravel') }}</h2>
         <div class="mb-8"></div>
             <div class="flex justify-center items-center align-middle">
                 <form action="{{ route('home.company') }}" method="POST">

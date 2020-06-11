@@ -15,7 +15,7 @@ class CalculateHours extends Command
      *
      * @var string
      */
-    protected $signature = 'make:hours';
+    protected $signature = 'make:hours {date?}';
 
     /**
      * The console command description.
@@ -42,7 +42,9 @@ class CalculateHours extends Command
      */
     public function handle()
     {
-        $markings_local = Marking::whereDate('created_at','2020-06-08')->get();
+        $date = $this->argument('date') ?? Fecha::now()->subday()->format('Y-m-d');
+
+        $markings_local = Marking::whereDate('created_at',$date)->get();
 
         foreach ($markings_local as $key => $marking) {
             $employee = Employee::where('cod_marking', $marking->cod_marking)->where('cod_terminal',$marking->serialno)->first();
@@ -115,7 +117,8 @@ class CalculateHours extends Command
         $horaTermino = new \DateTime($realHour);
 
         $interval = $horaInicio->diff($horaTermino);
-        return $interval->format('%H.%i');
+        $interval = new \DateTime($interval->format('%H:%i'));
+        return $interval->format('H.i');
        /*  $cal_chour = explode(':', $hour);
         $cal_real_chour = explode(':', $realHour);
 
