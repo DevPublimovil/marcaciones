@@ -38,11 +38,11 @@ class MyAccountController extends Controller
                  ]);
             }
      
-            if($request->salary){
+            /* if($request->salary){
                 $user->employee->update([
                     'salary' => $request->salary
                 ]);
-            }
+            } */
      
             return back()->with('message','Tus datos se actualizaron con éxito');
         }

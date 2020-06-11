@@ -36,12 +36,12 @@
                     <input class="shadow appearance-none text-xs border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" minlength="8" name="password" id="password">
                 <span class="text-gray-500 text-xs italic">* Dejarlo vacío para mantener la misma contraseña</span>
                 </div>
-                @if($user->employee)
+                {{-- @if($user->employee)
                 <div class="mb-3">
                     <label for="email">Salario:</label>
                     <input class="shadow appearance-none text-xs border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" name="salary" id="salary" placeholder="0.00" step="any" value="{{ $user->employee->salary }}" required>
                 </div>
-                @endif
+                @endif --}}
                 <div class="mb-3">
                 <label for="firma"><a href="{{ route('employees.editfirm', $user->id) }}" class="change text-indigo-500 cursor-pointer underline hover:text-indigo-900">Editar firma</a></label>
                 <div class="flex w-full h-40">

@@ -109,8 +109,8 @@
                     <td class="column"><strong>Codigo:</strong> {{ $action->employee->cod_marking }}</td>
                 </tr>
                 <tr>
-                    <td class="column"><strong>Nombre del empleado:</strong> {{$action->employee->name_employee . ' ' . $action->employee->surname_employee}}</td>
-                    <td class="column"><strong>Sueldo:</strong> ${{$action->employee->salary}}</td>
+                    <td class="column" colspan="2"><strong>Nombre del empleado:</strong> {{$action->employee->name_employee . ' ' . $action->employee->surname_employee}}</td>
+                    {{-- <td class="column"><strong>Sueldo:</strong> ${{$action->employee->salary}}</td> --}}
                 </tr>
                 <tr>
                     <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> {{$action->employee->departament->display_name}}</td>

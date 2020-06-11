@@ -47,8 +47,8 @@ class ActionController extends Controller
             $user = User::find(Auth::id());
             $salary = $user->employee->salary;
             $firm = $user->firm;
-            if(!$salary || !$firm){
-                return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes proporcionar tu salario y tener una firma');
+            if(/* !$salary ||  */!$firm){
+                return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes tener una firma');
             }else{
                 return view('personalactions.new-personal-action', compact('user','typeactions'));
             }

@@ -65,13 +65,13 @@
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
                                 focus:outline-none focus:shadow-outline" name="positionemployee" id="positionemployee" type="text" value="{{ old('positionemployee',$employee->position ?? '') }}">
                             </div>
-                            <div class="mb-4">
+                            {{-- <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="salaryemployee">
                                     Salario
                                 </label>
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
                                 focus:outline-none focus:shadow-outline" name="salaryemployee" id="salaryemployee" type="number" step="any" value="{{ old('salaryemployee',$employee->salary ?? '') }}">
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="flex-1 p-2 border-l border-gray-200">
                             <div class="mb-4">

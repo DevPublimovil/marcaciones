@@ -90,7 +90,7 @@ class EmployeeController extends Controller
                                     'surname_employee' => $request->surnameemployee,
                                     'cod_marking' => $request->codemployee,
                                     'cod_terminal' => $request->terminal,
-                                    'salary' => $request->salaryemployee,
+                                    /* 'salary' => $request->salaryemployee, */
                                     'position' => $request->positionemployee,
                                     'company_id' => $request->company,
                                     'user_id' => ($type) ? $user->id : null,
@@ -186,7 +186,7 @@ class EmployeeController extends Controller
                         'surname_employee' => $request->surnameemployee,
                         'cod_marking' => $request->codemployee,
                         'cod_terminal' => $request->terminal,
-                        'salary' => $request->salaryemployee,
+                        /* 'salary' => $request->salaryemployee, */
                         'position' => $request->positionemployee,
                         'company_id' => $request->company,
                         'departament_id' => $request->departament,
