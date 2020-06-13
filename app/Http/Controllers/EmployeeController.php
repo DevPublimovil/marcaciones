@@ -14,6 +14,7 @@ use App\Terminal;
 use Image;
 use Storage;
 use Illuminate\Support\Facades\Hash;
+use \Carbon\Carbon as Fecha;
 use App\Http\Requests\StoreEmployee;
 
 class EmployeeController extends Controller
@@ -231,6 +232,7 @@ class EmployeeController extends Controller
 
      public function updateFirm(Request $request, $id)
      {
+
         if(Auth::user()->hasPermission('edit_firm')){
              //verifico si obtengo datos de la imagen
             if($request->imagefirma)
@@ -241,7 +243,7 @@ class EmployeeController extends Controller
                 //Utilizo intervention image para codificar la cadena a imagen
                 $img = Image::make($cadena)->encode('png', 75);
                 //Establezco un nombre unico para la imagen
-                $nombreImagen = $id.'firma.png';
+                $nombreImagen = strtotime(Fecha::now()->toDateString()) .'.png';
                 //Guardo la imagen en la carpeta storage
                 Storage::disk('public')->put('firms/' . $nombreImagen, $img);
                 //Busco el empleado
@@ -251,12 +253,8 @@ class EmployeeController extends Controller
                     'firm' => 'firms/' . $nombreImagen
                 ]);
             }
-            //Retorno un mensaje con la respuesta
-            if($user->role->name != 'empleado'){
-                return redirect()->route('actions.index');
-            }else{
-                return redirect()->route('employees.edit', $id)->with('mensaje','¡Su firma se actualizó correctamente!');
-            }
+            
+            return $user->role->name;
         }
         
      }

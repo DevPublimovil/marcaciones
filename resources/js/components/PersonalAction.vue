@@ -6,7 +6,7 @@
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
                         <h4 class="text-xl text-center text-gray-700">Faltas cometidas</h4>
-                        <div class="form-control-ic text-base grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        <div class="form-control-ic text-base grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2">
                             <div v-for="(type, index) in types" :key="index">
                                 <label class="inline-flex items-center cursor-pointer">
                                     <input type="checkbox" v-model="typeactions" class="form-checkbox bg-gray-400" :value="type.id" >

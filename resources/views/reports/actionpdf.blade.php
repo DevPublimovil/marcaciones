@@ -160,8 +160,20 @@
         <table class="table text-center text-sm" style="table-layout:fixed">
             <tr>
                 <td>
-                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">{{ $action->employee->jefe->name }}</p>
-                    <p style="padding:0%;margin:0%">Jefe inmediato</p>
+                    <div style="position: relative;">
+                        <div style="position: absolute; left: 40px; top: 40px;">
+                            @if ($action->check_gte == 1 && $action->employee->jefe->firm)
+                                <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
+                            @endif
+                        </div>
+                        <div style="position: absolute; left: 0px; top: 80px;"><p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;"></p></div>
+                      </div>
+                    {{-- @if ($action->check_gte == 1 && $action->employee->jefe->firm)
+                        <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
+                    @endif
+                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">
+                    {{ $action->employee->jefe->name }}</p>
+                    <p style="padding:0%;margin:0%">Jefe inmediato</p> --}}
                 </td>
                 <td class="text-center firma">
                     @if ($action->check_gte == 1 && $action->employee->jefe->firm)
