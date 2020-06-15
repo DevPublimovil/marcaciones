@@ -1,8 +1,11 @@
 <template>
     <div class="hortory-component">
-        <div class="history-main shadow-lg rounded p-0 m-0">
+        <div class="history-main shadow-lg rounded-lg p-0 m-0">
             <div class="history-header flex justify-between">
-                <ul class="list-reset flex border-b">
+                <div class="self-center">
+                    
+                </div>
+                <ul class="list-reset flex border-b text-xl">
                     <li class="-mb-px m-0">
                         <a class="bg-white inline-block hover:text-blue-600  rounded-t py-2 px-4 font-semibold" :class="[ isPending ? 'border-l border-t border-r text-blue-600' : 'text-gray-500' ]" href="#" @click="fetchPending()">Pendientes</a>
                     </li>
@@ -10,11 +13,8 @@
                         <a class="bg-white inline-block hover:text-blue-600 py-2 px-4 font-semibold" :class="[ isApproved ? 'border-l border-t border-r text-blue-600' : 'text-gray-500' ]" href="#" @click="fetchApproved()">Aprobadas</a>
                     </li>
                 </ul>
-                <div class="self-center">
-                    <h3 class="mr-3 text-xl text-blue-800">Historial de acciones de personal</h3>
-                </div>
             </div>
-            <div class="history-body flex bg-white">
+            <div class="history-body flex bg-white rounded">
                 <div class="flex-1">
                     <div class="timeline relative mt-5 mx-2 p-0" v-if="actions.length > 0">
                         <div v-for="(action, index) in actions" :key="index">
@@ -66,9 +66,17 @@
                         </div>
                     </div>
                     <template v-else>
-                        <div class="w-1/2 mx-auto m-4">
-                            <img src="/images/empty.svg">
-                            <p class="text-gray-500 font-bold text-center mb-4">No se encontró ningún registro</p>
+                        <div class="flex justify-center mt-32 mb-32" v-if="isLoading">
+                            <div class="text-gray-700 text-center ">
+                                <i class="fa fa-spinner fa-pulse fa-spin text-blue-500 fa-3x" aria-hidden="true"></i>
+                                <div class="logo">Cargando...</div>
+                            </div>
+                        </div>
+                        <div class="flex w-1/2 mx-auto p-1 h-full" v-if="!isLoading">
+                            <div class="flex-1 h-64">
+                                <img src="/images/empty.svg" class="object-contain h-56 w-full" alt="">
+                                <p class="text-center">No se encontró ningún registro</p>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -88,6 +96,7 @@ export default {
             token: '',
             loadingApproved: false,
             loadingNoApproved: false,
+            isLoading: false
         }
     },
     created(){
@@ -96,19 +105,31 @@ export default {
     },
     methods: {
         fetchPending(){
+            let vm = this
+            vm.isLoading = true
             axios.get('/apiactions/1').then(response => {
-                this.actions = response.data.actions
-                this.role = response.data.user
-                this.isPending = true
-                this.isApproved = false
+                vm.actions = response.data.actions
+                vm.role = response.data.user
+                vm.isPending = true
+                vm.isApproved = false
+            }).catch(error =>{
+                toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo')
+            }).finally(()=>{
+                vm.isLoading = false
             })
         },
         fetchApproved(){
+            let vm = this
+            vm.isLoading = true
             axios.get('/apiactions/2').then(response => {
-                this.actions = response.data.actions
-                this.role = response.data.user
-                this.isPending = false
-                this.isApproved = true
+                vm.actions = response.data.actions
+                vm.role = response.data.user
+                vm.isPending = false
+                vm.isApproved = true
+            }).catch(error =>{
+                toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo')
+            }).finally(()=>{
+                vm.isLoading = false
             })
         },
         changeApproved(action){

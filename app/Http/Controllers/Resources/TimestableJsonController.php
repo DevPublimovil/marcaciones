@@ -22,7 +22,8 @@ class TimestableJsonController extends Controller
         $user = User::find(Auth::id());
         if($user->role->name == 'gerente')
         {
-            $company = $user->companiesResources->company;
+            $company = $user->companiesResources->first();
+            $company = $company->company;
             $resource = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->first();
         }else{
             $resource = $user;

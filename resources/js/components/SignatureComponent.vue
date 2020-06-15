@@ -12,7 +12,9 @@
                                 <p>Dibuja tu firma en el centro del recuadro para obtener mejores resultados.</p>
                             </div>
                        </div>
-                        <canvas class="w-full h-64 border-gray-700"></canvas>
+                        <div class="border border-gray-500 rounded-lg">
+                            <canvas class="w-full h-64 border-gray-700 rounded-lg"></canvas>
+                        </div>
                         <div class="signature-pad--footer mt-1">
                             <div class="flex signature-pad--actions items-end content-end">
                                 <div class="flex-1 text-right">

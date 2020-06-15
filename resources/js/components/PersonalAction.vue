@@ -1,8 +1,7 @@
 <template>
-    <div class="form-personal-action">
+    <div class="form-personal-action text-xs">
          <div class="container mx-auto py-4">
-            <div class="w-11/12 mx-auto">
-                <h5 class="text-xl py-2 px-2 text-blue-900 font-bold">Nueva acción de personal</h5>
+            <div class="w-full p-2 mx-auto">
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
                         <h4 class="text-xl text-center text-gray-700">Faltas cometidas</h4>
@@ -14,7 +13,7 @@
                                 </label>
                             </div>
                             <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="form-checkbox bg-gray-400" @click="otherAction()">
+                                <input type="checkbox" class="form-checkbox bg-gray-400" :checked="showOther" @click="showOther ? showOther = false : showOther = true">
                                 <span class="ml-2">Otros</span>
                             </label>
                         </div>
@@ -45,7 +44,7 @@
 <script>
 import swal from 'sweetalert'
 export default {
-    props:['user','types'],
+    props:['user','types','action'],
     data(){
         return{
             typeactions:[],
@@ -62,10 +61,28 @@ export default {
             vm.loading = true
             axios.post('/actions/',{
                 actions: vm.typeactions,
-                otherAction: vm.other,
+                otherAction: vm.showOther ? vm.other : null,
                 description: vm.description
             }).then(response => {
                 swal(response.data, "Puedes revisar su estado en tu historial", "success").then((value) =>{
+                    if(value)
+                    {
+                        window.location.href = "/actions"
+                    }
+                })
+            }).catch(error => {
+                toastr.error('Ocurrió un problema, intentalo de nuevo')
+            }).finally(() => vm.loading = false)
+        },
+        update(action){
+            let vm = this
+            vm.loading = true
+            axios.put('/actions/' + action,{
+                actions: vm.typeactions,
+                otherAction: vm.showOther ? vm.other : null,
+                description: vm.description
+            }).then(({data})=>{
+                swal(data, "Puedes revisar su estado en tu historial", "success").then((value) =>{
                     if(value)
                     {
                         window.location.href = "/actions"
@@ -90,22 +107,29 @@ export default {
             }else if(!this.description){
                 this.showAlert('La descripción de su accion de personal es obligatoria')
             }else{
-                this.createPersonalAction()
+                if(this.action != null){
+                    this.update(this.action.id)
+                }else{
+                    this.createPersonalAction()
+                }
             }
 
         },
-        otherAction(){
-            if(this.showOther)
-            {
-                this.showOther = false
-            }
-            else
-            {
+    },
+    mounted(){
+        if(this.action != null){
+            if (this.action.other_action != null) {
                 this.showOther = true
-                this.other = ''
+            }
+            this.description = this.action.description
+            this.other = this.action.other_action
+            if(this.action.personalaction.length > 0){
+                for (let index = 0; index < this.action.personalaction.length; index++) {
+                    this.typeactions.push(this.action.personalaction[index].type_action_id)
+                }
             }
         }
-    },
+    }
 }
 </script>
 <style>

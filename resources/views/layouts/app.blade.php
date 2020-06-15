@@ -82,6 +82,7 @@
                 <div class="loader"></div>
             </div>
             <section class="content">
+                @yield('header-content')
                 @yield('content')
             </section>  
         </div>

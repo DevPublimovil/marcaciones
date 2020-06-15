@@ -1,10 +1,7 @@
 <template>
     <div class="status-action-component">
         <div class="container-md mx-auto py-2">
-            <div class="card-status w-10/12 mx-auto">
-                <div class="flex card-header-status align-center items-center align-middle content-center h-12">
-                    <h3 class="font-bold text-xl text-blue-900 mx-2">Historial de acciones de personal</h3>
-                </div>
+            <div class="card-status w-full p-2 mx-auto">
                 <div class="card-body-status flex bg-white border border-gray-200 rounded shadow" v-if="actions.length > 0">
                     <div class="timeline w-full relative mt-5 mx-2 p-0" v-if="actions.length > 0">
                         <div v-for="(action, index) in actions" :key="index">
@@ -65,6 +62,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="flex justify-end mt-1 text-xs">
+                                    <button class="btn border border-blue-800 hover:bg-blue-100" v-if="action.check_gte == 0" @click="edit(action.id)">Editar</button>
+                                    <button class="btn bg-blue-500 hover:bg-blue-600 text-white ml-1" @click="viewPdf(action.id)">Ver</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -97,6 +98,9 @@ export default {
             }).catch(response =>{
                 console.log(response)
             })
+        },
+        edit(action){
+            window.location.href = '/actions/' + action + '/edit'
         },
         viewPdf(action){
             window.open('/actions/' + action, '_blank')

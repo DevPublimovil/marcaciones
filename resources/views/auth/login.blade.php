@@ -9,8 +9,7 @@
             <i class="fa fa-envelope" aria-hidden="true"></i>
         </div>
         <div>
-            <h5>{{ __('Correo') }}</h5>
-            <input class="input" type="text" name="email" id="email" value="{{ old('email') }}" required>
+            <input class="input" type="text" name="email" id="email" value="{{ old('email') }}" placeholder="Correo" required>
         </div>
     </div>
     <div class="mb-8"></div>
@@ -19,8 +18,7 @@
             <i class="fa fa-lock" aria-hidden="true"></i>
         </div>
         <div>
-            <h5>{{ __('Password') }}</h5>
-            <input class="input" type="password" name="password" id="password" minlength="8"   required>
+            <input class="input" type="password" name="password" id="password" minlength="8"  placeholder="Contraseña"  required>
         </div>
     </div>
     @error('email')

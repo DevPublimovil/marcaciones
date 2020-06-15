@@ -243,7 +243,7 @@ class EmployeeController extends Controller
                 //Utilizo intervention image para codificar la cadena a imagen
                 $img = Image::make($cadena)->encode('png', 75);
                 //Establezco un nombre unico para la imagen
-                $nombreImagen = strtotime(Fecha::now()->toDateString()) .'.png';
+                $nombreImagen = strtotime(Fecha::now()->format('Y-m-d H:i:s')) .'.png';
                 //Guardo la imagen en la carpeta storage
                 Storage::disk('public')->put('firms/' . $nombreImagen, $img);
                 //Busco el empleado

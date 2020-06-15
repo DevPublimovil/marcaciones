@@ -8,7 +8,7 @@
         </div>
         <div class="relative px-4 py-4 text-gray-600 text-sm">
             <p class="mb-2">
-                <strong class="text-blue-800"><i class="fa fa-envelope" aria-hidden="true"></i> </strong> {{ $employee->user->email }}
+                <strong class="text-blue-800"><i class="fa fa-envelope" aria-hidden="true"></i> </strong> <span class="text-xs">{{ $employee->user->email }}</span>
             </p>
             <p class="mb-2">
                 <strong class="text-blue-800"><i class="fa fa-briefcase" aria-hidden="true"></i></strong> {{ $employee->position }}

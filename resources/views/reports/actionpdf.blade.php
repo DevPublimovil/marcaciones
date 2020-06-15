@@ -166,40 +166,36 @@
                                 <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
                             @endif
                         </div>
-                        <div style="position: absolute; left: 0px; top: 80px;"><p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;"></p></div>
+                        <div style="position: absolute; left: 0px; top: 80px;">
+                            <p style="padding:0%;border-bottom:1px solid gray;"></p>
+                        </div>
+                        <div style="position: absolute; left: 0px; top: 90px;">
+                            <p style="padding:0%;">
+                            {{$action->employee->jefe->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Jefe inmediato
+                            </p>
+                        </div>
                       </div>
-                    {{-- @if ($action->check_gte == 1 && $action->employee->jefe->firm)
-                        <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
-                    @endif
-                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">
-                    {{ $action->employee->jefe->name }}</p>
-                    <p style="padding:0%;margin:0%">Jefe inmediato</p> --}}
                 </td>
-                <td class="text-center firma">
-                    @if ($action->check_gte == 1 && $action->employee->jefe->firm)
-                        <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
-                    @endif
+                <td width="20%"></td>
+                <td>
+                    <div style="position: relative;">
+                        <div style="position: absolute; left: 40px; top: 40px;">
+                            @if ($action->check_rh == 1 && $rh->firm)
+                            <img src="{{public_path('storage/'.$rh->firm)}}" class="image_firma" alt="">
+                            @endif
+                        </div>
+                        <div style="position: absolute; left: 0px; top: 80px;">
+                            <p style="padding:0%;border-bottom:1px solid gray;"></p>
+                        </div>
+                        <div style="position: absolute; left: 0px; top: 90px;">
+                            <p style="padding:0%;">
+                            {{$rh->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Recursos humanos
+                            </p>
+                        </div>
+                      </div>
                 </td>
             </tr>
             {{-- <tr>
-                <td>
-                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">Rene cisneros</p>
-                    <p style="padding:0%;margin:0%">Gerente de IT</p>
-                </td>
-                <td class="text-center firma">
-                    <img src="{{public_path('storage/'.$action->employee->firma)}}" class="image_firma" alt="">
-                </td>
-            </tr> --}}
-            {{-- <tr>
-                <td>
-                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">Rene cisneros</p>
-                    <p style="padding:0%;margin:0%">Gerente de IT</p>
-                </td>
-                <td class="text-center firma">
-                    <img src="{{public_path('storage/'.$action->employee->firma)}}" class="image_firma" alt="">
-                </td>
-            </tr> --}}
-            <tr>
                 <td>
                     <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">{{$rh->name}}</p>
                     <p style="padding:0%;margin:0%">Recursos Humano</p>
@@ -209,7 +205,7 @@
                     <img src="{{public_path('storage/'.$rh->firm)}}" class="image_firma" alt="">
                     @endif
                 </td>
-            </tr>
+            </tr> --}}
         </table>
     </main>
 </body>

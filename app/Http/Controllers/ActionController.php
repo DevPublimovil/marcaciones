@@ -98,9 +98,18 @@ class ActionController extends Controller
      */
     public function show($id)
     {
+        $user = User::find(Auth::id());
         if(Auth::user()->hasPermission('browse_actions')){
             $action = Action::find($id);
             $employee = $action->employee;
+            if($user->role->name == 'empleado'){
+                if($employee->id != $user->employee->id){
+                    return back()->with([
+                        'message' => 'Estas intentando acceder a una acción de personal que no te pertenece',
+                        'type' => 'danger'
+                    ]);
+                }
+            }
             $company = $employee->company;
             $resource = $company->resourceCompany()->first();
             $rh =  $resource->user;
@@ -124,7 +133,18 @@ class ActionController extends Controller
      */
     public function edit($id)
     {
-        
+        $action = Action::find($id);
+        if(!$action->check_gte){
+            $action = $action->with('personalaction')->first();
+            $typeactions = ActionType::all();
+            $user = User::find(Auth::id());
+            return view('personalactions.new-personal-action', compact('user','typeactions','action'));
+        }else{
+            return back()->with([
+                'message' => 'Estas intentando editar una acción de personal que ya fue aprobada',
+                'type' => 'danger'
+            ]);
+        }
     }
 
     /**
@@ -136,7 +156,30 @@ class ActionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find(Auth::id());
+        $action = Action::find($id);
+        $action->update([
+            'other_action'  => $request->otherAction ?? null,
+            'description'   => $request->description,
+            'created_by'   => $user->employee->id,
+        ]);
+
+        if($request->actions)
+        {
+            foreach ($request->actions as $key => $value) {
+                $action->personalaction()->where('type_action_id', '!=', $value)->delete();
+            }
+
+            foreach ($request->actions as $key => $item) {
+                $pantalla = PersonalAction::firstOrCreate([
+                    'action_id'   => $action->id,
+                    'type_action_id'      => $item
+                ]);
+            }
+
+        }
+
+       return response()->json('Tu acción de personal se actualizó con éxito',200);
     }
 
     /**
@@ -186,7 +229,7 @@ class ActionController extends Controller
                 $rh = $user->companiesResources()->first();
                 $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
 
-                $rh->notify(new NewPersonalAction($action->employee));
+                //$rh->notify(new NewPersonalAction($action->employee));
 
             }else if($user->role->name == 'rrhh')
             {

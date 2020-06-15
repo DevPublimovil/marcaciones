@@ -291,7 +291,9 @@ export default {
             })
         },
         showProfile(employee){
-            window.location.href = "/employees/" + employee
+            if(this.rol == 3){
+                window.location.href = "/employees/" + employee
+            }
         },
         newTimestable(){
             this.timeTitle = 'Nuevo horario'

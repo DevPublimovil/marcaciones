@@ -27,7 +27,7 @@ class MenuItemsTableSeeder extends Seeder
                 'icon_class' => 'voyager-boat',
                 'color'      => null,
                 'parent_id'  => null,
-                'order'      => 1,
+                'order'      => 15,
             ])->save();
         }
 
@@ -174,18 +174,34 @@ class MenuItemsTableSeeder extends Seeder
             ])->save();
         }
 
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => __('Carga de datos'),
+            'url'     => '',
+            'route'   => 'admin.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'voyager-upload',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 1,
+            ])->save();
+        }
+
         $menu = Menu::where('name', 'manager')->firstOrFail();
 
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
-            'title'   => 'Historial',
+            'title'   => 'Acciones de personal',
             'url'     => '',
             'route'   => 'actions.index',
         ]);
         if (!$menuItem->exists) {
             $menuItem->fill([
                 'target'     => '_self',
-                'icon_class' => 'fa-history',
+                'icon_class' => 'fa-file-text',
                 'color'      => null,
                 'parent_id'  => null,
                 'order'      => 15,
@@ -229,14 +245,14 @@ class MenuItemsTableSeeder extends Seeder
 
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
-            'title'   => 'Historial',
+            'title'   => 'Acciones de personal',
             'url'     => '',
             'route'   => 'actions.index',
         ]);
         if (!$menuItem->exists) {
             $menuItem->fill([
                 'target'     => '_self',
-                'icon_class' => 'fa-history',
+                'icon_class' => 'fa-file-text',
                 'color'      => null,
                 'parent_id'  => null,
                 'order'      => 18,
@@ -311,14 +327,14 @@ class MenuItemsTableSeeder extends Seeder
 
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
-            'title'   => 'Historial',
+            'title'   => 'Acciones de personal',
             'url'     => '',
             'route'   => 'actions.index',
         ]);
         if (!$menuItem->exists) {
             $menuItem->fill([
                 'target'     => '_self',
-                'icon_class' => 'fa-history',
+                'icon_class' => 'fa-file-text',
                 'color'      => null,
                 'parent_id'  => null,
                 'order'      => 2,
