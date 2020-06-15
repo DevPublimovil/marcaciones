@@ -52,4 +52,11 @@ class HomeController extends Controller
 
         return redirect()->route('actions.index');
     }
+
+    public function homeclockbot()
+    {
+        $user = User::find(Auth::id());
+        $employee = $user->employee->id;
+        return view('subjefe.home', compact('employee'));
+    }
 }

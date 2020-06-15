@@ -135,7 +135,7 @@ class ActionController extends Controller
     {
         $action = Action::find($id);
         if(!$action->check_gte){
-            $action = $action->with('personalaction')->first();
+            $action = $action->load('personalaction');
             $typeactions = ActionType::all();
             $user = User::find(Auth::id());
             return view('personalactions.new-personal-action', compact('user','typeactions','action'));
@@ -218,7 +218,7 @@ class ActionController extends Controller
             $action = Action::find($id);
             $user = User::find(Auth::id());
             $employee = $action->employee->user;
-            if($user->role->name == 'gerente')
+            if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
             {
                 $action->update([
                     'check_gte' => 1
@@ -229,7 +229,7 @@ class ActionController extends Controller
                 $rh = $user->companiesResources()->first();
                 $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
 
-                //$rh->notify(new NewPersonalAction($action->employee));
+                $rh->notify(new NewPersonalAction($action->employee));
 
             }else if($user->role->name == 'rrhh')
             {
@@ -243,6 +243,16 @@ class ActionController extends Controller
             return 'La acción de personal ha sido aprobada ';
         }else{
             abort(403);
+        }
+    }
+
+    public function myactions()
+    {
+        $user = User::find(Auth::id());
+        if($user->firm){
+            return view('subjefe.actions', compact('user'));
+        }else{
+            return redirect()->route('employees.editfirm', $user->id);
         }
     }
 }

@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/myaccount/employee', 'MyAccountController@show')->name('myaccount.show');
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post('/home/company/', 'HomeController@selectCompany')->name('home.company');
+    Route::get('/inicio/clockbot', 'HomeController@homeclockbot')->name('home.clockbot');
+    Route::get('/myactions', 'ActionController@myactions')->name('actions.myactions');
 });
 
 

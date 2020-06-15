@@ -19,6 +19,8 @@
                         {{menu('employee', 'my_menu')}}
                     @elseif($user->role->name == 'gerente')
                         {{menu('manager', 'my_menu')}}
+                    @elseif($user->role->name == 'subjefe')
+                        {{menu('subjefe', 'my_menu')}}
                     @endif
             </nav>
             <!-- /.sidebar-menu -->

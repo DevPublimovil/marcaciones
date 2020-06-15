@@ -49,7 +49,7 @@ class ActionsJsonController extends Controller
                 ->with(['employee'])
                 ->orderBy('actions.created_at','DESC')->get();
         }
-        else if($user->role->name == "gerente")
+        else if($user->role->name == "gerente" || $user->role->name == "subjefe")
         {
             $query = Action::whereHas('employee', function ($query) use ($user) {
                 $query->where('jefe_id',$user->id);
@@ -75,7 +75,7 @@ class ActionsJsonController extends Controller
                 ->with(['employee'])
                 ->orderBy('actions.created_at','DESC')->get();
         }
-        else if($user->role->name == "gerente")
+        else if($user->role->name == "gerente" || $user->role->name == "subjefe")
         {
             $query = Action::whereHas('employee', function ($query) use ($user) {
                 $query->where('jefe_id',$user->id);

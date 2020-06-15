@@ -18,7 +18,7 @@ class EmployeeJsonController extends Controller
     {
         $user = User::find(Auth::id());
         $column = $this->selectColumn($request->column);
-        if($user->role->name == 'gerente')
+        if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
             $resource =  $user->workersGte();
         }else{
@@ -57,7 +57,7 @@ class EmployeeJsonController extends Controller
     public function showEmployees(){
 
         $user = User::find(Auth::id());
-        if($user->role->name == 'gerente')
+        if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
            $employees = $user->workersGte()->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
         }else{

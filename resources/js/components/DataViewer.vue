@@ -1,8 +1,8 @@
 <template>
     <div class="dv text-base py-4">
        <div class="w-11/12 mx-auto">
-            <div class="flex h-12 justify-between align-middle content-center items-center">
-                <div><h2 class="text-xl text-blue-900 font-bold">Lista de empleados</h2></div>
+            <div class="flex h-12 justify-between align-middle content-center items-center mt-4 mb-4">
+                <div><h2 class="text-2xl text-blue-900 font-bold"> <i class="fa fa-users" aria-hidden="true"></i> Lista de empleados</h2></div>
                 <div class="text-sm">
                         <span v-if="employeesSelected.length > 0" class="btn border border-blue-800 text-blue-800 hover:bg-blue-200 cursor-pointer" @click="showFormChange()">Cambiar horario</span>
                        <template v-if="rol == 3">
@@ -65,15 +65,26 @@
                                             <td class="px-4 py-2" @click="showProfile(row.id)">{{ row.first_name }}</td>
                                             <td @click="showProfile(row.id)">{{ row.last_name }}</td>
                                             <td @click="showProfile(row.id)">{{ row.cod }}</td>
-                                            <!-- <td>{{ row.position }}</td>
-                                            <td>{{ row.type }}</td>
-                                            <td>{{ row.company }}</td>
-                                            <td>{{ row.departament }}</td> -->
+                                        </tr>
+                                        <tr v-if="isLoading">
+                                            <td colspan="4">
+                                                <div class="flex justify-center py-2">
+                                                    <div class="text-gray-700 text-center ">
+                                                        <i class="fa fa-spinner fa-pulse fa-spin text-blue-500 fa-3x" aria-hidden="true"></i>
+                                                        <div class="logo">Cargando...</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr v-if="model.length == 0 && isLoading == false">
+                                            <td colspan="4">
+                                                <p class="text-center mt-4">No se encontró ningún registro</p>
+                                            </td>
                                         </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="dv-footer flex justify-between mt-5">
+                        <div class="dv-footer flex justify-between mt-5"  v-if="model.length > 0">
                             <div>
                                 <span>Mostrando  {{ meta.from }} - {{ meta.to }} de {{ meta.total }} empleados</span>
                             </div>
@@ -138,6 +149,7 @@ export default {
             timeTitle:'',
             idtimestable:'',
             model: [],
+            isLoading:false,
             meta:[],
             links:[],
             employeesSelected:[],
@@ -273,11 +285,17 @@ export default {
         },
         fetchIndexData(){
             let vm = this
+            vm.isLoading = true
+            vm.model = []
             axios.get(`${this.source}?column=${this.query.column}&direction=${this.query.direction}&page=${this.query.page}
             &per_page=${this.query.per_page}&search_input=${this.query.search_input}&time=${this.idtimestable}`).then(response =>{
                 vm.model = response.data.data
                 vm.meta = response.data.meta
                 vm.links = response.data.links
+            }).catch(error =>{
+                toastr.error('Ocurrió un problema por favot intentalo de nuevo')
+            }).finally(()=>{
+                vm.isLoading = false
             })
         },
         noTimestables(){

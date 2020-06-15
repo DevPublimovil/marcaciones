@@ -20,7 +20,7 @@ class TimestableJsonController extends Controller
     public function index()
     {
         $user = User::find(Auth::id());
-        if($user->role->name == 'gerente')
+        if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
             $company = $user->companiesResources->first();
             $company = $company->company;

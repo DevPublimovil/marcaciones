@@ -28,7 +28,7 @@ class ReportsController extends Controller
 
                 $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
             }
-            else if($user->role->name == 'gerente')
+            else if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
             {
                 $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
             }
@@ -65,7 +65,7 @@ class ReportsController extends Controller
             if($request->employees){
                 $employees = explode(',',$request->employees);
             }else{
-                if($user->role->name == 'gerente'){
+                if($user->role->name == 'gerente' || $user->role->name == 'subjefe'){
                     $employees = $user->workersGte;
                 }else{
                     $employees = $user->appCompany->company->employees;

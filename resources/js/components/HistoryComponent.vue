@@ -25,12 +25,8 @@
                                 <div class="timeline-item rounded-lg border border-gray-400 text-gray-600 ml-16 p-0 mt-0 relative">
                                     <div class="flex justify-between">
                                         <div>
-                                            <h3 class="timeline-header text-xl text-gray-800 leading-loose p-1 m-0" v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
+                                            <h3 class="timeline-header text-xl text-gray-800 leading-loose p-1 m-0" v-if="role.role.name == 'gerente' || role.role.name == 'rrhh' || role.role.name == 'subjefe'">
                                                 {{ action.name_employee }}
-                                            </h3>
-                                            <h3 class="timeline-header text-xl text-gray-800 leading-loose p-1 m-0" v-else>
-                                                <span><i :class="[action.check_gte ? 'text-green-600 fa fa-check-circle' : 'text-red-600 fa fa-times-circle']" aria-hidden="true"></i> Gerente</span>
-                                                <span><i :class="[action.check_rh ? 'text-green-600 fa fa-check-circle' : 'text-red-600 fa fa-times-circle']" aria-hidden="true"></i> Recursos humanos</span>
                                             </h3>
                                         </div>
                                         <div>
@@ -47,13 +43,13 @@
                                             <a :href="'/actions/' + action.id" class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1" target="_blank">
                                                 Ver pdf <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                             </a>
-                                            <template v-if="role.role.name == 'gerente'">
+                                            <template v-if="role.role.name == 'gerente' || role.role.name == 'subjefe'">
                                                 <button class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1" v-if="isPending" @click="changeNoApproved(action.id)">
                                                     <i class="fa fa-spinner fa-spin" aria-hidden="true" v-if="loadingNoApproved"></i>
                                                     No aprobar
                                                 </button>
                                             </template>
-                                            <template v-if="role.role.name == 'gerente' || role.role.name == 'rrhh'">
+                                            <template v-if="role.role.name == 'gerente' || role.role.name == 'rrhh' || role.role.name == 'subjefe'">
                                                 <button class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1" v-if="isPending" @click="changeApproved(action.id)">
                                                     <i class="fa fa-spinner fa-spin" aria-hidden="true" v-if="loadingApproved"></i>
                                                     Aprobar

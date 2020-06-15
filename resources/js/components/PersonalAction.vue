@@ -1,6 +1,6 @@
 <template>
     <div class="form-personal-action text-xs">
-         <div class="container mx-auto py-4">
+         <div class="container-lg mx-auto py-4">
             <div class="w-full p-2 mx-auto">
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
