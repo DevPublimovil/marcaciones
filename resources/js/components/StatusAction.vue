@@ -1,7 +1,7 @@
 <template>
     <div class="status-action-component">
         <div class="container-lg mx-auto py-2">
-            <div class="card-status w-10/12 mx-auto">
+            <div class="card-status w-full md:w-10/12 mx-auto">
                 <div class="card-body-status flex bg-white border border-gray-200 rounded shadow" v-if="actions.length > 0">
                     <div class="timeline w-full relative mt-5 mx-2 p-0" v-if="actions.length > 0">
                         <div v-for="(action, index) in actions" :key="index">

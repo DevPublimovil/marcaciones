@@ -6,7 +6,7 @@
                     <img class="h-full w-full object-cover"  :src="'/storage/'+info.avatar" alt="username">
                 </button>
                 <transition enter-active-class="transition duration-300 ease-out transform" enter-class="-translate-y-3 scale-95 opacity-0" enter-to-class="translate-y-0 scale-100 opacity-100" leave-active-class="transition duration-150 ease-in transform" leave-class="translate-y-0 opacity-100" leave-to-class="-translate-y-3 opacity-0">
-                <div v-show="isVisible" class="fixed pt-2 w-1/5 top-auto right-0">
+                <div v-show="isVisible" class="fixed  top-auto right-0">
                     <div class="relative py-1 bg-white border border-gray-200 rounded-md shadow-xl">
                     <div class="relative top-0 w-4 h-4 origin-center transform rotate-45 translate-x-5 -translate-y-2 bg-white border-t border-l border-gray-200 rounded-sm pointer-events-none"></div>
                     <div class="relative text-center">

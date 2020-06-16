@@ -21,11 +21,13 @@ class EmployeeJsonController extends Controller
         if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
             $resource =  $user->workersGte();
+            $timestable = $resource->first(); 
         }else{
             $resource = $user->appcompany->company->employees();
+            $timestable = $resource->first();
         }
 
-        $model = $resource->where('timetable_id',$request->time)->orderBy($column, $request->direction)
+        $model = $resource->where('timetable_id', $timestable->timetable_id)->orderBy($column, $request->direction)
                 ->where(function($query) use($request){
                     if($request->search_input)
                     {

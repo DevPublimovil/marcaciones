@@ -3,7 +3,7 @@
 @section('header-content')
     <div class="flex p-2 pt-8 mb-y">
         <div class="flex-1">
-            <h3 class="text-2xl text-gray-700 font-bold">
+            <h3 class="text-base md:text-2xl text-gray-700 font-bold">
                 <span class="mr-3"><i class="fa fa-file-text" aria-hidden="true"></i></span>
                 @if (isset($action))
                     Editar acción de personal
@@ -12,7 +12,6 @@
                 @endif
             </h3>
         </div>
-        <div class="flex-1"></div>
     </div>
 @endsection
 

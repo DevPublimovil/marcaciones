@@ -166,10 +166,10 @@
                                 <img src="{{public_path('storage/'.$action->employee->jefe->firm)}}" class="image_firma" alt="">
                             @endif
                         </div>
-                        <div style="position: absolute; left: 0px; top: 80px;">
+                        <div style="position: absolute; left: 0px; top: 90px;">
                             <p style="padding:0%;border-bottom:1px solid gray;"></p>
                         </div>
-                        <div style="position: absolute; left: 0px; top: 90px;">
+                        <div style="position: absolute; left: 0px; top: 100px;">
                             <p style="padding:0%;">
                             {{$action->employee->jefe->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Jefe inmediato
                             </p>
@@ -184,10 +184,10 @@
                             <img src="{{public_path('storage/'.$rh->firm)}}" class="image_firma" alt="">
                             @endif
                         </div>
-                        <div style="position: absolute; left: 0px; top: 80px;">
+                        <div style="position: absolute; left: 0px; top: 90px;">
                             <p style="padding:0%;border-bottom:1px solid gray;"></p>
                         </div>
-                        <div style="position: absolute; left: 0px; top: 90px;">
+                        <div style="position: absolute; left: 0px; top: 100px;">
                             <p style="padding:0%;">
                             {{$rh->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Recursos humanos
                             </p>

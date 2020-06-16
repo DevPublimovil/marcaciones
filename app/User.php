@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 USE Illuminate\Contracts\Translation\HasLocalePreference;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -61,5 +62,16 @@ class User extends \TCG\Voyager\Models\User
 
     public function appcompany(){
         return $this->hasOne(AppSession::class);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

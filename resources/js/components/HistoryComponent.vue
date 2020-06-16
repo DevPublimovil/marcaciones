@@ -1,6 +1,6 @@
 <template>
     <div class="hortory-component">
-        <div class="history-main shadow-lg rounded-lg p-0 m-0">
+        <div class="history-main w-10/12 mx-auto mt-4 shadow-lg rounded-lg p-0">
             <div class="history-header flex justify-between">
                 <div class="self-center">
                     
@@ -14,7 +14,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="history-body flex bg-white rounded">
+            <div class="history-body flex bg-white rounded min-h-full">
                 <div class="flex-1">
                     <div class="timeline relative mt-5 mx-2 p-0" v-if="actions.length > 0">
                         <div v-for="(action, index) in actions" :key="index">

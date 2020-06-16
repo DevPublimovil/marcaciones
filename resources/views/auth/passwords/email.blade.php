@@ -3,6 +3,13 @@
 @section('content')
     <form action="{{ route('password.email') }}" method="POST" class="mx-auto">
         @csrf
+        <div class="flex mx-auto">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+        </div>
         <div class="input-div one">
             <div class="i">
                 <i class="fa fa-envelope" aria-hidden="true"></i>

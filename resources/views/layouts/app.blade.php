@@ -77,7 +77,7 @@
         <x-menu-component></x-menu-component>
         <x-header-component></x-header-component>
         {{-- <menu-component></menu-component> --}}
-        <div class="content-wrapper">
+        <div class="content-wrapper ">
             <div class="loader-bg">
                 <div class="loader"></div>
             </div>
