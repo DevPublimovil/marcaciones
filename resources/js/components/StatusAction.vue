@@ -1,7 +1,7 @@
 <template>
     <div class="status-action-component">
         <div class="container-lg mx-auto py-2">
-            <div class="card-status w-full p-2 mx-auto">
+            <div class="card-status w-10/12 mx-auto">
                 <div class="card-body-status flex bg-white border border-gray-200 rounded shadow" v-if="actions.length > 0">
                     <div class="timeline w-full relative mt-5 mx-2 p-0" v-if="actions.length > 0">
                         <div v-for="(action, index) in actions" :key="index">
@@ -21,7 +21,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="text-xs text-center md:text-base">Accion de personal enviada</div>
+                                                <div class="text-xs text-center md:text-base hidden md:block">Accion de personal enviada</div>
                                             </div>
 
                                             <div class="w-1/4">
@@ -39,7 +39,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="text-xs text-center md:text-base">Gte. {{action.check_gte == 1 ? 'aprobada' : action.check_gte == 3 ? 'no aprobada' : 'pendiente'}}</div>
+                                                <div class="text-xs text-center md:text-base hidden md:block">Gte. {{action.check_gte == 1 ? 'aprobada' : action.check_gte == 3 ? 'no aprobada' : 'pendiente'}}</div>
                                             </div>
 
                                             <div class="w-1/4">
@@ -57,7 +57,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="text-xs text-center md:text-base">RH. {{action.check_rh == 1 ? 'aprobada' : action.check_rh == 3 ? 'no aprobada' : 'pendiente'}}</div>
+                                                <div class="text-xs text-center md:text-base hidden md:block">RH. {{action.check_rh == 1 ? 'aprobada' : action.check_rh == 3 ? 'no aprobada' : 'pendiente'}}</div>
                                             </div>
                                         </div>
                                     </div>

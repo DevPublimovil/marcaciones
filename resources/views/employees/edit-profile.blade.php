@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-xl w-8/12 mx-auto px-6 py-6">
+<div class="container-xl w-full md:w-8/12 mx-auto md:px-6 px-0 py-6">
     @if ($errors->any())
         <div  class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-4" role="alert">
             <ul>
@@ -16,7 +16,7 @@
             {{ session('message') }}
         </div>
     @endif
-    <h3 class="text-xl text-blue-900 mb-3 font-bold">Editar pérfil</h3>
+    <h3 class="text-2xl text-blue-900 mb-3 font-bold"><i class="fa fa-address-book" aria-hidden="true"></i> Mi cuenta</h3>
     <div class="shadow-lg rounded-lg border border-gray-300 bg-white">
         <div class="flex justify-between p-2">
             <div class="flex-1 pl-4">
@@ -44,9 +44,11 @@
                 @endif --}}
                 <div class="mb-3">
                 <label for="firma"><a href="{{ route('employees.editfirm', $user->id) }}" class="change text-indigo-500 cursor-pointer underline hover:text-indigo-900">Editar firma</a></label>
+                @if ($user->firm)
                 <div class="flex w-full h-40">
                     <img class="rounded-lg w-1/2 h-auto" id="firm-image" src="{{ asset('storage/' . $user->firm) }}" alt="">
                 </div>
+                @endif
                 </div>
                 <div class="flex justify-end mb-3 text-xs">
                     <button type="submit" class="btn border border-blue-700 bg-blue-600 text-white mx-1 hover:bg-blue-500">

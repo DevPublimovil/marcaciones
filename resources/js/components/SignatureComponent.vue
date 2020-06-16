@@ -1,10 +1,10 @@
 <template>
     <div class="signature-component">
-        <div class="container mx-auto py-2">
-               <div id="signature-pad" class="signature-pad mt-20">
-                    <div class="signature-pad--body mx-auto w-3/4">
+        <div class="container mx-auto w-full md:w-3/4 py-2">
+               <div id="signature-pad" class="signature-pad">
+                    <div class="signature-pad--body mx-auto w-full">
                        <div class="flex items-center align-middle content-center">
-                            <div class="flex-auto">
+                            <div class="flex-auto hidden md:block">
                                 <h3 class="text-blue-900 text-xl font-bold mb-1">DIBUJA TU FIRMA</h3>
                             </div>
                             <div class="flex-auto mb-2 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4" role="alert">
@@ -18,7 +18,7 @@
                         <div class="signature-pad--footer mt-1">
                             <div class="flex signature-pad--actions items-end content-end">
                                 <div class="flex-1 text-right">
-                                    <button type="button" class="btn bg-white border border-gray-500 hover:text-white hover:bg-blue-500" data-action="clear" title="Limpiar lienzo"><i class="fa fa-undo" aria-hidden="true"></i> Limpiar</button>
+                                    <button type="button" class="btn bg-white border border-gray-500 focus:outline-none hover:text-white hover:bg-blue-500" data-action="clear" title="Limpiar lienzo"><i class="fa fa-undo" aria-hidden="true"></i> Limpiar</button>
                                     <button type="button" class="btn bg-blue-500 hover:bg-blue-600 text-white" data-action="save-svg"><i class="fa fa-spinner fa-spin fa-fw" :class="[showIcon ? '' : 'hidden']"></i> Guardar firma</button>
                                 </div>
                             </div>

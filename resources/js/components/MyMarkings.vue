@@ -1,6 +1,6 @@
 <template>
     <div class="mis-marcaciones ">
-        <div class="bg-white rounded overflow-hidden shadow-md px-6 py-4">
+        <div class="bg-white rounded overflow-x-auto shadow-md px-6 py-4">
             <div class="flex w-full justify-between mb-2">
                 <div class="flex items-center border-b border-b-2 border-blue-700 py-2" >
                     <template v-if="markings.length > 0">
@@ -11,18 +11,21 @@
                 <!--<input v-model="date" class="form-input" name="search" id="search" type="search" placeholder="Buscar">-->
                 <div class="flex ">
                     <div class="flex-initial pl-1">
-                        <span class="cursor-pointer transition duration-500 ease-in-out button bg-gray-300 text-blue-700 border-b-4 border-gray-400 transform hover:-translate-y-1 hover:scale-100 " @click="showModal = true">{{ action }}</span>
+                        <span class="cursor-pointer transition duration-500 ease-in-out button bg-gray-300 text-blue-700 border-b-4 border-gray-400 transform hover:-translate-y-1 hover:scale-100 " @click="showModal = true">
+                            <i class="fa fa-calendar-o block md:hidden" aria-hidden="true"></i> <span class="hidden md:block">{{ action }}</span>
+                        </span>
                     </div>
                     <div class="flex-initial">
                         <a href="/actions/create" class="transition duration-500 ease-in-out button bg-blue-600 text-white border-b-4 border-blue-700 transform hover:-translate-y-1 hover:scale-100 " >
-                            Crear acción de personal
+                            <i class="fa fa-file block md:hidden" aria-hidden="true"></i>
+                            <span class="hidden md:block">Crear acción de personal</span>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="w-1/2 mx-auto" v-if="searchDay.length == 0">
                 <img src="/images/empty.svg">
-                <p class="text-gray-500 font-bold text-center mb-4">No se encontró ningún registro</p>
+                <p class="text-black font-bold text-center mb-4">No se encontró ningún registro</p>
             </div>
             <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-4" v-else>
                 <thead>
@@ -30,7 +33,7 @@
                         <th class="px-4 py-2 text-gray-700 ">Día</th>
                         <th class="px-4 py-2 text-gray-700">Entrada</th>
                         <th class="px-4 py-2 text-gray-700">Salida</th>
-                        <th class="px-4 py-2 text-gray-700">Minutos tarde</th>
+                        <th class="px-4 py-2 text-gray-700 hidden md:block">Minutos tarde</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,22 +41,22 @@
                         <td class="px-4 py-2">{{ item.date }}</td>
                         <td class="px-4 py-2">{{ item.in }}</td>
                         <td class="px-4 py-2">{{ item.out }}</td>
-                        <td class="px-4 py-2">{{ item.minutes }}</td>
+                        <td class="px-4 py-2 hidden md:block">{{ item.minutes }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
          <my-modal-component v-if="showModal" @close="showModal = false">
             <template v-slot:header-modal>
-                <p class="text-2xl font-bold">Elige un rango de fechas</p>
+                <p class="text-base md:text-2xl font-bold">Mostrar marcaciones</p>
             </template>
             <template v-slot:body-modal>
-                <div class="flex justify-between mb-4">
-                    <div class="flex-1 px-1">
+                <div class="flex flex-wrap justify-between mb-4">
+                    <div class="flex-1 px-1 mb-2">
                         <span class="font-bold">Desde:</span>
                         <input type="date" class="form-input w-full" name="" id="" v-model="startDate" min="2019-12-31">
                     </div>
-                    <div class="flex-1 px-1">
+                    <div class="flex-1 px-1 mb-2">
                     <span class="font-bold text-left">Hasta:</span>
                         <input type="date" class="form-input w-full" name="" id="" v-model="endDate" value="2020-05-21">
                     </div>

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('header-content')
-    <div class="flex p-2 pt-8 mb-y align-middle content-center items-center">
-        <div class="flex-1 p-0 m-0">
-            <h3 class="text-2xl text-gray-700 font-bold">
+    <div class="flex w-10/12 mx-auto flex-wrap py-4 px-6 align-middle content-center items-center bg-gray-100 shadow rounded-md">
+        <div class="flex-auto p-0 m-0">
+            <h3 class="md:text-2xl text-sm text-gray-700 font-bold">
                 <span class="mr-3"><i class="fa fa-file-text" aria-hidden="true"></i></span>
                 Acciones de personal
             </h3>
         </div>
-        <div class="flex-1 p-0 m-0">
+        <div class="flex-auto p-0 m-0">
             @if (session('message'))
                 <x-alert :type="session('type')" :message="session('message')"></x-alert>
             @endif

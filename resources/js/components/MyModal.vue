@@ -18,7 +18,7 @@
                     <div class="my-5">
                        <slot name="body-modal"></slot>
                     </div>
-                    <div class="flex justify-end pt-2">
+                    <div class="flex justify-center md:justify-end pt-2">
                        <slot name="footer-modal"></slot>
                     </div>
                 </div>

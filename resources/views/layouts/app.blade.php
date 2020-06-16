@@ -82,8 +82,10 @@
                 <div class="loader"></div>
             </div>
             <section class="content">
-                @yield('header-content')
-                @yield('content')
+                <div class="p-2">
+                    @yield('header-content')
+                    @yield('content')
+                </div>
             </section>  
         </div>
     </div>
