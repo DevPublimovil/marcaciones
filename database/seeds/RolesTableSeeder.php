@@ -16,6 +16,8 @@ class RolesTableSeeder extends Seeder
 
         $role = Role::create(['name' => 'rrhh', 'display_name' => 'RRHH']);
 
+        $role = Role::create(['name' => 'subjefe', 'display_name' => 'Sub Jefe']);
+
         $role = Role::firstOrNew(['name' => 'admin']);
         if (!$role->exists) {
             $role->fill([

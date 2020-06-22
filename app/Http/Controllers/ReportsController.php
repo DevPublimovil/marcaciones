@@ -15,6 +15,7 @@ use App\ActionType;
 use App\PersonalAction;
 use App\Helper\Assistence;
 use \Carbon\Carbon as Fecha;
+use Illuminate\Support\Collection;
 
 class ReportsController extends Controller
 {

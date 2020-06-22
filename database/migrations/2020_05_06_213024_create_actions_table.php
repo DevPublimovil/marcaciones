@@ -17,12 +17,17 @@ class CreateActionsTable extends Migration
             $table->id();
             $table->mediumText('other_action')->nullable();
             $table->text('description');
+            $table->tinyInteger('check_employee')->default(0);
             $table->tinyInteger('check_gte')->default(0);
             $table->tinyInteger('check_rh')->default(0);
+            $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
-            $table->foreign('created_by')->references('id')->on('employees')
+            $table->foreign('created_by')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

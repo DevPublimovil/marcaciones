@@ -4,81 +4,67 @@ use App\Employee;
 use \Carbon\Carbon as Fecha;
 use App\Marking;
 use App\Action;
+use Illuminate\Support\Collection;
 
 class Assistence {
     
     public static function showAssists($request, $id)
     {
-        $period = [];
-        $markings = collect();
         $employee = Employee::find($id);
-        if($request->start_date && $request->end_date)
-        {
-            $period = Fecha::parse($request->start_date)->toPeriod($request->end_date);
-        }else{
-            $start_date = Fecha::now()->startOfWeek()->format('Y-m-d');
-            $end_date = Fecha::now()->endOfWeek()->format('Y-m-d');
-            $period = Fecha::parse($start_date)->toPeriod($end_date);
-        }
 
+        $markings = collect();
+        
+        $period = collect(Fecha::parse($request->start_date)->toPeriod($request->end_date));
+        
         foreach ($period as $key => $value) {
-            $marking = Marking::where('serialno',$employee->cod_terminal)->where('cod_marking',$employee->cod_marking)->whereDate('created_at',$value)->first();
-            $action = Action::where('created_by', $employee->id)->whereDate('created_At',Fecha::parse($value)->format('Y-m-d'))->first();
+            $marking = Marking::HaveMarking($employee->cod_marking, $employee->cod_terminal)->whereDate('created_at',$value)->first();
+
+            $action = $employee->actions()->whereDate('created_at',$value)->first();
+
             $permission = ($action) ? 'SI' : 'AUSENTE';
+
+
             if($marking)
             {
-                $late = ($marking->late_arrivals > 60) ? self::convertMinutes($marking->late_arrivals) : null;
-                $markings[] = [
-                    'date' => Fecha::parse($value)->format('d/m/Y'),
-                    'day'   => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
-                    'in' => Fecha::parse($marking->check_in)->format('H:i a'),
-                    'out'    => Fecha::parse($marking->check_out)->format('H:i a'),
-                    'hours_worked' => $marking->hours_worked ?? null,
-                    'extra_hours' => $marking->extra_hours ?? null,
-                    'late_arrivals' => $late ?? $marking->late_arrivals,
-                    'permission' => ($marking->check_in && $marking->check_out) ? '' : $permission
-                ];
-            }else{
-                $markings[] = [
-                    'date' => Fecha::parse($value)->format('d/m/Y'),
-                    'day'   => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
-                    'in' => 'sin marcación',
-                    'out'    => 'sin marcación',
-                    'hours_worked' => null,
-                    'extra_hours' => null,
-                    'late_arrivals' => null,
-                    'permission' => $permission
-                ];
+                $markings->push([
+                    'date'          => Fecha::parse($value)->format('d/m/Y'),
+                    'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
+                    'in'            => Fecha::parse($marking->check_in)->format('H:i a'),
+                    'out'           => Fecha::parse($marking->check_out)->format('H:i a'),
+                    'hours_worked'  => $marking->hours_worked ?? null,
+                    'extra_hours'   => $marking->extra_hours ?? null,
+                    'late_arrivals' => $marking->late_arrivals ?? null,
+                    'permission'    => ($marking->check_in && $marking->check_out) ? '' : $permission
+                ]);
+            }
+            else
+            {
+                $markings->push([
+                    'date'          => Fecha::parse($value)->format('d/m/Y'),
+                    'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
+                    'in'            => 'sin marcación',
+                    'out'           => 'sin marcación',
+                    'hours_worked'  => '',
+                    'extra_hours'   => '',
+                    'late_arrivals' => '',
+                    'permission'    => $permission
+                ]);
             }
         }
 
-        $filtered_worked = [];
-        $filtered_extra = [];
-        $filtered_minutes = [];
+        $filtered_worked    = $markings->where('hours_worked','!=',null);
+        $filtered_worked    = $filtered_worked->pluck('hours_worked');
+        $filtered_extra    = $markings->where('extra_hours','!=',null);
+        $filtered_extra    = $filtered_extra->pluck('extra_hours');
+        $filtered_minutes    = $markings->where('late_arrivals','!=',null);
+        $filtered_minutes    = $filtered_minutes->pluck('late_arrivals');
 
-        foreach ($markings as $key => $value) {
-            if($value['hours_worked'] != null)
-            {
-                $filtered_worked[] = $value['hours_worked'];
-            }
-
-            if($value['extra_hours'] != null)
-            {
-                $filtered_extra[] = $value['extra_hours'];
-            }
-
-            if($value['late_arrivals'] != null)
-            {
-                $filtered_minutes[] = $value['late_arrivals'];
-            }
-        }
-
-        return $assists = ([
+        return collect([
             'markings' => $markings,
-            'total_hours_worked' => self::AddPlayTime($filtered_worked),
-            'total_extra_hours' => self::AddPlayTime($filtered_extra),
-            'total_late_arrivals' => self::AddPlayTime($filtered_minutes)
-        ]);
+            'total_hours_worked'    => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_worked),
+            'total_extra_hours'     => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_extra),
+            'total_late_arrivals'   => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_minutes)
+            ]);
     }
 
     public static function AddPlayTime($times) {
@@ -108,4 +94,5 @@ class Assistence {
 
         return  sprintf('%02d:%02d', $time, $total);
     } */
+
 }

@@ -17,4 +17,9 @@ class Marking extends Model
     {
         return $query->where('serialno',$cod_terminal)->where('cod_marking',$cod_marking);
     }
+
+    public function scopeHaveMarking($query, $cod, $terminal)
+    {
+        return $query->where('cod_marking',$cod)->where('serialno',$terminal);
+    }
 }
