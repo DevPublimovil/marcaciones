@@ -124,8 +124,8 @@ export default {
             vm.loading = true;
             let formData = new FormData()
             formData.append('attached', vm.someData)
-            formData.append('actions[]', vm.typeactions)
-            formData.append('otherAction', vm.showOther ? vm.other : null)
+            formData.append('actions', JSON.stringify(vm.typeactions))
+            formData.append('otherAction', vm.showOther ? vm.other : '')
             formData.append('description', vm.description)
             formData.append('employee', vm.employee)
             axios
@@ -133,7 +133,7 @@ export default {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data'
-                    }  
+                    }
                 })
                 .then(response => {
                     swal(response.data, 'Puedes revisar su estado en tu historial', 'success').then(

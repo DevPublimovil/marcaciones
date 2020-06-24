@@ -27,7 +27,18 @@
                                                 <div class="relative mb-2">
                                                     <div
                                                         class="w-10 h-10 mx-auto cursor-pointer bg-blue-500 rounded-full text-lg text-white flex items-center"
-                                                        title="Accion de personal creada"
+                                                        title="Acción de personal creada"
+                                                        v-if="action.employee_id == null"
+                                                    >
+                                                        <span class="text-center text-white w-full">
+                                                            <i class="fa fa-check-circle"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div
+                                                        class="w-10 h-10 mx-auto cursor-pointer rounded-full text-lg text-white flex items-center"
+                                                        title="Acción de personal creada"
+                                                        v-else
+                                                        :class="[action.check_employee == 1 ? 'bg-blue-500' : 'bg-red-500']"
                                                     >
                                                         <span class="text-center text-white w-full">
                                                             <i class="fa fa-check-circle"></i>
@@ -38,7 +49,12 @@
                                                 <div
                                                     class="text-xs text-center md:text-base hidden md:block"
                                                 >
-                                                    Accion de personal enviada
+                                                    <span v-if="action.employee_id == null">
+                                                        Acción de personal enviada
+                                                    </span>
+                                                    <span v-else :class="[action.check_employee == 1 ? '' : 'text-red-500']">
+                                                        {{action.check_employee == 1 ? 'Acción de personal enviada' : 'Debes Aprobar la acción de personal'}}
+                                                    </span>
                                                 </div>
                                             </div>
 
@@ -191,7 +207,7 @@
                                         Editar
                                     </button>
                                     <a
-                                        :href="action.attached" 
+                                        :href="action.attached"
                                         class="btn border border-gray-800 hover:text-white hover:bg-gray-800 ml-1"
                                         target="_blank"
                                         v-if="action.attached != null"

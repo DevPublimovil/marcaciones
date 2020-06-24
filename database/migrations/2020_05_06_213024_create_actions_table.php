@@ -15,13 +15,13 @@ class CreateActionsTable extends Migration
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
-            $table->mediumText('other_action')->nullable();
+            $table->mediumText('other_action')->nullable()->default(null);
             $table->text('description');
             $table->tinyInteger('check_employee')->default(0);
             $table->tinyInteger('check_gte')->default(0);
             $table->tinyInteger('check_rh')->default(0);
-            $table->string('attached',255)->nullable();
-            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->string('attached',255)->nullable()->default(null);
+            $table->unsignedBigInteger('employee_id')->nullable()->default(null);
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 

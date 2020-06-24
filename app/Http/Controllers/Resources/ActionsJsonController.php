@@ -42,11 +42,36 @@ class ActionsJsonController extends Controller
     public function showPendingActions($user)
     {
         if($user->role->name == "rrhh"){
-            $query = $user->appcompany->company->actions()->CheckGte()->NoCheckRh()->with('user')->orderBy('created_at','DESC')->get();
+            $query = $user->appcompany->company->employees()
+                    ->select('actions.*','users.name')
+                    ->join('users','users.id','employees.user_id')
+                    ->join('actions','actions.created_by','users.id')
+                    ->where('actions.check_gte','=',1)
+                    ->where('check_rh','=',0)
+                    ->orderBy('created_at','DESC')
+                    ->get();
+            $queryTwo = $user->appcompany->company->employees()
+                        ->select('actions.*','employees.name_employee','employees.surname_employee')
+                        ->join('actions','actions.employee_id','employees.id')
+                        ->where('actions.check_gte','=',1)
+                        ->where('actions.check_employee','=',1)
+                        ->where('check_rh','=',0)
+                        ->orderBy('created_at','DESC')
+                        ->get();
+
+            $query = $query->merge($queryTwo);
+            
+            $query = $query->sortByDesc('created_at');
         }
         else if($user->role->name == "gerente" || $user->role->name == "subjefe")
         {
-            $query = $user->actionsGte()->noCheckGte()->with('user')->orderBy('created_at','DESC')->get();
+            $query = $user->workersGte()->select('actions.*','users.name')
+                    ->join('users','users.id','employees.user_id')
+                    ->join('actions','actions.created_by','users.id')
+                    ->orderBy('created_at','DESC')
+                    ->where('check_gte','=',0)
+                    ->orderBy('created_at','DESC')
+                    ->get();
         }
 
         $data = ActionResource::collection($query);
@@ -59,11 +84,41 @@ class ActionsJsonController extends Controller
     public function showApprovedActions($user)
     {
         if($user->role->name == "rrhh"){
-            $query = $user->appcompany->company->actions()->CheckRh()->with('user')->orderBy('created_at','DESC')->get();
+            $query = $user->appcompany->company->employees()
+                    ->select('actions.*','users.name')
+                    ->join('users','users.id','employees.user_id')
+                    ->join('actions','actions.created_by','users.id')
+                    ->where('actions.check_gte','=',1)
+                    ->where('check_rh','=',1)
+                    ->orderBy('created_at','DESC')
+                    ->get();
+            $queryTwo = $user->appcompany->company->employees()
+                    ->select('actions.*','employees.name_employee','employees.surname_employee')
+                    ->join('actions','actions.employee_id','employees.id')
+                    ->where('actions.check_gte','=',1)
+                    ->where('actions.check_employee','=',1)
+                    ->where('check_rh','=',1)
+                    ->orderBy('created_at','DESC')
+                    ->get();
+
+            $query = $query->merge($queryTwo);
+
+            $query = $query->sortByDesc('created_at');
         }
         else if($user->role->name == "gerente" || $user->role->name == "subjefe")
         {
-            $query = $user->actionsGte()->checkGte()->orWhere('created_by', $user->id)->with('user')->orderBy('created_at','DESC')->get();
+            $query = $user->workersGte()->select('actions.*','users.name')
+                        ->join('users','users.id','employees.user_id')
+                        ->join('actions','actions.created_by','users.id')
+                        ->orderBy('created_at','DESC')
+                        ->where('check_gte','=',1)
+                        ->orderBy('created_at','DESC')
+                        ->get();
+            $queryTwo = $user->actionsEmp;
+
+            $query = $query->merge($queryTwo);
+
+            $query = $query->sortByDesc('created_at');
         }
 
         $data = ActionResource::collection($query);
@@ -76,7 +131,10 @@ class ActionsJsonController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        $query = $user->actionsEmp()->orWhere('actions.employee_id', $user->employee->id)->orderBy('created_at','DESC')->get();
+        $query = $user->actionsEmp()
+                ->orWhere('actions.employee_id', $user->employee->id)
+                ->orderBy('created_at','DESC')
+                ->get();
         $data = ActionResource::collection($query);
 
         return response()->json($data, 200);

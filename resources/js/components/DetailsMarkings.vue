@@ -33,7 +33,7 @@
                     <th>Salida</th>
                     <th>Horas Trabajadas</th>
                     <th>Horas extras</th>
-                    <th>Minutos</th>
+                    <th>Minutos tarde</th>
                 </thead>
                 <tbody class="text-center">
                     <tr v-for="(marking, index) in markings.markings" :key="index" class="border-b-2">
@@ -115,7 +115,7 @@ export default {
             this.$root.start = moment(datosDB.start).format('YYYY-MM-DD')
             this.$root.end = moment(datosDB.end).format('YYYY-MM-DD')
         }
-       
+
         this.fetchDataMarkings()
     },
 }

@@ -3,7 +3,8 @@
         <div class="w-full md:w-10/12 mx-auto shadow-xs bg-white rounded py-4 px-4 mt-4">
             <div class="flex w-full justify-center md:justify-end">
                 <a
-                href="/actions/create"
+                    href="/actions/create"
+                    v-if="user.role_id != 3 && user.role_id != 1"
                     class="bg-white hover:bg-gray-800 hover:text-white border border-gray-800 text-gray-800 font-bold py-2 px-4 mx-2 rounded"
                 >
                     Crear
@@ -69,7 +70,7 @@
                                         <p class="text-xs mb-3">{{ action.description }}</p>
                                         <div class="flex justify-end">
                                             <a
-                                                :href="action.attached" 
+                                                :href="action.attached"
                                                 class="btn-sm border border-blue-700 text-ble-700 hover:text-blue-800 hover:bg-blue-100 mx-1"
                                                 target="_blank"
                                                 v-if="action.attached != null"
@@ -158,6 +159,7 @@
 
 <script>
 export default {
+    props:['user'],
     data() {
         return {
             actions: [],

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Marking;
 
 class Employee extends Model
-{ 
+{
 
     public static $columns = [
         'nombre', 'apellidos', 'codigo', /* 'cargo', 'tipo','compañia','departamento' */
@@ -19,6 +19,11 @@ class Employee extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function actions()
+    {
+        return $this->hasMany('App\Action', 'employee_id', 'id');
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
@@ -28,7 +33,7 @@ class Employee extends Model
     {
         return $this->belongsTo(Departament::class);
     }
-    
+
 
     public function markings()
     {

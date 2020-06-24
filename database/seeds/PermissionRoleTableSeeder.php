@@ -23,7 +23,7 @@ class PermissionRoleTableSeeder extends Seeder
 
         $role = Role::where('name', 'empleado')->firstOrFail();
 
-        $role->permissions()->sync([7,8,9]);
+        $role->permissions()->sync([6,7,8,9]);
 
         $role = Role::where('name', 'gerente')->firstOrFail();
 

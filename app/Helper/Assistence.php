@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Helper;
 use App\Employee;
 use \Carbon\Carbon as Fecha;
@@ -7,19 +7,24 @@ use App\Action;
 use Illuminate\Support\Collection;
 
 class Assistence {
-    
+
     public static function showAssists($request, $id)
     {
         $employee = Employee::find($id);
 
         $markings = collect();
-        
+
         $period = collect(Fecha::parse($request->start_date)->toPeriod($request->end_date));
-        
+
         foreach ($period as $key => $value) {
             $marking = Marking::HaveMarking($employee->cod_marking, $employee->cod_terminal)->whereDate('created_at',$value)->first();
 
-            $action = $employee->actions()->whereDate('created_at',$value)->first();
+            if($employee->type_employee == 1 && $employee->user)
+            {
+                $action = $employee->user->actionsEmp()->whereDate('created_at',$value)->first();
+            }else{
+                $action = Action::where('employee_id',$employee->id)->whereDate('created_at',$value)->first();
+            }
 
             $permission = ($action) ? 'SI' : 'AUSENTE';
 
@@ -68,7 +73,7 @@ class Assistence {
     }
 
     public static function AddPlayTime($times) {
-        $minutes = 0; 
+        $minutes = 0;
 
         foreach ($times as $time) {
             list($hour, $minute) = explode('.', $time);

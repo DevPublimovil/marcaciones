@@ -46,7 +46,7 @@
             padding: 0.75rem;
             vertical-align: top;
         }
-        
+
         .column{
             border: 1px solid black;
             padding: 0%;
@@ -88,7 +88,7 @@
     <header>
         <table class="table negrita uppercase">
             <tr>
-                <td class="column">{{ $action->user->employee->company->display_name ??   $action->employee->company->display_name }}, S.A. DE C.V.</td>
+                <td class="column">{{ $employee->company->name }}, S.A. DE C.V.</td>
                 <td class="column"><u>ACCION DE PERSONAL</u></td>
                 <td class="column">RECURSOS HUMANOS</td>
             </tr>
@@ -106,17 +106,17 @@
             <tbody class="text-sm">
                 <tr>
                     <td class="column"><strong>Fecha:</strong> {{\Carbon\Carbon::parse($action->created_at)->isoFormat('LLLL')}}</td>
-                    <td class="column"><strong>Codigo:</strong> {{ $action->user->employee->cod_marking ?? $action->employee->cod_marking}}</td>
+                    <td class="column"><strong>Codigo:</strong> {{ $employee->cod_marking}}</td>
                 </tr>
                 <tr>
                     <td class="column" colspan="2"><strong>Nombre del empleado:</strong> </td>
                     {{-- <td class="column"><strong>Sueldo:</strong> ${{$action->employee->salary}}</td> --}}
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> {{$action->user->employee->departament->display_name ?? $action->employee->departament->display_name}}</td>
+                    <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> {{$employee->departament->display_name}}</td>
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Nombre del puesto:</strong> {{$action->user->employee->position ?? $action->employee->position}}</td>
+                    <td class="column" colspan="2"><strong>Nombre del puesto:</strong> {{$employee->position}}</td>
                 </tr>
             </tbody>
         </table>
@@ -149,10 +149,26 @@
                     <p><strong>Descripcion:</strong> {{$action->description}}</p>
                 </td>
                 <td class="text-center column firma">
-                    @if ($action->employee->user->firm)
-                        <img src="{{public_path('storage/'.$action->employee->user->firm)}}" class="image_firma" alt="">
+                    @if ($employee->user->firm)
+                        @if ($action->check_employee && $action->employee_id != null)
+                            <img src="{{public_path('storage/'.$employee->user->firm)}}" class="image_firma" alt="">
+                            Empleado
+                        @elseif($action->employee_id == null)
+                            <img src="{{public_path('storage/'.$employee->user->firm)}}" class="image_firma" alt="">
+                                Empleado
+                        @else
+                            Firma del empleado
+                            <div style="height: 80px;">
+
+                            </div>
+                        @endif
+                    @else
+                        Firma del empleado
+                        <div style="height: 80px;">
+
+                        </div>
                     @endif
-                    Empleado
+
                 </td>
             </tr>
         </table>
@@ -162,8 +178,8 @@
                 <td>
                     <div style="position: relative;">
                         <div style="position: absolute; left: 40px; top: 40px;">
-                            @if ($action->check_gte == 1 && $action->employee->jefe->firm ?? $action->user->employee->jefe->firm)
-                                <img src="{{public_path('storage/'.$action->employee->jefe->firm) ?? public_path('storage/'.$action->user->employee->jefe->firm)}}" class="image_firma" alt="">
+                            @if ($action->check_gte == 1 && $employee->jefe->firm)
+                                <img src="{{public_path('storage/'.$employee->jefe->firm)}}" class="image_firma" alt="">
                             @endif
                         </div>
                         <div style="position: absolute; left: 0px; top: 90px;">

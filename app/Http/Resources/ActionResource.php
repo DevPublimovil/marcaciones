@@ -26,7 +26,7 @@ class ActionResource extends JsonResource
             'employee_id' => $this->employee_id,
             'attached' => Storage::disk('public')->url($this->attached),
             'diffHumans' => Fecha::parse($this->created_at)->diffForHumans(),
-            'name_employee' => $this->user->name,
+            'name_employee' => $this->user->name ?? $this->name ?? $this->name_employee . ' ' . $this->surname_employee,
         ];
     }
 }

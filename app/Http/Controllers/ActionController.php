@@ -92,17 +92,17 @@ class ActionController extends Controller
 
             $user = User::find(Auth::id());
             $action = Action::create([
-                'other_action'  => $request->otherAction ?? null,
+                'other_action'  => $request->otherAction ?? NULL,
                 'description'   => $request->description,
-                'attached'      => $path ?? null,
+                'attached'      => $path ?? NULL,
                 'check_gte'     => ($user->role->id == 2 && $request->employee) ? 1 : 0,
-                'employee_id'   => ($user->role->id == 2 && $request->employee) ? $request->employee : null,
+                'employee_id'   => ($user->role->id == 2 && $request->employee) ? $request->employee : NULL,
                 'created_by'    => $user->id,
             ]);
 
             if($request->actions)
             {
-                foreach ($request->actions as $key => $value) {
+                foreach (json_decode($request->actions) as $key => $value) {
                     PersonalAction::create([
                         'action_id'         => $action->id,
                         'type_action_id'    => $value
@@ -142,6 +142,7 @@ class ActionController extends Controller
         if(Auth::user()->hasPermission('browse_actions')){
             $action = Action::find($id);
             $employee = ($action->employee_id) ? $action->employee : $action->user->employee;
+
             if($user->role->name == 'empleado'){
                 if($employee->id != $user->employee->id){
                     return back()->with([
@@ -157,6 +158,7 @@ class ActionController extends Controller
             $pdf = PDF::loadView('reports.actionpdf',[
                 'action' => $action,
                 'rh' => $rh,
+                'employee' => $employee,
                 'personal_actions' => $personal_actions,
             ])->setPaper('letter','portrait');
             return $pdf->stream($employee->name_employee . '.pdf');
@@ -199,7 +201,7 @@ class ActionController extends Controller
         $user = User::find(Auth::id());
         $action = Action::find($id);
         $action->update([
-            'other_action'  => $request->otherAction ?? null,
+            'other_action'  => $request->otherAction ?? '',
             'description'   => $request->description,
             'created_by'   => $user->id,
         ]);
@@ -244,7 +246,7 @@ class ActionController extends Controller
             ]);
 
             $employee->notify(new NoApprovedAction);
-            
+
 
             return 'Has descartado la accion de personal';
         }else{
@@ -254,7 +256,7 @@ class ActionController extends Controller
 
     public function approved($id)
     {
-        if(Auth::user()->hasPermission('browse_actions_approved')){
+        /* if(Auth::user()->hasPermission('browse_actions_approved')){ */
             $action = Action::find($id);
             $user = User::find(Auth::id());
             $employee = ($action->employee_id) ? $action->employee->user : $action->user;
@@ -277,23 +279,26 @@ class ActionController extends Controller
                     'check_rh' => 1
                 ]);
 
-                $employee->notify(new ApprovedAction($user->name));
+                if($employee->type_employee == 1)
+                {
+                    $employee->notify(new ApprovedAction($user->name));
+                }
             }else if($user->role->name == 'empleado')
             {
                 $action->update([
                     'check_employee' => 1
                 ]);
-                
-                
+
+
                 $rh = $user->employee->company->resourceCompany()->first();
                 $rh = $rh->user;
                 $rh->notify(new NewPersonalAction($user));
             }
 
             return 'La acción de personal ha sido aprobada ';
-        }else{
+        /* }else{
             abort(403);
-        }
+        } */
     }
 
     public function myactions()

@@ -50,8 +50,9 @@ class Action extends Model
         $query->where('check_gte',0)->orWhere('check_rh',0);
     }
 
-    /* protected $casts = [
-        'check_gte' => 'boolean',
-        'check_rh' => 'boolean'
-    ]; */
+    protected $casts = [
+        'other_action' => null,
+        'attached' => null,
+        'employee_id' => null
+    ];
 }

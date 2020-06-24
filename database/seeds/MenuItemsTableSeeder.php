@@ -210,7 +210,7 @@ class MenuItemsTableSeeder extends Seeder
 
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
-            'title'   => 'Tarjeta',
+            'title'   => 'Asistencias',
             'url'     => '',
             'route'   => 'reports.index',
         ]);
@@ -261,7 +261,7 @@ class MenuItemsTableSeeder extends Seeder
 
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
-            'title'   => 'Tarjeta',
+            'title'   => 'Asistencias',
             'url'     => '',
             'route'   => 'reports.index',
         ]);
