@@ -66,6 +66,17 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/home/company/', 'HomeController@selectCompany')->name('home.company');
     Route::get('/inicio/clockbot', 'HomeController@homeclockbot')->name('home.clockbot');
     Route::get('/myactions', 'ActionController@myactions')->name('actions.myactions');
+
+
+
+
+
+
+
+
+
+    //rutas para gerentes
+    Route::get('gte/actions', 'Gte\PersonalActionGteController@index')->name('gte.actions.index');
 });
 
 

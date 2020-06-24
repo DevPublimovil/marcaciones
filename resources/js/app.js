@@ -41,6 +41,7 @@ Vue.component('data-viewer', require('./components/DataViewer.vue').default);
 Vue.component('time-component', require('./components/TimeComponent.vue').default);
 Vue.component('form-report', require('./components/FormReport.vue').default);
 Vue.component('signature-component', require('./components/SignatureComponent.vue').default);
+Vue.component('action-index-component', require('./components/boss/ActionIndexComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

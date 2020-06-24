@@ -17,10 +17,10 @@
                 <strong class="text-blue-800"><i class="fa fa-flag" aria-hidden="true"></i> </strong> {{ $employee->company->country->name }}
             </p>
             <p class="mb-2">
-                <strong class="text-blue-800"><i class="fa fa-users" aria-hidden="true"></i></strong> {{ $employee->departament->display_name }}
+                <strong class="text-blue-800"><i class="fa fa-users" aria-hidden="true"></i></strong> {{ $employee->departament->display_name ?? ''}}
             </p>
             <p class="mb-2">
-                <strong class="text-blue-800"><i class="fa fa-building" aria-hidden="true"></i></strong> {{ $employee->company->display_name }}
+                <strong class="text-blue-800"><i class="fa fa-building" aria-hidden="true"></i></strong> {{ $employee->company->display_name ?? ''}}
             </p>
             <p class="flex text-primary justify-end items-end">
                 <a href="{{ route('employees.edit', Auth::id()) }}" class="btn-circle">
