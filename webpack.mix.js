@@ -27,4 +27,4 @@ mix.js('resources/js/app.js', 'public/js')
             "@":     path.resolve(__dirname, "resources/assets/js"),
          }
       }
-   }).purgeCss();
+   });
