@@ -101,7 +101,7 @@
                                             <span v-if="query.direction == 'desc'">&darr;</span>
                                         </span>
                                     </th>
-                                    <th width="40px" v-if="rol == 2"></th>
+                                    <th width="40px" v-if="rol == 2 || rol == 4"></th>
                                 </thead>
                                 <tbody class="text-gray-700 shadow-inner">
                                     <tr
@@ -121,7 +121,7 @@
                                         </td>
                                         <td @click="showProfile(row.id)">{{ row.last_name }}</td>
                                         <td @click="showProfile(row.id)">{{ row.cod }}</td>
-                                        <td class="text-xl" title="Crear acción de personal" v-if="rol == 2">
+                                        <td class="text-xl" title="Crear acción de personal" v-if="rol == 2 || rol == 4">
                                             <a :href="'/create/action/employee/' + row.id">
                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                             </a>

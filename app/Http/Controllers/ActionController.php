@@ -95,8 +95,8 @@ class ActionController extends Controller
                 'other_action'  => $request->otherAction ?? NULL,
                 'description'   => $request->description,
                 'attached'      => $path ?? NULL,
-                'check_gte'     => ($user->role->id == 2 && $request->employee) ? 1 : 0,
-                'employee_id'   => ($user->role->id == 2 && $request->employee) ? $request->employee : NULL,
+                'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : 0,
+                'employee_id'   => ($user->role->id != 1 && $request->employee) ? $request->employee : NULL,
                 'created_by'    => $user->id,
             ]);
 
@@ -110,7 +110,7 @@ class ActionController extends Controller
                 }
             }
 
-            if($user->role->id == 2 && $request->employee)
+            if($user->role->id != 1 && $request->employee)
             {
                 $employee = Employee::find($request->employee);
                 if($employee->type_employee == 1)

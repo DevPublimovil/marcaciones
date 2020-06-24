@@ -114,8 +114,7 @@ class ActionsJsonController extends Controller
                         ->where('check_gte','=',1)
                         ->orderBy('created_at','DESC')
                         ->get();
-            $queryTwo = $user->actionsEmp;
-
+            $queryTwo = $user->actionsEmp()->whereNotNull('employee_id')->get();
             $query = $query->merge($queryTwo);
 
             $query = $query->sortByDesc('created_at');
@@ -131,10 +130,18 @@ class ActionsJsonController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        $query = $user->actionsEmp()
+        if($user->role->id == 1)
+        {
+            $query = $user->actionsEmp()
                 ->orWhere('actions.employee_id', $user->employee->id)
                 ->orderBy('created_at','DESC')
                 ->get();
+        }else{
+            $query = $user->actionsEmp()
+                ->whereNull('actions.employee_id')
+                ->orderBy('created_at','DESC')
+                ->get();
+        }
         $data = ActionResource::collection($query);
 
         return response()->json($data, 200);

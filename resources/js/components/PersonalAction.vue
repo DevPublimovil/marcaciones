@@ -4,7 +4,7 @@
             <div class="w-full p-0 mx-auto">
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
-                        <template v-if="user.role_id == 2">
+                        <template v-if="user.role_id == 2 || user.role_id == 4">
                             <h4 class="text-xl text-center text-gray-700">Empleado</h4>
                             <div class="form-control-ic">
                                 <select
@@ -221,7 +221,7 @@ export default {
             }
         }
 
-        if (this.user.role_id == 2) {
+        if (this.user.role_id == 2 || this.user.role_id == 4) {
             this.fetchEmployees();
         }
 
