@@ -5,7 +5,7 @@
             <div>{{ time.in }} - {{ time.out}} </div>
             <div>
                 <span class="mx-2 cursor-pointer hover:text-blue-500" @click="changeTime(time)" title="Editar horario"><i class="fa fa-pencil" aria-hidden="true"></i></span>
-                 <span class="mx-2 cursor-pointer hover:text-blue-500" @click="listEmployees(time.id)" title="Empleados"><i class="fa fa-users" aria-hidden="true"></i></span>
+                 <span class="mx-2 cursor-pointer hover:text-blue-500" @click="listEmployees(time.id)" title="Empleados" :class="[currentTime == time.id ? 'text-blue-500' : '']"><i class="fa fa-users" aria-hidden="true"></i></span>
             </div>
         </div>
     </div>
@@ -13,7 +13,7 @@
 <script>
 export default {
     name:'TimeComponent',
-    props:['time'],
+    props:['time','currentTime'],
     data(){
         return{
             

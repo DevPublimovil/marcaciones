@@ -21,7 +21,7 @@ class Assistence {
 
             if($employee->type_employee == 1 && $employee->user)
             {
-                $action = $employee->user->actionsEmp()->whereDate('created_at',$value)->first();
+                $action = $employee->user->actionsEmp()->whereDate('created_at',Fecha::parse($value)->format('Y-m-d'))->first();
             }else{
                 $action = Action::where('employee_id',$employee->id)->whereDate('created_at',$value)->first();
             }
@@ -36,10 +36,10 @@ class Assistence {
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
                     'in'            => Fecha::parse($marking->check_in)->format('H:i a'),
                     'out'           => Fecha::parse($marking->check_out)->format('H:i a'),
-                    'hours_worked'  => $marking->hours_worked ?? null,
-                    'extra_hours'   => $marking->extra_hours ?? null,
-                    'late_arrivals' => $marking->late_arrivals ?? null,
-                    'permission'    => ($marking->check_in && $marking->check_out) ? '' : $permission
+                    'hours_worked'  => $marking->hours_worked ? str_replace('.',':',$marking->hours_worked) : null,
+                    'extra_hours'   => $marking->extra_hours ? str_replace('.',':',$marking->extra_hours) : null,
+                    'late_arrivals' => $marking->late_arrivals ? str_replace('.',':',$marking->late_arrivals) : null,
+                    'permission'    => ($permission == 'SI') ? $permission : ''
                 ]);
             }
             else
@@ -58,11 +58,12 @@ class Assistence {
         }
 
         $filtered_worked    = $markings->where('hours_worked','!=',null);
-        $filtered_worked    = $filtered_worked->pluck('hours_worked');
+        $filtered_worked    = $filtered_worked->pluck( str_replace('.',':','hours_worked'));
         $filtered_extra    = $markings->where('extra_hours','!=',null);
-        $filtered_extra    = $filtered_extra->pluck('extra_hours');
+        $filtered_extra    = $filtered_extra->pluck( str_replace('.',':','extra_hours'));
         $filtered_minutes    = $markings->where('late_arrivals','!=',null);
-        $filtered_minutes    = $filtered_minutes->pluck('late_arrivals');
+        $filtered_minutes    = $filtered_minutes->pluck( str_replace('.',':','late_arrivals'));
+
 
         return collect([
             'markings' => $markings,
@@ -76,7 +77,7 @@ class Assistence {
         $minutes = 0;
 
         foreach ($times as $time) {
-            list($hour, $minute) = explode('.', $time);
+            list($hour, $minute) = explode(':', $time);
             $minutes += $hour * 60;
             $minutes += $minute;
         }

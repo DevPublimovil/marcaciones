@@ -33,7 +33,8 @@
                     <th>Salida</th>
                     <th>Horas Trabajadas</th>
                     <th>Horas extras</th>
-                    <th>Minutos tarde</th>
+                    <th>Llegadas tarde</th>
+                    <th>Permiso</th>
                 </thead>
                 <tbody class="text-center">
                     <tr v-for="(marking, index) in markings.markings" :key="index" class="border-b-2">
@@ -44,6 +45,7 @@
                         <td>{{ marking.hours_worked }}</td>
                         <td>{{ marking.extra_hours }}</td>
                         <td>{{ marking.late_arrivals }}</td>
+                        <td>{{ marking.permission }}</td>
                     </tr>
                 </tbody>
                 <tfoot>

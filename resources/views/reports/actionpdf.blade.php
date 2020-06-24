@@ -109,7 +109,7 @@
                     <td class="column"><strong>Codigo:</strong> {{ $employee->cod_marking}}</td>
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Nombre del empleado:</strong> </td>
+                    <td class="column" colspan="2"><strong>Nombre del empleado:</strong> {{$employee->name_employee . ' ' . $employee->surname_employee}}</td>
                     {{-- <td class="column"><strong>Sueldo:</strong> ${{$action->employee->salary}}</td> --}}
                 </tr>
                 <tr>

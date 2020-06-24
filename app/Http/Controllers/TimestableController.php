@@ -116,7 +116,7 @@ class TimestableController extends Controller
                 ]);
             }
 
-            return response()->json('!Se ha actualizado el horario para tus empleados con éxito!', 200);
+            return response()->json('!Se ha actualizado el horario para tus empleados', 200);
         }
     }
 }

@@ -92,7 +92,7 @@
                     <th>Salida</th>
                     <th>Horas Trabajadas</th>
                     <th>Horas Extras</th>
-                    <th>Minutos Tarde</th>
+                    <th>Llegadas tarde</th>
                     <th class="bnone">Permiso Tomado</th>
                 </tr>
             </thead>
