@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('/actions', 'ActionController');
     Route::put('/actions/noapproved/{action}', 'ActionController@noApproved')->name('actions.noapproved');
     Route::put('/actions/approved/{action}', 'ActionController@approved')->name('actions.approved');
-    
+    Route::get('/create/action/employee/{employee}', 'ActionController@createForEmployee')->name('actions.create.employee');
     Route::resource('/timestables', 'TimestableController'); //rutas para horarios
     Route::resource('/employees', 'EmployeeController'); //rutas para aministracion de empleados
     Route::post('/timestables/change', 'TimestableController@changeTimesEmployee')->name('timestable.change'); //ruta para cambiar empleados y horarios

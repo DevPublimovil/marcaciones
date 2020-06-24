@@ -12,6 +12,7 @@ use App\PersonalAction;
 use App\Http\Resources\ActionResource;
 use App\CompanyResource;
 use App\AppSession;
+use Illuminate\Support\Collection;
 
 class ActionsJsonController extends Controller
 {
@@ -41,21 +42,11 @@ class ActionsJsonController extends Controller
     public function showPendingActions($user)
     {
         if($user->role->name == "rrhh"){
-            $company = AppSession::where('user_id',$user->id)->first();
-            $query = Action::whereHas('employee', function ($query) use ($company) {
-                $query->where('company_id',$company->company_id);
-            })->CheckGte()
-                ->NoCheckRh()
-                ->with(['employee'])
-                ->orderBy('actions.created_at','DESC')->get();
+            $query = $user->appcompany->company->actions()->CheckGte()->NoCheckRh()->with('user')->orderBy('created_at','DESC')->get();
         }
         else if($user->role->name == "gerente" || $user->role->name == "subjefe")
         {
-            $query = Action::whereHas('employee', function ($query) use ($user) {
-                $query->where('jefe_id',$user->id);
-            })->NoCheckGte()
-                ->with(['employee'])
-                ->orderBy('actions.created_at','DESC')->get();
+            $query = $user->actionsGte()->noCheckGte()->with('user')->orderBy('created_at','DESC')->get();
         }
 
         $data = ActionResource::collection($query);
@@ -68,20 +59,11 @@ class ActionsJsonController extends Controller
     public function showApprovedActions($user)
     {
         if($user->role->name == "rrhh"){
-            $company = AppSession::where('user_id',$user->id)->first();
-            $query = Action::whereHas('employee', function ($query) use ($company) {
-                $query->where('company_id',$company->company_id);
-            })->CheckRh()
-                ->with(['employee'])
-                ->orderBy('actions.created_at','DESC')->get();
+            $query = $user->appcompany->company->actions()->CheckRh()->with('user')->orderBy('created_at','DESC')->get();
         }
         else if($user->role->name == "gerente" || $user->role->name == "subjefe")
         {
-            $query = Action::whereHas('employee', function ($query) use ($user) {
-                $query->where('jefe_id',$user->id);
-            })->CheckGte()
-                ->with(['employee'])
-                ->orderBy('actions.created_at','DESC')->get();
+            $query = $user->actionsGte()->checkGte()->orWhere('created_by', $user->id)->with('user')->orderBy('created_at','DESC')->get();
         }
 
         $data = ActionResource::collection($query);
@@ -94,8 +76,7 @@ class ActionsJsonController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        $employee = $user->employee;
-        $query = $employee->actions()->orderBy('created_at','DESC')->get();
+        $query = $user->actionsEmp()->orWhere('actions.employee_id', $user->employee->id)->orderBy('created_at','DESC')->get();
         $data = ActionResource::collection($query);
 
         return response()->json($data, 200);

@@ -11,7 +11,7 @@ class NewPersonalAction extends Notification
 {
     use Queueable;
 
-    private $employee;
+    private $user;
     private $url;
 
     /**
@@ -19,9 +19,9 @@ class NewPersonalAction extends Notification
      *
      * @return void
      */
-    public function __construct($employee)
+    public function __construct($user)
     {
-        $this->employee = $employee;
+        $this->user = $user;
         $this->url = '/actions';
     }
 
@@ -47,8 +47,9 @@ class NewPersonalAction extends Notification
         return (new MailMessage)
             ->subject('Nueva acción de personal')
             ->greeting('¡Hola '. $notifiable->name .'!')
-            ->line('Tienes una nueva accion de personal')
-            ->line('de tu empleado ' . $this->employee->name_employee . ' ' . $this->employee->surname_employee)
+            ->line('Tienes una nueva acción de personal')
+            ->line(($this->user->role->id == 1) ? 'de tu empleado ' . $this->user->name : 'de tu jefe ' . $this->user->name)
+            ->line('La cual requiere tu aprobación')
             ->action('Revisar', url($this->url))
             ->line('¡Gracias por usar nuestra Aplicación!')
             ->salutation('¡Saludos!');

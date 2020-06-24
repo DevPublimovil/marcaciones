@@ -74,4 +74,21 @@ class User extends \TCG\Voyager\Models\User
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function actionsGte()
+    {
+        return $this->hasManyThrough(
+            'App\Action',
+            'App\Employee',
+            'jefe_id',
+            'created_by',
+            'id', 
+            'id'
+        );
+    }
+
+    public function actionsEmp()
+    {
+        return $this->hasMany('App\Action', 'created_by', 'id');
+    }
 }

@@ -22,4 +22,16 @@ class Company extends Model
     {
         return $this->hasMany('App\CompanyResource', 'company_id', 'id');
     }
+
+    public function actions()
+    {
+        return $this->hasManyThrough(
+            'App\Action',
+            'App\Employee',
+            'company_id',
+            'created_by',
+            'id', 
+            'id'
+        );
+    }
 }

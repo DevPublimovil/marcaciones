@@ -28,11 +28,7 @@ class Employee extends Model
     {
         return $this->belongsTo(Departament::class);
     }
-
-    public function actions()
-    {
-        return $this->hasMany('App\Action','created_by','id');
-    }
+    
 
     public function markings()
     {

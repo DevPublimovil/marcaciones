@@ -20,6 +20,7 @@ class CreateActionsTable extends Migration
             $table->tinyInteger('check_employee')->default(0);
             $table->tinyInteger('check_gte')->default(0);
             $table->tinyInteger('check_rh')->default(0);
+            $table->string('attached',255)->nullable();
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();

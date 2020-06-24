@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('header-content')
-    <div class="flex p-2 pt-8 mb-y">
+    <div class="flex w-full xl:w-10/12 mx-auto flex-wrap py-4 border-b">
         <div class="flex-1">
-            <h3 class="text-base md:text-2xl text-gray-700 font-bold">
+            <h3 class="font-bold text-2xl text-center md:text-left">
                 <span class="mr-3"><i class="fa fa-file-text" aria-hidden="true"></i></span>
                 @if (isset($action))
                     Editar acción de personal
@@ -18,5 +18,5 @@
 @section('content')
     <personal-action-component :types="{{ json_encode($typeactions) }}" :user="{{ json_encode($user)}}" @isset ($action)
         :action="{{$action}}"
-    @endisset></personal-action-component>
+    @endisset  @isset($employee) :myemployee="{{$employee}}" @endisset></personal-action-component>
 @endsection

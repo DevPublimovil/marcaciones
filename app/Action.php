@@ -14,9 +14,14 @@ class Action extends Model
         return $this->hasMany(PersonalAction::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User','created_by','id');
+    }
+
     public function employee()
     {
-        return $this->belongsTo('App\Employee','created_by','id');
+        return $this->belongsTo('App\Employee','employee_id','id');
     }
 
     public function scopeNoCheckGte($query){
