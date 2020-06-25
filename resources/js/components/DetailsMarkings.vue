@@ -4,23 +4,7 @@
             <div class="flex justify-between p-0">
                 <div class="self-center flex-auto">
                     <h3 class="text-xl font-bold">{{ employee.name_employee + ' ' + employee.surname_employee }}</h3>
-                    <h3 class="text-gray-500 text-sm">{{ employee.departament.display_name }}</h3>
-                </div>
-                <div class="flex-auto justify-end">
-                    <div class="flex justify-end">
-                        <div class="self-center mx-1">
-                            <span>Desde: </span>
-                        </div>
-                        <div>
-                            <datepicker :format="customFormatter" :language="es" v-model="startDate" @input="changeDate()" input-class="inline-block form-input"  placeholder="Selecciona la fecha"></datepicker>
-                        </div>
-                        <div class="self-center mx-1">
-                                <span>Hasta: </span>
-                        </div>
-                        <div>
-                            <datepicker :format="customFormatter" :language="es" v-model="endDate" @input="changeDate()" input-class="inline-block form-input"  placeholder="Selecciona la fecha"></datepicker>
-                        </div>
-                    </div>
+                    <h3 class="text-gray-500 text-sm">{{ employee.departament ? employee.departament.display_name : '' }}</h3>
                 </div>
             </div>
         </div>
@@ -64,19 +48,10 @@
     </div>
 </template>
 <script>
-import Datepicker from 'vuejs-datepicker';
-import {en, es} from 'vuejs-datepicker/dist/locale';
 export default {
     props:['employee','startdate','enddate'],
-    components: {
-        Datepicker,
-    },
     data(){
         return{
-            en: en,
-            es: es,
-            startDate: '',
-            endDate: '',
             markings: [],
         }
     },
@@ -86,38 +61,15 @@ export default {
             let vm = this
             axios.get(url,{
                 params:{
-                    start_date: vm.startDate,
-                    end_date: vm.endDate
+                    start_date: vm.startdate,
+                    end_date: vm.enddate
                 }
             }).then(response => {
                 this.markings = response.data
             })
         },
-        changeDate(){
-            this.markings = []
-            localStorage.setItem('time-vue', JSON.stringify({start: this.startDate, end: this.endDate}));
-            this.$root.start = moment(this.startDate).format('YYYY-MM-DD')
-            this.$root.end = moment(this.endDate).format('YYYY-MM-DD')
-            this.fetchDataMarkings()
-        },
-        customFormatter(date) {
-            return moment(date).format('YYYY-MM-DD');
-        }
     },
     mounted() {
-        let datosDB = JSON.parse(localStorage.getItem('time-vue'));
-        if(datosDB == null){
-            this.startDate = this.startdate
-            this.endDate = this.enddate
-            this.$root.start = moment(this.startdate).format('YYYY-MM-DD')
-            this.$root.end = moment(this.enddate).format('YYYY-MM-DD')
-        }else{
-            this.startDate = datosDB.start
-            this.endDate = datosDB.end
-            this.$root.start = moment(datosDB.start).format('YYYY-MM-DD')
-            this.$root.end = moment(datosDB.end).format('YYYY-MM-DD')
-        }
-
         this.fetchDataMarkings()
     },
 }

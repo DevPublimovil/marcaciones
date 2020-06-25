@@ -27,14 +27,14 @@ class ReportsController extends Controller
             {
                 $resource = $user->appcompany->first();
 
-                $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
+                $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(2);
             }
             else if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
             {
-                $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(1);
+                $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(2);
             }
         
-            return view('reports.details', compact('employees'));
+            return view('reports.details', compact('employees'));   
         }else{
             abort(403);
         }

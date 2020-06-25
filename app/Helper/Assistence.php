@@ -5,6 +5,7 @@ use \Carbon\Carbon as Fecha;
 use App\Marking;
 use App\Action;
 use Illuminate\Support\Collection;
+use App\DaysTable;
 
 class Assistence {
 
@@ -16,7 +17,23 @@ class Assistence {
 
         $period = collect(Fecha::parse($request->start_date)->toPeriod($request->end_date));
 
-        foreach ($period as $key => $value) {
+        $newPeriod = collect();
+
+
+        $days = DaysTable::where('timetable_id', $employee->timetable_id)->get();
+
+        foreach ($days as $key => $timetable) {
+            foreach ($period as $key => $value) {
+                if(Fecha::parse($value)->locale('es')->isoFormat('dddd') == strtolower($timetable->day))
+                {
+                    $newPeriod[] = $value;
+                }
+            }
+        }
+
+        $timePermited = 30 / $days->count();
+
+        foreach ($newPeriod->sort() as $key => $value) {
             $marking = Marking::HaveMarking($employee->cod_marking, $employee->cod_terminal)->whereDate('created_at',$value)->first();
 
             if($employee->type_employee == 1 && $employee->user)
@@ -58,7 +75,7 @@ class Assistence {
         }
 
         $filtered_worked    = $markings->where('hours_worked','!=',null);
-        $filtered_worked    = $filtered_worked->pluck( str_replace('.',':','hours_worked'));
+        $filtered_worked    = $filtered_worked->pluck( str_replace('.',':','hours_worked') );
         $filtered_extra    = $markings->where('extra_hours','!=',null);
         $filtered_extra    = $filtered_extra->pluck( str_replace('.',':','extra_hours'));
         $filtered_minutes    = $markings->where('late_arrivals','!=',null);
@@ -69,7 +86,7 @@ class Assistence {
             'markings' => $markings,
             'total_hours_worked'    => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_worked),
             'total_extra_hours'     => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_extra),
-            'total_late_arrivals'   => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_minutes)
+            'total_late_arrivals'   => ($markings->isEmpty()) ? null : self::AddPlayTimeArrivals($filtered_minutes, $timePermited)
             ]);
     }
 
@@ -80,6 +97,23 @@ class Assistence {
             list($hour, $minute) = explode(':', $time);
             $minutes += $hour * 60;
             $minutes += $minute;
+        }
+
+        $hours = floor($minutes / 60);
+        $minutes -= $hours * 60;
+        // returns the time already formatted
+        return  sprintf('%02d:%02d', $hours, $minutes);
+    }
+
+    public static function AddPlayTimeArrivals($times, $timestable)
+    {
+        $minutes = 0;
+
+        foreach ($times as $time) {
+            list($hour, $minute) = explode(':', $time);
+            $minutes += $hour * 60;
+            $minutes += $minute;
+            $minutes -= $timestable;
         }
 
         $hours = floor($minutes / 60);

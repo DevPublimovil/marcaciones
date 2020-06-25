@@ -72,7 +72,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 
-
+    Route::get('/marcaciones/employees', 'MarkingsController@showEmployees')->name('marcaciones.show');
 
 
     //rutas para gerentes

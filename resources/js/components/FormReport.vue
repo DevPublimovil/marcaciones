@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="button" class="bg-blue-600 h-full hover:bg-blue-500 font-semibold text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" @click="showModal = true">
+        <button type="button" class="bg-blue-600 inline-block  h-full hover:bg-blue-500 font-semibold text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" @click="showModal = true">
             Generar reporte  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
         </button>
 
@@ -15,8 +15,8 @@
                         <div class="flex">
                             <div class="flex-1">
                                  <input type="hidden" name="_token" :value="token">
-                                <input type="hidden" name="start_date" :value="start">
-                                <input type="hidden" name="end_date" :value="end">
+                                <input type="hidden" name="start_date" :value="formatDate(start)">
+                                <input type="hidden" name="end_date" :value="formatDate(end)">
                                 <input type="hidden" name="employees" :value="selected">
                                 <ul>
                                     <li class="mb-4 w-full">
@@ -43,7 +43,7 @@
 </template>
 <script>
 export default {
-    props:['token','start','end','emp'],
+    props:['token','start','end',],
     data() {
         return {
             employees:[],
@@ -54,7 +54,6 @@ export default {
     },
     mounted() {
         this.getEmployees();
-        this.value.push({id: this.emp.id, name: this.emp.name_employee + ' ' + this.emp.surname_employee})
     },
     methods: {
         customForm(){
@@ -72,8 +71,9 @@ export default {
             $("#mi-form-report").submit()
             this.showModal = false
             this.value = []
-            this.value.push({id: this.emp.id, name: this.emp.name_employee + ' ' + this.emp.surname_employee})
-            
+        },
+        formatDate(date){
+            return moment(date).format('YYYY-MM-DD')
         }
     },
     computed: {

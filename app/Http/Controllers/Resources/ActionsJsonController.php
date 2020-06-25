@@ -35,44 +35,35 @@ class ActionsJsonController extends Controller
             return $this->showPendingActions($user);
         }else if($type == 2){
             return $this->showApprovedActions($user);
+        }else if($type == 3)
+        {
+            return $this->showNotApproved($user);
         }
     }
 
 
     public function showPendingActions($user)
     {
-        if($user->role->name == "rrhh"){
-            $query = $user->appcompany->company->employees()
-                    ->select('actions.*','users.name')
-                    ->join('users','users.id','employees.user_id')
-                    ->join('actions','actions.created_by','users.id')
+        $query = $user->appcompany->company->employees()
+                ->select('actions.*','users.name')
+                ->join('users','users.id','employees.user_id')
+                ->join('actions','actions.created_by','users.id')
+                ->where('actions.check_gte','=',1)
+                ->whereNull('check_rh')
+                ->orderBy('created_at','DESC')
+                ->get();
+        $queryTwo = $user->appcompany->company->employees()
+                    ->select('actions.*','employees.name_employee','employees.surname_employee')
+                    ->join('actions','actions.employee_id','employees.id')
                     ->where('actions.check_gte','=',1)
-                    ->where('check_rh','=',0)
+                    ->where('actions.check_employee','=',1)
+                    ->whereNull('check_rh')
                     ->orderBy('created_at','DESC')
                     ->get();
-            $queryTwo = $user->appcompany->company->employees()
-                        ->select('actions.*','employees.name_employee','employees.surname_employee')
-                        ->join('actions','actions.employee_id','employees.id')
-                        ->where('actions.check_gte','=',1)
-                        ->where('actions.check_employee','=',1)
-                        ->where('check_rh','=',0)
-                        ->orderBy('created_at','DESC')
-                        ->get();
 
-            $query = $query->merge($queryTwo);
-            
-            $query = $query->sortByDesc('created_at');
-        }
-        else if($user->role->name == "gerente" || $user->role->name == "subjefe")
-        {
-            $query = $user->workersGte()->select('actions.*','users.name')
-                    ->join('users','users.id','employees.user_id')
-                    ->join('actions','actions.created_by','users.id')
-                    ->orderBy('created_at','DESC')
-                    ->where('check_gte','=',0)
-                    ->orderBy('created_at','DESC')
-                    ->get();
-        }
+        $query = $query->merge($queryTwo);
+        
+        $query = $query->sortByDesc('created_at');
 
         $data = ActionResource::collection($query);
         return response()->json([
@@ -83,48 +74,63 @@ class ActionsJsonController extends Controller
 
     public function showApprovedActions($user)
     {
-        if($user->role->name == "rrhh"){
-            $query = $user->appcompany->company->employees()
-                    ->select('actions.*','users.name')
-                    ->join('users','users.id','employees.user_id')
-                    ->join('actions','actions.created_by','users.id')
-                    ->where('actions.check_gte','=',1)
-                    ->where('check_rh','=',1)
-                    ->orderBy('created_at','DESC')
-                    ->get();
-            $queryTwo = $user->appcompany->company->employees()
-                    ->select('actions.*','employees.name_employee','employees.surname_employee')
-                    ->join('actions','actions.employee_id','employees.id')
-                    ->where('actions.check_gte','=',1)
-                    ->where('actions.check_employee','=',1)
-                    ->where('check_rh','=',1)
-                    ->orderBy('created_at','DESC')
-                    ->get();
+        $query = $user->appcompany->company->employees()
+                ->select('actions.*','users.name')
+                ->join('users','users.id','employees.user_id')
+                ->join('actions','actions.created_by','users.id')
+                ->where('actions.check_gte','=',1)
+                ->where('check_rh','=',1)
+                ->orderBy('created_at','DESC')
+                ->get();
+        $queryTwo = $user->appcompany->company->employees()
+                ->select('actions.*','employees.name_employee','employees.surname_employee')
+                ->join('actions','actions.employee_id','employees.id')
+                ->where('actions.check_gte','=',1)
+                ->where('actions.check_employee','=',1)
+                ->where('check_rh','=',1)
+                ->orderBy('created_at','DESC')
+                ->get();
 
-            $query = $query->merge($queryTwo);
+        $query = $query->merge($queryTwo);
 
-            $query = $query->sortByDesc('created_at');
-        }
-        else if($user->role->name == "gerente" || $user->role->name == "subjefe")
-        {
-            $query = $user->workersGte()->select('actions.*','users.name')
-                        ->join('users','users.id','employees.user_id')
-                        ->join('actions','actions.created_by','users.id')
-                        ->orderBy('created_at','DESC')
-                        ->where('check_gte','=',1)
-                        ->orderBy('created_at','DESC')
-                        ->get();
-            $queryTwo = $user->actionsEmp()->whereNotNull('employee_id')->get();
-            $query = $query->merge($queryTwo);
-
-            $query = $query->sortByDesc('created_at');
-        }
+        $query = $query->sortByDesc('created_at');
 
         $data = ActionResource::collection($query);
         return response()->json([
             'actions' => $data,
             'user' => $user
              ], 200);
+             
+    }
+
+    public function showNotApproved($user)
+    {
+        $query = $user->appcompany->company->employees()
+            ->select('actions.*','users.name')
+            ->join('users','users.id','employees.user_id')
+            ->join('actions','actions.created_by','users.id')
+            ->where('actions.check_gte','=',1)
+            ->where('check_rh','=',0)
+            ->orderBy('created_at','DESC')
+            ->get();
+        $queryTwo = $user->appcompany->company->employees()
+                ->select('actions.*','employees.name_employee','employees.surname_employee')
+                ->join('actions','actions.employee_id','employees.id')
+                ->where('actions.check_gte','=',1)
+                ->where('actions.check_employee','=',1)
+                ->where('check_rh','=',0)
+                ->orderBy('created_at','DESC')
+                ->get();
+
+        $query = $query->merge($queryTwo);
+
+        $query = $query->sortByDesc('created_at');
+
+        $data = ActionResource::collection($query);
+        return response()->json([
+            'actions' => $data,
+            'user' => $user
+            ], 200);
     }
 
     public function show($id)

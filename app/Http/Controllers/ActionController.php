@@ -98,7 +98,7 @@ class ActionController extends Controller
                 'other_action'  => $request->otherAction ?? NULL,
                 'description'   => $request->description,
                 'attached'      => $path ?? NULL,
-                'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : 0,
+                'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : null,
                 'employee_id'   => ($user->role->id != 1 && $request->employee) ? $request->employee : NULL,
                 'created_by'    => $user->id,
             ]);
@@ -155,8 +155,9 @@ class ActionController extends Controller
                 }
             }
             $company = $employee->company;
-            $resource = $company->resourceCompany()->first();
+            $resource = $company->resourceCompany()->join('users','users.id','company_resources.user_id')->where('users.role_id',3)->first();
             $rh =  $resource->user;
+            return public_path('storage/'.$rh->firm);
             $personal_actions = $action->personalaction;
             $pdf = PDF::loadView('reports.actionpdf',[
                 'action' => $action,
@@ -221,7 +222,6 @@ class ActionController extends Controller
                     'type_action_id'      => $item
                 ]);
             }
-
         }
 
        return response()->json('Tu acción de personal se actualizó con éxito',200);
@@ -291,9 +291,9 @@ class ActionController extends Controller
                     'check_employee' => 1
                 ]);
 
-
-                $rh = $user->employee->company->resourceCompany()->first();
-                $rh = $rh->user;
+                $rh = $user->employee->company_id;
+                $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh)->first();
+                
                 $rh->notify(new NewPersonalAction($user));
             }
 

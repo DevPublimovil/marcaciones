@@ -48,18 +48,75 @@ Vue.component('action-index-component', require('./components/boss/ActionIndexCo
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+import InfiniteLoading from 'vue-infinite-loading';
+import Datepicker from 'vuejs-datepicker';
+import {en, es} from 'vuejs-datepicker/dist/locale';
 const app = new Vue({
+    components: {
+        InfiniteLoading, Datepicker
+      },
     el: '#app',
     data:{
         start:'',
         end: '',
         showBar: true,
         showModal: false,
+        employee:'',
+        page: 1,
+        list: [],
+        en: en,
+        es: es,
+        startDate: '',
+        endDate: '',
+        infiniteId: +new Date(),
     },
+    methods: {
+        infiniteHandler($state) {
+          axios.get('/marcaciones/employees/', {
+            params: {
+              page: this.page,
+              employee: this.employee
+            },
+          }).then(({ data }) => {
+            if (data.data.length) {
+              this.page += 1;
+              this.list.push(...data.data);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+        },
+
+        customFormatter(date) {
+            return moment(date).format('YYYY-MM-DD');
+        },
+
+        changeDate(){
+            this.page = 1;
+            this.list = [];
+            this.infiniteId += 1;
+            localStorage.setItem('time-vue', JSON.stringify({start: this.startDate, end: this.endDate}));
+            this.$root.start = moment(this.startDate).format('YYYY-MM-DD')
+            this.$root.end = moment(this.endDate).format('YYYY-MM-DD')
+        },
+      },
     mounted() {
         setTimeout(function() {
             $("#notification").fadeOut(1500);
         },3000);
+
+        let datosDB = JSON.parse(localStorage.getItem('time-vue'));
+        if(datosDB == null){
+            this.startDate = this.startdate
+            this.endDate = this.enddate
+            this.$root.start = moment(this.startdate).format('YYYY-MM-DD')
+            this.$root.end = moment(this.enddate).format('YYYY-MM-DD')
+        }else{
+            this.startDate = datosDB.start
+            this.endDate = datosDB.end
+            this.$root.start = moment(datosDB.start).format('YYYY-MM-DD')
+            this.$root.end = moment(datosDB.end).format('YYYY-MM-DD')
+        }
     },
 });

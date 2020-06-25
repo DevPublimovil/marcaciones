@@ -32,7 +32,7 @@
                         title="ver acciones no aprobadas"
                         @click="getActions('/gte/actions/notapproved', 2)"
                     >
-                        No aprobadas
+                        Rechazadas
                     </button>
                 </div>
             </div>
@@ -71,6 +71,12 @@
                                     <div class="timeline-body p-2">
                                         <p class="text-sm"><b>Descripción</b></p>
                                         <p class="text-xs mb-3">{{ action.description }}</p>
+                                        <template>
+                                            <div v-if="action.comment != null">
+                                                <p class="text-sm"><b>Comentarios</b></p>
+                                                <p class="text-xs">{{action.comment}}</p>
+                                            </div>
+                                        </template>
                                         <div class="flex justify-end">
                                             <a
                                                 :href="action.attached"

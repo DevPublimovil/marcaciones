@@ -16,7 +16,7 @@
                         @click="showFormChange()"
                         >Cambiar horario</span
                     >
-                    <template v-if="rol == 3">
+                    <template>
                         <span
                             class="btn bg-blue-500 hover:bg-blue-400 text-white cursor-pointer"
                             @click="newTimestable()"
@@ -25,6 +25,7 @@
                         <a
                             href="/employees/create"
                             class="btn bg-blue-500 hover:bg-blue-400 text-white"
+                            v-if="rol == 3"
                             >Nuevo empleado</a
                         >
                     </template>
@@ -43,6 +44,7 @@
                             :key="index"
                             @update-timestable="updateTime"
                             @list-employees="listEmployees"
+                            @delete-time="deleteTime"
                         ></time-component>
                     </div>
                 </div>
@@ -85,7 +87,13 @@
                         <div class="dv-body flex">
                             <table class="table-fixed w-full text-center">
                                 <thead class="text-gray-900">
-                                    <th width="40px"></th>
+                                    <th width="40px" @click="selectAll()">
+                                        <input
+                                            type="checkbox"
+                                            :checked="isChecked"
+                                            class="cursor-pointer"
+                                        />
+                                    </th>
                                     <th
                                         class="cursor-pointer px-4 py-2"
                                         v-for="(column, index) in columns"
@@ -215,6 +223,26 @@
                             />
                         </div>
                     </div>
+
+                    <div class="mt-2 w-full" v-if="showModalTime">
+                        <label for="time_out" class="font-bold text-gray-600"
+                                >Dias</label
+                            >
+                        
+                        <div class="flex flex-wrap">
+                            <div v-for="(day, index) in days" :key="index">
+                                <label class="inline-flex items-center cursor-pointer ml-6">
+                                    <input
+                                        type="checkbox"
+                                        v-model="selectDays"
+                                        class="form-checkbox bg-gray-400"
+                                        :value="day"
+                                    />
+                                    <span class="ml-2">{{ day }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="footer-time ">
                     <div class="flex justify-end">
@@ -222,6 +250,11 @@
                             class="btn bg-blue-600 text-white hover:bg-blue-500"
                             @click="saveTimestable()"
                         >
+                            <i
+                                class="fa fa-spinner fa-spin"
+                                aria-hidden="true"
+                                v-if="isLoadingSave"
+                            ></i>
                             Guardar
                         </button>
                     </div>
@@ -262,8 +295,12 @@ export default {
         return {
             timeTitle: '',
             idtimestable: '',
+            days:['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],
+            selectDays:[],
             model: [],
             isLoading: false,
+            isLoadingSave: false,
+            isChecked: false,
             meta: [],
             links: [],
             employeesSelected: [],
@@ -272,6 +309,7 @@ export default {
             timeout: '17:30',
             selectTime: '',
             token: '',
+            showModalTime:false,
             query: {
                 page: 1,
                 column: 'nombre',
@@ -322,18 +360,56 @@ export default {
             this.timeout = e.out;
             this.timeTitle = 'Editar horario';
             this.idtimestable = e.id;
+            e.days.forEach(element => {
+                this.selectDays.push(element.day)
+            });
+            this.showModalTime = true
             this.$modal.show('modal-timestable');
         },
         listEmployees(e) {
             this.idtimestable = e;
             this.fetchIndexData();
         },
+        deleteTime(e){
+            swal({
+                title: '¿Deseas eliminar el horario?',
+                icon: 'warning',
+                buttons: true,
+                buttons: ['Cancelar', 'Aceptar'],
+                dangerMode: true,
+            }).then(willDelete=>{
+                if(willDelete){
+                    axios.delete('/timestables/' + e).then(response =>{
+                        this.fetchIndexData();
+                        this.fetchTimestable();
+                        swal(response.data, {
+                            icon: 'success',
+                            timer: 2000,
+                            button: false,
+                        });
+                    })
+                }
+            })
+        },
+        selectAll(){
+            this.isChecked = true
+            if(this.employeesSelected.length)
+            {
+                this.employeesSelected = []
+            }else{
+                this.model.forEach(element => {
+                    this.employeesSelected.push(element.id)
+                });
+            }
+        },
         saveTimestable() {
+            this.isLoadingSave = true
             if (this.idtimestable) {
                 axios
                     .put('/timestables/' + this.idtimestable, {
                         in: this.timein,
                         out: this.timeout,
+                        days: JSON.stringify(this.selectDays)
                     })
                     .then(({ data }) => {
                         this.$modal.hide('modal-timestable');
@@ -343,12 +419,19 @@ export default {
                             button: false,
                         });
                         this.fetchTimestable();
-                    });
+                    }).catch(error =>{
+                        toastr.error('Ocurrió un error, Intenta recargar la página')
+                    }).finally(this.isLoadingSave = false);
             } else {
-                axios
+                if(!this.selectDays.length > 0)
+                {
+                    toastr.warning('Debes seleccionar al menos un día')
+                }else{
+                    axios
                     .post('/timestables', {
                         in: this.timein,
                         out: this.timeout,
+                        days: JSON.stringify(this.selectDays)
                     })
                     .then(({ data }) => {
                         this.$modal.hide('modal-timestable');
@@ -358,7 +441,10 @@ export default {
                             button: false,
                         });
                         this.fetchTimestable();
-                    });
+                    }).catch(error =>{
+                        toastr.error('Ocurrió un error, Intenta recargar la página')
+                    }).finally(this.isLoadingSave = false);
+                }
             }
         },
         saveChamgesEmployees() {
@@ -368,6 +454,7 @@ export default {
                     timestable: this.selectTime,
                 })
                 .then(({ data }) => {
+                    this.isChecked = false
                     swal(data, {
                         icon: 'success',
                         timer: 2000,
@@ -378,6 +465,7 @@ export default {
                     this.selectTime = '';
                     this.$modal.hide('modal-change-employees');
                     this.fetchIndexData();
+                    this.fetchTimestable();
                 });
         },
         toggleOrder(column) {
@@ -407,6 +495,9 @@ export default {
                 )
                 .then(response => {
                     vm.model = response.data.data;
+                    if(vm.model.length){
+                        vm.getFirst(vm.model[0])
+                    }
                     vm.meta = response.data.meta;
                     vm.links = response.data.links;
                 })
@@ -416,6 +507,9 @@ export default {
                 .finally(() => {
                     vm.isLoading = false;
                 });
+        },
+        getFirst(employee){
+            this.idtimestable = employee.timestable
         },
         fetchTimestable() {
             axios.get('/apitime').then(({ data }) => {
@@ -429,11 +523,11 @@ export default {
         },
         newTimestable() {
             this.timeTitle = 'Nuevo horario';
+            this.showModalTime = true
             this.$modal.show('modal-timestable');
         },
         modalClosed() {
-            this.idtimestable = '';
-            (this.timeTitle = ''), (this.timein = '08:00'), (this.timeout = '17:30');
+            (this.selectDays = []), (this.timeTitle = ''), (this.timein = '08:00'), (this.timeout = '17:30');
         },
     },
     mounted() {

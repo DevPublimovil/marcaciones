@@ -12,4 +12,6 @@ class DaysTable extends Model
     {
         return $this->belongsTo('App\Timetable', 'timetable_id', 'id');
     }
+
+    public $timestamps = false;
 }

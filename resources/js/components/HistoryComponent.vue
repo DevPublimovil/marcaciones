@@ -2,13 +2,6 @@
     <div class="hortory-component">
         <div class="w-full md:w-10/12 mx-auto shadow-xs bg-white rounded py-4 px-4 mt-4">
             <div class="flex w-full justify-center md:justify-end">
-                <a
-                    href="/actions/create"
-                    v-if="user.role_id != 3 && user.role_id != 1"
-                    class="bg-white hover:bg-gray-800 hover:text-white border border-gray-800 text-gray-800 font-bold py-2 px-4 mx-2 rounded"
-                >
-                    Crear
-                </a>
                 <div class="inline-flex">
                     <button
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-l border border-gray-800 focus:outline-none"
@@ -19,12 +12,20 @@
                         Pendientes
                     </button>
                     <button
-                        class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-r border border-gray-800 focus:outline-none"
+                        class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 border border-gray-800 focus:outline-none"
                         :class="[ isApproved ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
                         title="ver acciones aprobadas"
                         @click="fetchApproved()"
                     >
                         Aprobadas
+                    </button>
+                    <button
+                        class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-r border border-gray-800 focus:outline-none"
+                        :class="[ isNotApproved ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
+                        title="ver acciones no aprobadas"
+                        @click="fetchNotApproved() "
+                    >
+                        Rechazadas
                     </button>
                 </div>
             </div>
@@ -46,11 +47,6 @@
                                         <div>
                                             <h3
                                                 class="timeline-header text-base text-gray-800 leading-loose p-1 m-0"
-                                                v-if="
-                                                    role.role.name == 'gerente' ||
-                                                        role.role.name == 'rrhh' ||
-                                                        role.role.name == 'subjefe'
-                                                "
                                             >
                                                <b> Creada por: </b>{{ action.name_employee }}
                                             </h3>
@@ -68,6 +64,12 @@
                                     <div class="timeline-body p-2">
                                         <p class="text-sm"><b>Descripción</b></p>
                                         <p class="text-xs mb-3">{{ action.description }}</p>
+                                        <template>
+                                            <div v-if="action.comment != null">
+                                                <p class="text-sm"><b>Comentarios</b></p>
+                                                <p class="text-xs">{{action.comment}}</p>
+                                            </div>
+                                        </template>
                                         <div class="flex justify-end">
                                             <a
                                                 :href="action.attached"
@@ -85,45 +87,30 @@
                                                 Ver pdf
                                                 <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                             </a>
-                                            <template
-                                                v-if="
-                                                    role.role.name == 'gerente' ||
-                                                        role.role.name == 'subjefe'
-                                                "
+                                            <button
+                                                class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1"
+                                                v-if="isPending"
+                                                @click="changeNoApproved(action.id)"
                                             >
-                                                <button
-                                                    class="btn-sm border border-red-700 text-red-700 hover:text-red-800 hover:bg-red-100 mx-1"
-                                                    v-if="isPending"
-                                                    @click="changeNoApproved(action.id)"
-                                                >
-                                                    <i
-                                                        class="fa fa-spinner fa-spin"
-                                                        aria-hidden="true"
-                                                        v-if="loadingNoApproved"
-                                                    ></i>
-                                                    No aprobar
-                                                </button>
-                                            </template>
-                                            <template
-                                                v-if="
-                                                    role.role.name == 'gerente' ||
-                                                        role.role.name == 'rrhh' ||
-                                                        role.role.name == 'subjefe'
-                                                "
+                                                <i
+                                                    class="fa fa-spinner fa-spin"
+                                                    aria-hidden="true"
+                                                    v-if="loadingNoApproved"
+                                                ></i>
+                                                No aprobar
+                                            </button>
+                                            <button
+                                                class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1"
+                                                v-if="isPending"
+                                                @click="changeApproved(action.id)"
                                             >
-                                                <button
-                                                    class="btn-sm bg-blue-600 hover:bg-blue-700 text-white mx-1"
-                                                    v-if="isPending"
-                                                    @click="changeApproved(action.id)"
-                                                >
-                                                    <i
-                                                        class="fa fa-spinner fa-spin"
-                                                        aria-hidden="true"
-                                                        v-if="loadingApproved"
-                                                    ></i>
-                                                    Aprobar
-                                                </button>
-                                            </template>
+                                                <i
+                                                    class="fa fa-spinner fa-spin"
+                                                    aria-hidden="true"
+                                                    v-if="loadingApproved"
+                                                ></i>
+                                                Aprobar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -165,6 +152,7 @@ export default {
             actions: [],
             isPending: true,
             isApproved: false,
+            isNotApproved: false,
             role: [],
             token: '',
             loadingApproved: false,
@@ -187,6 +175,7 @@ export default {
                     vm.role = response.data.user;
                     vm.isPending = true;
                     vm.isApproved = false;
+                    vm.isNotApproved = false;
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo');
@@ -203,8 +192,28 @@ export default {
                 .then(response => {
                     vm.actions = response.data.actions;
                     vm.role = response.data.user;
-                    vm.isPending = false;
+                     vm.isPending = false;
                     vm.isApproved = true;
+                    vm.isNotApproved = false;
+                })
+                .catch(error => {
+                    toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo');
+                })
+                .finally(() => {
+                    vm.isLoading = false;
+                });
+        },
+        fetchNotApproved() {
+            let vm = this;
+            vm.isLoading = true;
+            axios
+                .get('/apiactions/3')
+                .then(response => {
+                    vm.actions = response.data.actions;
+                    vm.role = response.data.user;
+                    vm.isPending = false;
+                    vm.isApproved = false;
+                    vm.isNotApproved = true;
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo');
@@ -233,16 +242,11 @@ export default {
                     this.loadingApproved = false;
                 });
         },
-        pending(){
-            this.isPending = true
-            this.isApproved = false
-        },
-        approved(){
-            this.isApproved = true
-            this.isPending = false
-        },
         changeNoApproved(action) {
             let vm = this;
+            var input = document.createElement("TEXTAREA")
+            input.className = "form-textarea w-full"
+            input.placeholder = "Agrega tu comentario.."
             swal({
                 title: '¿Estás seguro que deseas descartar la acción de personal?',
                 icon: 'warning',
@@ -251,29 +255,50 @@ export default {
                 dangerMode: true,
             }).then(willDelete => {
                 if (willDelete) {
-                    vm.loadingNoApproved = true;
-                    toastr.info('¡espera un momento, tus cambios se estan guardando!');
-                    axios
-                        .put('/actions/noapproved/' + action)
-                        .then(response => {
-                            vm.fetchPending();
-                            swal(response.data, {
-                                icon: 'warning',
-                                timer: 2000,
-                                button: false,
-                            });
-                        })
-                        .catch(error => {
-                            toastr.error('Ocurrió un problema, por favor intentelo de nuevo');
-                        })
-                        .finally(() => {
-                            this.loadingNoApproved = false;
-                        });
+                    swal({
+                        text: "Debes ingresar un comentario",
+                        closeOnClickOutside: false,
+                        content: input
+                    }).then(value =>{
+                        if(input.value.length == 0)
+                        {
+                            swal({
+                                icon: "warning",
+                                text: '¡Debes ingresar un comentario!'
+                                })
+                        }else{
+                            vm.sendNotApprove(action, input.value)
+                        }
+                    })
                 } else {
-                    swal('¡Aun puedes aprobar la acción de personal!');
+                    swal('¡Aún puedes aprobar la acción de personal!');
                 }
             });
         },
+
+        sendNotApprove(action, comments){
+            let vm = this;
+            vm.loadingNoApproved = true;
+            toastr.info('¡Espera un momento, tus cambios se están guardando!');
+            axios
+                .put('/gte/actions/notapprove/' + action,{
+                    comments: comments
+                })
+                .then(response => {
+                    this.fetchPending();
+                    swal(response.data, {
+                        icon: 'success',
+                        timer: 2000,
+                        button: false,
+                    });
+                })
+                .catch(error => {
+                    toastr.error('Ocurrió un problema, intenta recargar la página');
+                })
+                .finally(() => {
+                    this.loadingNoApproved = false;
+                });
+        }
     },
 };
 </script>

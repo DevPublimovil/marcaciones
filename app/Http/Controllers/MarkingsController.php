@@ -58,5 +58,22 @@ class MarkingsController extends Controller
          ],200);
      }
 
+     public function showEmployees(Request $request)
+     {
+        $user = User::find(Auth::id());
+        if($user->role->name == 'rrhh')
+        {
+            $resource = $user->appcompany->first();
+
+            $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->with('departament','company')->orderBy('name_employee','ASC')->paginate(2);
+        }
+        else if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
+        {
+            $employees = $user->workersGte()->SearchEmployee($request->employee)->with('departament','company')->orderBy('name_employee','ASC')->paginate(2);
+        }
+    
+        return $employees;
+     }
+
      
 }

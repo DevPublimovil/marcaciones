@@ -72,9 +72,9 @@
                                                                 :class="[
                                                                     action.check_gte == 1
                                                                         ? 'bg-blue-500'
-                                                                        : action.check_gte == 3
-                                                                        ? 'bg-blue-500'
-                                                                        : 'bg-gray-300',
+                                                                        : action.check_gte == null
+                                                                        ? 'bg-gray-300'
+                                                                        : 'bg-blue-500',
                                                                 ]"
                                                                 style="width: 100%;"
                                                             ></div>
@@ -86,16 +86,16 @@
                                                         :class="[
                                                             action.check_gte == 1
                                                                 ? 'bg-blue-500'
-                                                                : action.check_gte == 3
-                                                                ? 'bg-red-500'
-                                                                : 'bg-gray-300',
+                                                                : action.check_gte == null
+                                                                ? 'bg-gray-300'
+                                                                : 'bg-red-500',
                                                         ]"
                                                         :title="[
                                                             action.check_gte == 1
                                                                 ? 'Tu accion de personal ha sido aprobado por tu jefe'
-                                                                : action.check_gte == 3
-                                                                ? 'Tu acción de personal ha sido rechazada'
-                                                                : 'Tu accion de personal aún no ha sido aprobado por tu jefe',
+                                                                : action.check_gte == null
+                                                                ? 'Tu accion de personal aún no ha sido aprobado por tu jefe'
+                                                                : 'Tu acción de personal ha sido rechazada por tu jefe',
                                                         ]"
                                                     >
                                                         <span class="text-center text-white w-full">
@@ -104,7 +104,7 @@
                                                                 :class="[
                                                                     action.check_gte == 1
                                                                         ? 'fa-check-circle'
-                                                                        : action.check_gte == 3
+                                                                        : action.check_gte == null
                                                                         ? 'fa-times-circle'
                                                                         : 'fa-times-circle',
                                                                 ]"
@@ -120,9 +120,9 @@
                                                     {{
                                                         action.check_gte == 1
                                                             ? 'aprobada'
-                                                            : action.check_gte == 3
-                                                            ? 'no aprobada'
-                                                            : 'pendiente'
+                                                            : action.check_gte == null
+                                                            ? 'pendiente'
+                                                            : 'no aprobada'
                                                     }}
                                                 </div>
                                             </div>
@@ -141,9 +141,9 @@
                                                                 :class="[
                                                                     action.check_rh == 1
                                                                         ? 'bg-blue-500'
-                                                                        : action.check_rh == 3
-                                                                        ? 'bg-blue-500'
-                                                                        : 'bg-gray-300',
+                                                                        : action.check_rh == null
+                                                                        ? 'bg-gray-300'
+                                                                        : 'bg-blue-500',
                                                                 ]"
                                                                 style="width: 100%"
                                                             ></div>
@@ -155,16 +155,16 @@
                                                         :class="[
                                                             action.check_rh == 1
                                                                 ? 'bg-blue-500'
-                                                                : action.check_rh == 3
-                                                                ? 'bg-red-500'
-                                                                : 'bg-gray-300',
+                                                                : action.check_rh == null
+                                                                ? 'bg-gray-300'
+                                                                : 'bg-red-500',
                                                         ]"
                                                         :title="[
                                                             action.check_rh == 1
                                                                 ? 'Tu accion de personal ha sido aprobado por tu jefe'
-                                                                : action.check_rh == 3
-                                                                ? 'Tu acción de personal ha sido rechazada'
-                                                                : 'Tu accion de personal aún no ha sido aprobado por tu jefe',
+                                                                : action.check_rh == 0
+                                                                ? 'Tu acción de personal ha sido rechazada por recursos humanos'
+                                                                : 'Tu accion de personal aún no ha sido aprobado por recursos humanos',
                                                         ]"
                                                     >
                                                         <span class="text-center text-white w-full">
@@ -173,7 +173,7 @@
                                                                 :class="[
                                                                     action.check_rh == 1
                                                                         ? 'fa-check-circle'
-                                                                        : action.check_rh == 3
+                                                                        : action.check_rh == null
                                                                         ? 'fa-times-circle'
                                                                         : 'fa-times-circle',
                                                                 ]"
@@ -189,9 +189,9 @@
                                                     {{
                                                         action.check_rh == 1
                                                             ? 'aprobada'
-                                                            : action.check_rh == 3
-                                                            ? 'no aprobada'
-                                                            : 'pendiente'
+                                                            : action.check_rh == null
+                                                            ? 'pendiente'
+                                                            : 'no aprobada'
                                                     }}
                                                 </div>
                                             </div>
@@ -201,7 +201,7 @@
                                 <div class="flex justify-end mt-1 text-xs">
                                     <button
                                         class="btn border border-gray-800 hover:text-white hover:bg-gray-800"
-                                        v-if="action.check_gte == 0"
+                                        v-if="action.check_gte == null"
                                         @click="edit(action.id)"
                                     >
                                         Editar

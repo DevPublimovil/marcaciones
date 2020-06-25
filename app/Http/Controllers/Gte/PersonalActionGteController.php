@@ -172,7 +172,12 @@ class PersonalActionGteController extends Controller
 
         $employee = $personal_action->user->employee ?? $personal_action->employee;
 
-        $personal_action->update(['check_gte' => 0, 'comments' => $request->comments]);
+        if($gte->role_id == 3)
+        {
+            $personal_action->update(['check_rh' => 0, 'comments' => $request->comments]);
+        }else{
+            $personal_action->update(['check_gte' => 0, 'comments' => $request->comments]);
+        }
 
         if($employee->type_employee == 1)
         {

@@ -27,7 +27,7 @@ class EmployeeJsonController extends Controller
 
         (!$request->time) ? $timestable = $resource->first() : $timestableTwo = $request->time;
 
-        $model = $resource->where('timetable_id', $timestable->timetable_id ?? $timestableTwo)->orderBy($column, $request->direction)
+        $model = $resource->where('timetable_id', $timestable->timetable_id ?? $timestableTwo ?? null)->orderBy($column, $request->direction)
                 ->where(function($query) use($request){
                     if($request->search_input)
                     {

@@ -78,7 +78,7 @@
                     {{ $item['employee']->name_employee . ' ' . $item['employee']->surname_employee }}
                 </th>
                 <th class="text-right uppercase bnone" style="width:30%">
-                    {{ $item['employee']->departament->display_name }} | {{ $item['employee']->company->display_name }}
+                   {{--  {{ $item['employee']->departament->display_name }} | {{ $item['employee']->company->display_name ? ''}} --}}
                 </th>
             </thead>
         </table>

@@ -113,7 +113,7 @@
                     {{-- <td class="column"><strong>Sueldo:</strong> ${{$action->employee->salary}}</td> --}}
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> {{$employee->departament->display_name}}</td>
+                    <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> {{$employee->departament->display_name ?? ''}}</td>
                 </tr>
                 <tr>
                     <td class="column" colspan="2"><strong>Nombre del puesto:</strong> {{$employee->position}}</td>
