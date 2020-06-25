@@ -78,16 +78,19 @@ class ActionController extends Controller
 
             if($request->file('attached'))
             {
-
                 $path = Storage::disk('public')->putFile('adjuntos', $request->file('attached'));
-                $image = Image::make(Storage::disk('public')->get($path));
+                $file = explode('/',$request->file('attached')->getMimeType());
+                if($file[0]  == 'image')
+                {
+                    $image = Image::make(Storage::disk('public')->get($path));
 
-                $image->resize(1280, null, function($constrait){
-                    $constrait->aspectRatio();
-                    $constrait->upsize();
-                });
+                    $image->resize(1280, null, function($constrait){
+                        $constrait->aspectRatio();
+                        $constrait->upsize();
+                    });
 
-                Storage::disk('public')->put($path, (string) $image->encode('jpg', 50));
+                    Storage::disk('public')->put($path, (string) $image->encode('jpg', 50));
+                }
             }
 
             $user = User::find(Auth::id());
@@ -163,7 +166,7 @@ class ActionController extends Controller
             ])->setPaper('letter','portrait');
             return $pdf->stream($employee->name_employee . '.pdf');
         }else{
-
+            abort(403);
         }
     }
 
@@ -247,7 +250,6 @@ class ActionController extends Controller
 
             $employee->notify(new NoApprovedAction);
 
-
             return 'Has descartado la accion de personal';
         }else{
             abort(403);
@@ -256,7 +258,7 @@ class ActionController extends Controller
 
     public function approved($id)
     {
-        /* if(Auth::user()->hasPermission('browse_actions_approved')){ */
+        if(Auth::user()->hasPermission('browse_actions_approved')){
             $action = Action::find($id);
             $user = User::find(Auth::id());
             $employee = ($action->employee_id) ? $action->employee->user : $action->user;
@@ -296,9 +298,9 @@ class ActionController extends Controller
             }
 
             return 'La acción de personal ha sido aprobada ';
-        /* }else{
+        }else{
             abort(403);
-        } */
+        }
     }
 
     public function myactions()

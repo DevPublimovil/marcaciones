@@ -59,4 +59,9 @@ class Employee extends Model
     {
         return $query->where('name_employee','LIKE','%'.$employee.'%')->orWhere('surname_employee','LIKE','%'.$employee.'%');
     }
+
+    public function getFullNameAttribute($value)
+    {
+        return $this->name_employee . ' ' . $this->surname_employee;
+    }
 }

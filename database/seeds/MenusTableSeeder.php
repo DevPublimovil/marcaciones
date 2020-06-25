@@ -27,5 +27,9 @@ class MenusTableSeeder extends Seeder
         Menu::firstOrCreate([
             'name' => 'employee',
         ]);
+
+        Menu::firstOrCreate([
+            'name' => 'subjefe',
+        ]);
     }
 }

@@ -51,8 +51,8 @@ class Action extends Model
     }
 
     protected $casts = [
-        'other_action' => null,
-        'attached' => null,
-        'employee_id' => null
+        'check_employee' => 'boolean',
+        'check_gte' => 'boolean',
+        'check_rh' => 'boolean',
     ];
 }

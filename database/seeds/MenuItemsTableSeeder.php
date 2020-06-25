@@ -340,5 +340,23 @@ class MenuItemsTableSeeder extends Seeder
                 'order'      => 2,
             ])->save();
         }
+
+        $menu = Menu::where('name', 'subjefe')->firstOrFail();
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
+            'title'   => 'Acciones de personal',
+            'url'     => '',
+            'route'   => 'gte.actions.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa-file-text',
+                'color'      => null,
+                'parent_id'  => null,
+                'order'      => 1,
+            ])->save();
+        }
     }
 }

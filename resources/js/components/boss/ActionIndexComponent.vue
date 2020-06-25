@@ -4,6 +4,7 @@
             <div class="flex w-full justify-center md:justify-end">
                 <a
                     href="/actions/create"
+                    title="Crear una nueva acción de personal"
                     class="bg-white hover:bg-gray-800 hover:text-white border border-gray-800 text-gray-800 font-bold py-2 px-4 mx-2 rounded"
                 >
                     Crear
@@ -13,17 +14,25 @@
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-l border border-gray-800 focus:outline-none"
                         :class="[ isPending ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
                         title="Ver acciones pendientes de aprobar"
-                        @click="fetchPending()"
+                        @click="getActions('/gte/actions/pendings', 0)"
                     >
                         Pendientes
                     </button>
                     <button
-                        class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-r border border-gray-800 focus:outline-none"
+                        class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 border border-gray-800 focus:outline-none"
                         :class="[ isApproved ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
                         title="ver acciones aprobadas"
-                        @click="fetchApproved()"
+                        @click="getActions('/gte/actions/approved', 1)"
                     >
                         Aprobadas
+                    </button>
+                    <button
+                        class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-r border border-gray-800 focus:outline-none"
+                        :class="[ isNotApproved ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
+                        title="ver acciones no aprobadas"
+                        @click="getActions('/gte/actions/notapproved', 2)"
+                    >
+                        No aprobadas
                     </button>
                 </div>
             </div>
@@ -143,6 +152,7 @@ export default {
             actions: [],
             isPending: true,
             isApproved: false,
+            isNotApproved: false,
             token: '',
             loadingApproved: false,
             loadingNoApproved: false,
@@ -150,36 +160,33 @@ export default {
         };
     },
     created() {
-        this.fetchPending();
+        this.getActions('/gte/actions/pendings', 0);
         //this.token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     },
     methods: {
-        fetchPending() {
+        getActions(url, typeAction){
             let vm = this;
             vm.isLoading = true;
             axios
-                .get('/apiactions/1')
+                .get(url)
                 .then(response => {
                     vm.actions = response.data.actions;
-                    vm.isPending = true;
-                    vm.isApproved = false;
-                })
-                .catch(error => {
-                    toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo');
-                })
-                .finally(() => {
-                    vm.isLoading = false;
-                });
-        },
-        fetchApproved() {
-            let vm = this;
-            vm.isLoading = true;
-            axios
-                .get('/apiactions/2')
-                .then(response => {
-                    vm.actions = response.data.actions;
-                    vm.isPending = false;
-                    vm.isApproved = true;
+                    switch(typeAction) {
+                        case 0:
+                            vm.isPending = true;
+                            vm.isApproved = false;
+                            vm.isNotApproved = false;
+                            break;
+                        case 1:
+                            vm.isApproved = true;
+                            vm.isPending = false;
+                            vm.isNotApproved = false;
+                            break;
+                        default:
+                            vm.isNotApproved = true;
+                            vm.isApproved = false;
+                            vm.isPending = false;
+                    }
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un error al cargar la página, intentalo de nuevo');
@@ -192,14 +199,14 @@ export default {
             this.loadingApproved = true;
             toastr.info('¡espera un momento, tus cambios se estan guardando!');
             axios
-                .put('/actions/approved/' + action)
+                .put('/gte/actions/approve/' + action)
                 .then(({ data }) => {
-                    this.fetchPending();
                     swal(data, {
                         icon: 'success',
                         timer: 2000,
                         button: false,
                     });
+                    this.getActions('/gte/actions/pendings', 0);
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un problema, por favor intentelo de nuevo');
@@ -208,16 +215,11 @@ export default {
                     this.loadingApproved = false;
                 });
         },
-        pending(){
-            this.isPending = true
-            this.isApproved = false
-        },
-        approved(){
-            this.isApproved = true
-            this.isPending = false
-        },
         changeNoApproved(action) {
             let vm = this;
+            var input = document.createElement("TEXTAREA")
+            input.className = "form-textarea w-full"
+            input.placeholder = "Agrega tu comentario.."
             swal({
                 title: '¿Estás seguro que deseas descartar la acción de personal?',
                 icon: 'warning',
@@ -226,29 +228,51 @@ export default {
                 dangerMode: true,
             }).then(willDelete => {
                 if (willDelete) {
-                    vm.loadingNoApproved = true;
-                    toastr.info('¡espera un momento, tus cambios se estan guardando!');
-                    axios
-                        .put('/actions/noapproved/' + action)
-                        .then(response => {
-                            vm.fetchPending();
-                            swal(response.data, {
-                                icon: 'warning',
-                                timer: 2000,
-                                button: false,
-                            });
-                        })
-                        .catch(error => {
-                            toastr.error('Ocurrió un problema, por favor intentelo de nuevo');
-                        })
-                        .finally(() => {
-                            this.loadingNoApproved = false;
-                        });
+                    swal({
+                        text: "Debes ingresar un comentario",
+                        closeOnClickOutside: false,
+                        content: input
+                    }).then(value =>{
+                        if(input.value.length == 0)
+                        {
+                            swal({
+                                icon: "warning",
+                                text: '¡Debes ingresar un comentario!'
+                                })
+                        }else{
+                            vm.sendNotApprove(action, input.value)
+                        }
+                    })
                 } else {
-                    swal('¡Aun puedes aprobar la acción de personal!');
+                    swal('¡Aún puedes aprobar la acción de personal!');
                 }
             });
         },
+
+        sendNotApprove(action, comments){
+            let vm = this;
+            vm.loadingNoApproved = true;
+            toastr.info('¡Espera un momento, tus cambios se están guardando!');
+            axios
+                .put('/gte/actions/notapprove/' + action,{
+                    comments: comments
+                })
+                .then(response => {
+                    console.log(response.data)
+                    vm.getActions('/gte/actions/pendings', 0);
+                    swal(response.data, {
+                        icon: 'success',
+                        timer: 2000,
+                        button: false,
+                    });
+                })
+                .catch(error => {
+                    toastr.error('Ocurrió un problema, intenta recargar la página');
+                })
+                .finally(() => {
+                    this.loadingNoApproved = false;
+                });
+        }
     },
 };
 </script>

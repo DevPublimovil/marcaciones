@@ -88,7 +88,7 @@
     <header>
         <table class="table negrita uppercase">
             <tr>
-                <td class="column">{{ $employee->company->name }}, S.A. DE C.V.</td>
+                <td class="column">{{ $employee->company->display_name }} S.A. DE C.V.</td>
                 <td class="column"><u>ACCION DE PERSONAL</u></td>
                 <td class="column">RECURSOS HUMANOS</td>
             </tr>
