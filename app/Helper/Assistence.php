@@ -15,18 +15,23 @@ class Assistence {
         $employee = Employee::find($id);
 
         $markings = collect();
+
+        if($request->start_date && $request->end_date){
+            $startday = Fecha::parse($request->start_date)->subDay()->format('Y-m-d');
+            $endday = Fecha::parse($request->end_date)->subDay()->format('Y-m-d');
+        }
         
-        $period = collect(Fecha::parse($request->start_date ?? Fecha::now()->startOfWeek()->format('Y-m-d'))->toPeriod($request->end_date ?? Fecha::now()->endOfWeek()->format('Y-m-d')));
-
+        $period = collect(Fecha::parse($startday ?? Fecha::now()->startOfWeek()->format('Y-m-d'))->toPeriod($endday ?? Fecha::now()->endOfWeek()->format('Y-m-d')));
+        
         $newPeriod = collect();
-
+        
         $days = DaysTable::where('timetable_id', $employee->timetable_id)->get();
 
         foreach ($days as $key => $timetable) {
             foreach ($period as $key => $value) {
-                if(Fecha::parse($value)->locale('es')->isoFormat('dddd') == strtolower($timetable->day))
+                if(utf8_decode(Fecha::parse($value)->locale('es')->isoFormat('dddd')) == strtolower(utf8_decode($timetable->day)))
                 {
-                    $newPeriod[] = $value;
+                    $newPeriod[] = Fecha::parse($value)->format('Y-m-d');
                 }
             }
         }
@@ -81,7 +86,7 @@ class Assistence {
         $filtered_minutes    = $markings->where('late_arrivals','!=',null);
         $filtered_minutes    = $filtered_minutes->pluck( str_replace('.',':','late_arrivals'));
 
-
+        $timePermited = $timePermited * $markings->count();
         return collect([
             'markings' => $markings,
             'total_hours_worked'    => ($markings->isEmpty()) ? null : self::AddPlayTime($filtered_worked),
@@ -107,13 +112,12 @@ class Assistence {
 
     public static function AddPlayTimeArrivals($times, $timestable)
     {
-        $minutes = 0;
+        $minutes = (count($times) > 0) ? -$timestable : 0;
 
         foreach ($times as $time) {
             list($hour, $minute) = explode(':', $time);
             $minutes += $hour * 60;
             $minutes += $minute;
-            $minutes -= $timestable;
         }
 
         $hours = floor($minutes / 60);
