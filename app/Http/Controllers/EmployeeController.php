@@ -98,6 +98,7 @@ class EmployeeController extends Controller
                                     'departament_id' => $request->departament,
                                     'type_employee' => $request->typeemployee,
                                     'timetable_id' => $request->timestable,
+                                    'status' => $request->status,
                                     'jefe_id' => $request->boss
                                 ]);
                             }
@@ -193,6 +194,7 @@ class EmployeeController extends Controller
                         'departament_id' => $request->departament,
                         'type_employee' => $request->typeemployee,
                         'timetable_id' => $request->timestable,
+                        'status' => $request->status,
                         'jefe_id' => $request->boss
                     ]);
 

@@ -79,4 +79,5 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasMany('App\Action', 'created_by', 'id');
     }
+    
 }

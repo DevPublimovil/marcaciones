@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="button" class="bg-blue-600 inline-block  h-full hover:bg-blue-500 font-semibold text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" @click="showModal = true">
+        <button type="button" class="bg-blue-600 hidden md:inline-block  h-full hover:bg-blue-500 font-semibold text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" @click="showModal = true">
             Generar reporte  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
         </button>
 

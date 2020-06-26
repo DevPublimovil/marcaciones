@@ -20,9 +20,9 @@ class EmployeeJsonController extends Controller
         $column = $this->selectColumn($request->column);
         if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
-            $resource =  $user->workersGte();
+            $resource =  $user->workersGte()->where('status',1);
         }else{
-            $resource = $user->appcompany->company->employees();
+            $resource = $user->appcompany->company->employees()->where('status',1);
         }
 
         (!$request->time) ? $timestable = $resource->first() : $timestableTwo = $request->time;
@@ -61,9 +61,9 @@ class EmployeeJsonController extends Controller
         $user = User::find(Auth::id());
         if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
-           $employees = $user->workersGte()->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
+           $employees = $user->workersGte()->where('status',1)->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
         }else{
-            $employees = $user->appcompany->company->employees()->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
+            $employees = $user->appcompany->company->employees()->where('status',1)->select('id','name_employee','surname_employee')->orderBy('name_employee','ASC')->get();
         }
         return response()->json($employees,200);
     }

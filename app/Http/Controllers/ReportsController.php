@@ -27,11 +27,11 @@ class ReportsController extends Controller
             {
                 $resource = $user->appcompany->first();
 
-                $employees = Employee::where('company_id',$resource->company_id)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(2);
+                $employees = Employee::where('company_id',$resource->company_id)->where('status',1)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(2);
             }
             else if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
             {
-                $employees = $user->workersGte()->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(2);
+                $employees = $user->workersGte()->where('status',1)->SearchEmployee($request->employee)->orderBy('name_employee','ASC')->paginate(2);
             }
         
             return view('reports.details', compact('employees'));   
@@ -67,9 +67,9 @@ class ReportsController extends Controller
                 $employees = explode(',',$request->employees);
             }else{
                 if($user->role->name == 'gerente' || $user->role->name == 'subjefe'){
-                    $employees = $user->workersGte;
+                    $employees = $user->workersGte()->where('status',1)->get();
                 }else{
-                    $employees = $user->appCompany->company->employees;
+                    $employees = $user->appCompany->company->employees()->where('status',1)->get();
                 }
             }
             

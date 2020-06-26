@@ -1,7 +1,17 @@
 @extends('layouts.app')
 
+@section('header-content')
+    @section('header-content')
+    <div class="flex w-11/12 mx-auto flex-wrap py-4 border-b">
+        <div class="flex-1">
+            <h3 class="font-bold text-base md:text-2xl text-center md:text-left"> <span class="mr-3"><i class="fa fa-file-text" aria-hidden="true"></i></span>@if(isset($employee)) Editar empleado @else Nuevo empleado @endif</h3>
+        </div>
+    </div>
+    @endsection
+@endsection
+
 @section('content')
-    <div class="w-11/12 mx-auto py-4">
+    <div class="w-11/12 mx-auto">
         @if ($errors->any())
             <div  class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-4" role="alert">
                 <ul>
@@ -21,10 +31,10 @@
             @isset($employee)
                 @method('PUT')
             @endisset
-            <div class="body-form bg-gray-300 rounded shadow-lg">
+            <div class="body-form rounded shadow-lg">
                 <div class="flex">
                     <div class="flex">
-                        <h3 class="text-xl text-blue-900 py-2 mx-2 font-bold">@if(isset($employee)) Editar empleado @else Nuevo empleado @endif</h3>
+                        <h3 class="text-xl text-blue-900 py-2 mx-2 font-bold"></h3>
                     </div>
                 </div>
                 <div class="content-form p-4 bg-white">
@@ -174,8 +184,8 @@
                                 </label>
                                 <div class="relative">
                                     <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="status" id="status">
-                                        <option @if($employee->status == 1) selected @endif>Activo</option>
-                                        <option @if($employee->status == 0) selected @endif>No activo</option>
+                                        <option value="1" @if($employee->status == 1) selected @endif>Activo</option>
+                                        <option value="0" @if($employee->status == 0) selected @endif>No activo</option>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>

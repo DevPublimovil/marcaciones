@@ -45,7 +45,7 @@ class NoApprovedAction extends Notification
                 ->greeting('¡Hola '. $notifiable->name .'!')
                 ->line('Tu acción de personal ha sido rechazada.')
                 ->line('Puedes ingresar a la aplicación para revisar su estado')
-                ->action('Ingresar', url('/'))
+                ->action('Ingresar', url('/home'))
                 ->line('¡Gracias por usar nuestra Aplicación!')
                 ->salutation('¡Saludos!');
     }

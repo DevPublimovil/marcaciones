@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <div class="dt-body mt-4">
+        <div class="dt-body mt-4 overflow-x-auto">
             <table class="table-auto w-full text-sm text-gray-800">
                 <thead class="text-center border-b-2">
                     <th>Fecha</th>

@@ -12,7 +12,7 @@
         <div class="sidebar mt-6">
 
             <!-- Sidebar Menu -->
-            <nav class="mt-2">
+            <nav class="mt-2 text-xs md:text-base">
                     @if ($user->role->name == 'rrhh')
                         {{menu('rrhh', 'my_menu')}}
                     @elseif($user->role->name == 'empleado')

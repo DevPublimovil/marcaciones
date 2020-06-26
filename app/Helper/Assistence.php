@@ -11,14 +11,14 @@ class Assistence {
 
     public static function showAssists($request, $id)
     {
+        
         $employee = Employee::find($id);
 
         $markings = collect();
-
-        $period = collect(Fecha::parse($request->start_date)->toPeriod($request->end_date));
+        
+        $period = collect(Fecha::parse($request->start_date ?? Fecha::now()->startOfWeek()->format('Y-m-d'))->toPeriod($request->end_date ?? Fecha::now()->endOfWeek()->format('Y-m-d')));
 
         $newPeriod = collect();
-
 
         $days = DaysTable::where('timetable_id', $employee->timetable_id)->get();
 

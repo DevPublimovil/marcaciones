@@ -22,7 +22,7 @@ class NewPersonalAction extends Notification
     public function __construct($user)
     {
         $this->user = $user;
-        $this->url = '/actions';
+        $this->url = '/home';
     }
 
     /**

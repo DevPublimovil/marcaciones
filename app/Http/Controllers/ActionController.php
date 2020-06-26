@@ -119,14 +119,14 @@ class ActionController extends Controller
                 if($employee->type_employee == 1)
                 {
                     $employee->user->notify(new NewPersonalAction($user));
-                    return response()->json('Tu acción de personal se creó con éxito y tu empleado ha sido notificado',200);
+                    return response()->json('success',200);
                 }
 
-                return response()->json('Tu acción de personal se creó con éxito',200);
+                return response()->json($action->id,200);
             }else{
                 $boss = $user->employee->jefe;
                 $boss->notify(new NewPersonalAction($user));
-                return response()->json('Tu acción de personal se creó con éxito',200);
+                return response()->json('success',200);
             }
         }else{
             abort(403);
@@ -157,7 +157,6 @@ class ActionController extends Controller
             $company = $employee->company;
             $resource = $company->resourceCompany()->join('users','users.id','company_resources.user_id')->where('users.role_id',3)->first();
             $rh =  $resource->user;
-            return public_path('storage/'.$rh->firm);
             $personal_actions = $action->personalaction;
             $pdf = PDF::loadView('reports.actionpdf',[
                 'action' => $action,

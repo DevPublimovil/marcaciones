@@ -67,7 +67,7 @@
                                 class="form-textarea border border-gray-500 w-full"
                                 rows="5"
                                 v-model="description"
-                                placeholder="Puedes escribir el dia que cometistes la falta"
+                                placeholder="Puedes escribir el día que has cometido la falta"
                             ></textarea>
                         </div>
 
@@ -122,6 +122,7 @@ export default {
         createPersonalAction() {
             let vm = this;
             vm.loading = true;
+            toastr.info('Por favor espera mientras se crea tu acción de personal')
             let formData = new FormData()
             formData.append('attached', vm.someData)
             formData.append('actions', JSON.stringify(vm.typeactions))
@@ -136,13 +137,19 @@ export default {
                     }
                 })
                 .then(response => {
-                    swal(response.data, 'Puedes revisar su estado en tu historial', 'success').then(
-                        value => {
-                            if (value) {
-                                window.location.href = '/actions';
-                            }
-                        },
-                    );
+                    if(response.data == 'success')
+                    {
+                        swal({text:'Puedes revisar su estado en tu historial', icon:'success'}).then(
+                            value => {
+                                if (value) {
+                                    window.location.href = '/home';
+                                }
+                            },
+                        );
+                    }else{
+                        window.open('/actions/' + response.data, '_blank')
+                        window.location.href = '/home';
+                    }
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un problema, intentalo de nuevo');
@@ -162,7 +169,7 @@ export default {
                     swal(data, 'Puedes revisar su estado en tu historial', 'success').then(
                         value => {
                             if (value) {
-                                window.location.href = '/actions';
+                                window.location.href = '/home';
                             }
                         },
                     );

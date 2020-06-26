@@ -7,7 +7,8 @@
                     title="Crear una nueva acción de personal"
                     class="bg-white hover:bg-gray-800 hover:text-white border border-gray-800 text-gray-800 font-bold py-2 px-4 mx-2 rounded"
                 >
-                    Crear
+                <i class="fa fa-plus-circle block md:hidden" aria-hidden="true"></i>
+                    <span class="hidden md:block">Crear</span>
                 </a>
                 <div class="inline-flex">
                     <button
@@ -16,7 +17,8 @@
                         title="Ver acciones pendientes de aprobar"
                         @click="getActions('/gte/actions/pendings', 0)"
                     >
-                        Pendientes
+                    <i class="fa fa-file-text block md:hidden" aria-hidden="true"></i>
+                        <span class="hidden md:block">Pendientes</span>
                     </button>
                     <button
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 border border-gray-800 focus:outline-none"
@@ -24,7 +26,8 @@
                         title="ver acciones aprobadas"
                         @click="getActions('/gte/actions/approved', 1)"
                     >
-                        Aprobadas
+                        <i class="fa fa-check-circle block md:hidden" aria-hidden="true"></i>
+                        <span class="hidden md:block">Aprobadas</span>
                     </button>
                     <button
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-r border border-gray-800 focus:outline-none"
@@ -32,7 +35,8 @@
                         title="ver acciones no aprobadas"
                         @click="getActions('/gte/actions/notapproved', 2)"
                     >
-                        Rechazadas
+                        <i class="fa fa-times-circle block md:hidden" aria-hidden="true"></i>
+                        <span class="hidden md:block">Rechazadas</span>
                     </button>
                 </div>
             </div>
@@ -42,7 +46,7 @@
                         <div v-for="(action, index) in actions" :key="index">
                             <div class="time-label">
                                 <span
-                                    class="text-white shadow-none bg-gray-700 inline-block font-bold p-2 rounded"
+                                    class="text-white text-xs shadow-none bg-gray-700 inline-block font-bold p-2 rounded"
                                     >{{ action.created_at }}</span
                                 >
                             </div>
@@ -51,14 +55,14 @@
                                     class="timeline-item rounded-lg border border-gray-400 text-gray-600 ml-16 p-0 mt-0 relative"
                                 >
                                     <div class="flex justify-between">
-                                        <div>
+                                        <div class="text-xs md:text-base">
                                             <h3
-                                                class="timeline-header text-base text-gray-800 leading-loose p-1 m-0"
+                                                class="timeline-header text-gray-800 leading-loose p-1 m-0"
                                             >
                                                <b> Autor: </b>{{ action.name_employee }}
                                             </h3>
                                         </div>
-                                        <div>
+                                        <div class="hidden md:block">
                                             <span
                                                 class="time text-gray-500 text-xs p-3 float-right"
                                             >
@@ -69,11 +73,11 @@
                                     </div>
 
                                     <div class="timeline-body p-2">
-                                        <p class="text-sm"><b>Descripción</b></p>
+                                        <p class="text-xs md:text-sm"><b>Descripción</b></p>
                                         <p class="text-xs mb-3">{{ action.description }}</p>
                                         <template>
                                             <div v-if="action.comment != null">
-                                                <p class="text-sm"><b>Comentarios</b></p>
+                                                <p class="text-xs md:text-sm"><b>Comentarios</b></p>
                                                 <p class="text-xs">{{action.comment}}</p>
                                             </div>
                                         </template>
@@ -134,7 +138,7 @@
                                 <div class="logo">Cargando...</div>
                             </div>
                         </div>
-                        <div class="flex w-1/2 mx-auto p-1 h-full" v-if="!isLoading">
+                        <div class="flex w-full md:w-1/2 mx-auto p-1 h-full" v-if="!isLoading">
                             <div class="flex-1 h-64">
                                 <img
                                     src="/images/empty.svg"

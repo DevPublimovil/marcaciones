@@ -289,12 +289,14 @@
     </div>
 </template>
 <script>
+import swal from 'sweetalert';
 export default {
     props: ['title', 'source', 'columns', 'rol'],
     data() {
         return {
             timeTitle: '',
             idtimestable: '',
+            typeAction:0,
             days:['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],
             selectDays:[],
             model: [],
@@ -360,6 +362,7 @@ export default {
             this.timeout = e.out;
             this.timeTitle = 'Editar horario';
             this.idtimestable = e.id;
+            this.typeAction = 2
             e.days.forEach(element => {
                 this.selectDays.push(element.day)
             });
@@ -404,48 +407,55 @@ export default {
         },
         saveTimestable() {
             this.isLoadingSave = true
-            if (this.idtimestable) {
-                axios
-                    .put('/timestables/' + this.idtimestable, {
-                        in: this.timein,
-                        out: this.timeout,
-                        days: JSON.stringify(this.selectDays)
-                    })
-                    .then(({ data }) => {
-                        this.$modal.hide('modal-timestable');
-                        swal(data, {
-                            icon: 'success',
-                            timer: 2000,
-                            button: false,
-                        });
-                        this.fetchTimestable();
-                    }).catch(error =>{
-                        toastr.error('Ocurrió un error, Intenta recargar la página')
-                    }).finally(this.isLoadingSave = false);
-            } else {
-                if(!this.selectDays.length > 0)
-                {
-                    toastr.warning('Debes seleccionar al menos un día')
-                }else{
+            if(this.selectDays.length == 0){
+                swal({text:'Debes seleccionar al menos un día', icon:'warning'})
+                this.isLoadingSave = false
+            }else{
+                this.isLoadingSave = true
+                 if (this.typeAction == 2) {
                     axios
-                    .post('/timestables', {
-                        in: this.timein,
-                        out: this.timeout,
-                        days: JSON.stringify(this.selectDays)
-                    })
-                    .then(({ data }) => {
-                        this.$modal.hide('modal-timestable');
-                        swal(data, {
-                            icon: 'success',
-                            timer: 2000,
-                            button: false,
-                        });
-                        this.fetchTimestable();
-                    }).catch(error =>{
-                        toastr.error('Ocurrió un error, Intenta recargar la página')
-                    }).finally(this.isLoadingSave = false);
+                        .put('/timestables/' + this.idtimestable, {
+                            in: this.timein,
+                            out: this.timeout,
+                            days: JSON.stringify(this.selectDays)
+                        })
+                        .then(({ data }) => {
+                            this.$modal.hide('modal-timestable');
+                            swal(data, {
+                                icon: 'success',
+                                timer: 2000,
+                                button: false,
+                            });
+                            this.fetchTimestable();
+                        }).catch(error =>{
+                            toastr.error('Ocurrió un error, Intenta recargar la página')
+                        }).finally(this.isLoadingSave = false);
+                } else {
+                    if(!this.selectDays.length > 0)
+                    {
+                        toastr.warning('Debes seleccionar al menos un día')
+                    }else{
+                        axios
+                        .post('/timestables', {
+                            in: this.timein,
+                            out: this.timeout,
+                            days: JSON.stringify(this.selectDays)
+                        })
+                        .then(({ data }) => {
+                            this.$modal.hide('modal-timestable');
+                            swal(data, {
+                                icon: 'success',
+                                timer: 2000,
+                                button: false,
+                            });
+                            this.fetchTimestable();
+                        }).catch(error =>{
+                            toastr.error('Ocurrió un error, Intenta recargar la página')
+                        }).finally(this.isLoadingSave = false);
+                    }
                 }
             }
+           
         },
         saveChamgesEmployees() {
             axios
@@ -523,6 +533,7 @@ export default {
         },
         newTimestable() {
             this.timeTitle = 'Nuevo horario';
+            this.typeAction = 1
             this.showModalTime = true
             this.$modal.show('modal-timestable');
         },

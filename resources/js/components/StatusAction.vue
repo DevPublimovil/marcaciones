@@ -197,6 +197,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="flex p-3">
+                                        <div>
+                                            <h1 class="text-xs md:text-base"><b>Comentario:</b></h1>
+                                            <p class="text-xs md:text-base">
+                                                {{action.comment}}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="flex justify-end mt-1 text-xs">
                                     <button
