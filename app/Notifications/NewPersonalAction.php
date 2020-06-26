@@ -22,7 +22,7 @@ class NewPersonalAction extends Notification
     public function __construct($user)
     {
         $this->user = $user;
-        $this->url = '/home';
+        $this->url = '/actions';
     }
 
     /**
@@ -48,7 +48,7 @@ class NewPersonalAction extends Notification
             ->subject('Nueva acción de personal')
             ->greeting('¡Hola '. $notifiable->name .'!')
             ->line('Tienes una nueva acción de personal')
-            ->line(($this->user->role->id == 1 || $this->user->role->id == 4) ? 'de tu empleado ' . $this->user->name : 'de tu jefe ' . $this->user->name)
+            ->line(($this->user->role->id != 2) ? 'de tu empleado ' . $this->user->name : 'de tu jefe ' . $this->user->name)
             ->line('La cual requiere tu aprobación')
             ->action('Revisar', url($this->url))
             ->line('¡Gracias por usar nuestra Aplicación!')

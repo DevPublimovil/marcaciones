@@ -142,7 +142,12 @@ export default {
                         swal({text:'Puedes revisar su estado en tu historial', icon:'success'}).then(
                             value => {
                                 if (value) {
-                                    window.location.href = '/home';
+                                    if(this.user.role_id == 2 || this.user.role_id == 1)
+                                    {
+                                        window.location.href = '/home';
+                                    }else{
+                                        window.location.href = '/inicio/clockbot';
+                                    }
                                 }
                             },
                         );
@@ -169,7 +174,12 @@ export default {
                     swal(data, 'Puedes revisar su estado en tu historial', 'success').then(
                         value => {
                             if (value) {
-                                window.location.href = '/home';
+                                if(this.user.role_id == 2 || this.user.role_id == 1)
+                                {
+                                    window.location.href = '/home';
+                                }else{
+                                    window.location.href = '/inicio/clockbot';
+                                }
                             }
                         },
                     );
