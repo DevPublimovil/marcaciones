@@ -197,7 +197,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex p-3">
+                                    <div class="flex p-3" v-if="action.comment != null">
                                         <div>
                                             <h1 class="text-xs md:text-base"><b>Comentario:</b></h1>
                                             <p class="text-xs md:text-base">
