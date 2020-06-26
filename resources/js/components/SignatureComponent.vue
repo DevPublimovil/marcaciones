@@ -118,6 +118,8 @@ export default {
                 toastr.success('Tu firma se guardo con éxito')
                 if(data == 'empleado'){
                     window.location.href = '/home'
+                }else if(data == 'subjefe'){
+                    window.location.href = '/myactions'
                 }else{
                     window.location.href = '/actions'
                 }

@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
         $user = User::find(Auth::id());
         
-        if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
+        if($user->role->name == 'gerente')
         {
             return redirect()->route('gte.actions.index');
         }else if( $user->role->name == 'rrhh'){
