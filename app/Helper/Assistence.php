@@ -122,6 +122,8 @@ class Assistence {
 
         $hours = floor($minutes / 60);
         $minutes -= $hours * 60;
+
+        ($minutes < )
         // returns the time already formatted
         return  sprintf('%02d:%02d', $hours, $minutes);
     }

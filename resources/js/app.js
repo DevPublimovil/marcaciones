@@ -33,7 +33,6 @@ Vue.component('my-markings', require('./components/MyMarkings.vue').default);
 Vue.component('bad-progress', require('./components/BadProgress.vue').default);
 Vue.component('my-modal-component', require('./components/MyModal.vue').default);
 Vue.component('details-markings-component', require('./components/DetailsMarkings.vue').default);
-Vue.component('history-component', require('./components/Historycomponent.vue').default);
 Vue.component('personal-action-component', require('./components/PersonalAction.vue').default);
 Vue.component('status-action-component', require('./components/StatusAction.vue').default);
 Vue.component('notification-component', require('./components/NotificationComponent.vue').default);
@@ -41,7 +40,7 @@ Vue.component('data-viewer', require('./components/DataViewer.vue').default);
 Vue.component('time-component', require('./components/TimeComponent.vue').default);
 Vue.component('form-report', require('./components/FormReport.vue').default);
 Vue.component('signature-component', require('./components/SignatureComponent.vue').default);
-Vue.component('action-index-component', require('./components/boss/ActionIndexComponent.vue').default);
+Vue.component('action-index-component', require('./components/ActionIndexComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

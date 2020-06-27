@@ -50,11 +50,11 @@ class MakeMarkings extends Command
         $markings = Webster_checkinout::whereBetween('checktime',[$date_start, $date_end])->orderBy('checktime','ASC')->get();
         
         foreach ($markings as $key => $marking) {
-            $marcacion = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->exists();
+            $marcacion = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->first();
             if($marcacion)
             {
-                $marc = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->first();
-                $marc->update([
+                //$marc = Marking::where('cod_marking',$marking->userid)->where('serialno',$marking->serialno)->whereNotNull('check_in')->whereDate('created_at',Fecha::parse($date_start)->format('Y-m-d'))->first();
+                $marcacion->update([
                     'check_out' => $marking->checktime,
                 ]);
             }
@@ -69,7 +69,7 @@ class MakeMarkings extends Command
             }
 
             if ($marking->userid == 87) {
-                Log::info($marking->checktime);
+                Log::info($marking->checktime . ' ' . $marking->cod_marking);
             }
         } 
     }

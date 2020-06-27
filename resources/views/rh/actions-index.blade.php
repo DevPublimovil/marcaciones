@@ -12,11 +12,12 @@
         </div>
     </div>
 @endsection
+
 @section('content')
     <action-index-component
-        :rpending="'/gte/actions/pendings'"
-        :rapproved="'/gte/actions/approved'"
-        :rnotapproved="'/gte/actions/notapproved'"
+        :rpending="'/json/apiactions/pending'"
+        :rapproved="'/json/apiactions/approved'"
+        :rnotapproved="'/json/apiactions/notapproved'"
         :roleuser="'{{Auth::user()->role_id}}'"
     ></action-index-component>
 @endsection

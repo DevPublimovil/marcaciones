@@ -19,6 +19,11 @@ use Image;
 
 class ActionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -26,16 +31,36 @@ class ActionController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->hasPermission('browse_actions')){
-            $user = User::find(Auth::id());
-            if($user->firm){
-                return view('personalactions.history', compact('user'));
-            }else{
-                return redirect()->route('employees.editfirm', $user->id);
-            }
-        }else{
-            abort(403);
+        $user = User::find(Auth::id());
+        if(!$user->hasPermission('browse_actions'))
+        {
+            return back()->with([
+                'message' => 'No tienes permisos para el recurso',
+                'type' => 'warning'
+            ]);
+        }else if(!$user->firm){
+            return view('edit-firm', [$user]);
         }
+
+        switch ($user->role->name) {
+            case 'empleado':
+                    return view('personalactions.history');
+                break;
+            case 'gerente':
+                    return view('boss.actions-index');
+            case 'subjefe':
+                return view('boss.actions-index');
+            case 'rrhh':
+                    return view('rh.actions-index');
+            default:
+                return back()->with([
+                    'message' => 'No tienes permisos para el recurso',
+                    'type' => 'warning'
+                ]);
+            break;
+        }
+
+
     }
 
     /**

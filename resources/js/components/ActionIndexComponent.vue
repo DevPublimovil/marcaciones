@@ -5,6 +5,7 @@
                 <a
                     href="/actions/create"
                     title="Crear una nueva acción de personal"
+                    v-if="roleuser != 3"
                     class="bg-white hover:bg-gray-800 hover:text-white border border-gray-800 text-gray-800 font-bold py-2 px-4 mx-2 rounded"
                 >
                 <i class="fa fa-plus-circle block md:hidden" aria-hidden="true"></i>
@@ -15,7 +16,7 @@
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-l border border-gray-800 focus:outline-none"
                         :class="[ isPending ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
                         title="Ver acciones pendientes de aprobar"
-                        @click="getActions('/gte/actions/pendings', 0)"
+                        @click="getActions(rpending, 0)"
                     >
                     <i class="fa fa-file-text block md:hidden" aria-hidden="true"></i>
                         <span class="hidden md:block">Pendientes</span>
@@ -24,7 +25,7 @@
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 border border-gray-800 focus:outline-none"
                         :class="[ isApproved ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
                         title="ver acciones aprobadas"
-                        @click="getActions('/gte/actions/approved', 1)"
+                        @click="getActions(rapproved, 1)"
                     >
                         <i class="fa fa-check-circle block md:hidden" aria-hidden="true"></i>
                         <span class="hidden md:block">Aprobadas</span>
@@ -33,7 +34,7 @@
                         class="hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded-r border border-gray-800 focus:outline-none"
                         :class="[ isNotApproved ? 'bg-gray-800 text-white' : 'text-gray-800 bg-white' ]"
                         title="ver acciones no aprobadas"
-                        @click="getActions('/gte/actions/notapproved', 2)"
+                        @click="getActions(rnotapproved, 2)"
                     >
                         <i class="fa fa-times-circle block md:hidden" aria-hidden="true"></i>
                         <span class="hidden md:block">Rechazadas</span>
@@ -157,6 +158,7 @@
 
 <script>
 export default {
+    props:['rpending','rapproved','rnotapproved','roleuser'],
     data() {
         return {
             actions: [],
@@ -170,7 +172,7 @@ export default {
         };
     },
     created() {
-        this.getActions('/gte/actions/pendings', 0);
+        this.getActions(this.rpending, 0);
         //this.token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     },
     methods: {

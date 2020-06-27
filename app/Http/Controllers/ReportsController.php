@@ -16,11 +16,13 @@ use App\PersonalAction;
 use App\Helper\Assistence;
 use \Carbon\Carbon as Fecha;
 use Illuminate\Support\Collection;
+use App\Webster_checkinout;
 
 class ReportsController extends Controller
 {
     public function index(Request $request)
     {
+        
         if(Auth::user()->hasPermission('browse_reports')){
             $user = User::find(Auth::id());
             if($user->role->name == 'rrhh')
