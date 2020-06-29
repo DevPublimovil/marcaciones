@@ -11,7 +11,7 @@ class Action extends Model
 
     public function personalaction()
     {
-        return $this->hasMany(PersonalAction::class);
+        return $this->hasOne(PersonalAction::class);
     }
 
     public function user()

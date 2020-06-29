@@ -51,6 +51,7 @@ Vue.component('gte-personal-action-component', require('./components/GtePersonal
 import InfiniteLoading from 'vue-infinite-loading';
 import Datepicker from 'vuejs-datepicker';
 import {en, es} from 'vuejs-datepicker/dist/locale';
+import swal from 'sweetalert';
 const app = new Vue({
     components: {
         InfiniteLoading, Datepicker
@@ -96,6 +97,47 @@ const app = new Vue({
             this.infiniteId += 1;
             localStorage.setItem('time-vue', JSON.stringify({start: this.startDate, end: this.endDate}));
         },
+        sendNotification(){
+          let vm = this;
+          var input = document.createElement("input")
+          input.setAttribute("type","text")
+          input.className = "form-input w-full"
+          input.placeholder = "Agrega la fecha limite."
+          swal({
+              title: '¿Estás seguro que deseas enviar una notificación de acciones de personal a tus empleados?',
+              icon: 'warning',
+              buttons: true,
+              buttons: ['Cancelar', 'Aceptar'],
+              dangerMode: true,
+          }).then(willDelete =>{
+              if(willDelete){
+                  swal({
+                      title: "Debes ingresar la fecha limite",
+                      closeOnClickOutside: false,
+                      content: input
+                  }).then(value=>{
+                      if(input.value.length == 0)
+                      {
+                          swal({
+                              icon: "warning",
+                              text: '¡Debes ingresar la fecha limite!'
+                              })
+                      }else{
+                        toastr.info('Espera un momento tu notificación se esta procesando')
+                        axios.post('/reports/notification',{
+                          limitday: input.value
+                        }).then(response =>{
+                          swal({text:response.data.message,icon:response.data.type})
+                        }).catch(error =>{
+                          swal({text:'Ocurrió un problema por favor intentalo de nuevo', icon:'warning'})
+                        })
+                      }
+                  })
+              }else{
+                swal({text:'La notificación ha sido cancelada'})
+              }
+          })
+        }
       },
     mounted() {
         setTimeout(function() {

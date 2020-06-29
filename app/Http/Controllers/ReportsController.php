@@ -74,9 +74,13 @@ class ReportsController extends Controller
 
     public function sendNotification(Request $request)
     {
-        $recipient = new DynamicRecipient('joseescobar@gmail.com');
-        $recipient->notify(new ReportLastDay());
-        return back()->with([
+        $user = User::find(Auth::id());
+        $resources = $user->appcompany->company;
+
+        $resources->listemail;
+        $recipient = new DynamicRecipient($resources->listemail);
+        $recipient->notify(new ReportLastDay($request->limitday));
+        return response()->json([
             'message' => 'La notificación ha sido enviada',
             'type'  => 'success'
         ]);

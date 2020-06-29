@@ -10,15 +10,16 @@ use Illuminate\Notifications\Notification;
 class ReportLastDay extends Notification
 {
     use Queueable;
+    private $datetime;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($datetime)
     {
-        //
+        $this->datetime = $datetime;
     }
 
     /**
@@ -41,8 +42,11 @@ class ReportLastDay extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Prueba de notificacion.')
-                    ->line('Hoy es ultimo dia para enviar tus acciones de personal')
+                    ->subject('INFORMACION PARA ELABORACION DE PLANILLA')
+                    ->greeting('Buen día compañeros.')
+                    ->line('Por este medio se les recuerda que la entrega de la información relacionada con la Planilla:')
+                    ->line('Acciones de Personal, Horas Extras, Bajas, Altas, Permisos, descuentos de facturas, Nuevos Ingresos etc., Se recibirá dicha información hasta el día:')
+                    ->line($this->datetime)
                     ->action('Ingresar', url('/home'))
                     ->salutation('¡Saludos!');
     }

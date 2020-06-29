@@ -7,10 +7,7 @@
         </div>
         @if(Auth::user()->role->name == 'rrhh')
         <div class="flex-1 text-right hidden md:block">
-            <form action="{{route('reports.notification')}}" method="POST">
-                @csrf
-                <button type="submit" class="btn bg-white text-gray-800 border border-gray-800 hover:bg-gray-800 hover:text-white">Enviar notificación</button>
-            </form>
+            <button type="button" class="btn bg-white text-gray-800 border border-gray-800 hover:bg-gray-800 hover:text-white" v-on:click="sendNotification()">Enviar notificación</button>
         </div>
         @endif
     </div>

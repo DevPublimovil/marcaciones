@@ -119,7 +119,7 @@ class ActionController extends Controller
         }
 
         $action = Action::create([
-            'other_action'  => $request->otherAction ?? NULL,
+            'other_action'  => $request->otherAction ?? null,
             'description'   => $request->description,
             'attached'      => $path ?? NULL,
             'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : null,
@@ -129,12 +129,10 @@ class ActionController extends Controller
 
         if($request->actions)
         {
-            foreach (json_decode($request->actions) as $key => $value) {
-                PersonalAction::create([
-                    'action_id'         => $action->id,
-                    'type_action_id'    => $value
-                ]);
-            }
+            PersonalAction::create([
+                'action_id'         => $action->id,
+                'type_action_id'    => $request->actions
+            ]);
         }
 
         if($user->role->id != 1 && $request->employee)
@@ -168,13 +166,13 @@ class ActionController extends Controller
         $user = User::find(Auth::id());
         if(Auth::user()->hasPermission('browse_actions')){
             $action = Action::findOrFail($id);
+            $employee = ($action->employee_id) ? $action->employee : $action->user->employee;
             if($user->role->name == 'empleado')
             {
-                if($action->employee_id != $user->id || $action->created_by != $user->id){
+                if($user->employee->id != $employee->id){
                     return back();
                 }
             }
-            $employee = ($action->employee_id) ? $action->employee : $action->user->employee;
 
             if($user->role->name == 'empleado'){
                 if($employee->id != $user->employee->id){
@@ -187,12 +185,10 @@ class ActionController extends Controller
             $company = $employee->company;
             $resource = $company->resourceCompany()->join('users','users.id','company_resources.user_id')->where('users.role_id',3)->first();
             $rh =  $resource->user;
-            $personal_actions = $action->personalaction;
             $pdf = PDF::loadView('reports.actionpdf',[
                 'action' => $action,
                 'rh' => $rh,
                 'employee' => $employee,
-                'personal_actions' => $personal_actions,
             ])->setPaper('letter','portrait');
             return $pdf->stream($employee->name_employee . '.pdf');
         }else{
@@ -234,23 +230,19 @@ class ActionController extends Controller
         $user = User::find(Auth::id());
         $action = Action::find($id);
         $action->update([
-            'other_action'  => $request->otherAction ?? '',
+            'other_action'  => $request->otherAction ?? null,
             'description'   => $request->description,
             'created_by'   => $user->id,
         ]);
 
         if($request->actions)
         {
-            foreach ($request->actions as $key => $value) {
-                $action->personalaction()->where('type_action_id', '!=', $value)->delete();
-            }
-
-            foreach ($request->actions as $key => $item) {
-                $pantalla = PersonalAction::firstOrCreate([
-                    'action_id'   => $action->id,
-                    'type_action_id'      => $item
-                ]);
-            }
+            $personalaction = PersonalAction::updateOrCreate([
+                'action_id'   => $action->id
+            ],['type_action_id' => $request->actions]);
+            $action->update(['other_action' => null]);
+        }else{
+            $action->personalaction->delete();
         }
 
         return response()

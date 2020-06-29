@@ -130,14 +130,13 @@
                 </tr>
             </thead>
             <tbody class="column text-sm">
-                @foreach ($personal_actions as $item)
-                    <tr >
-                        <td colspan="3"> - {{$item->typeactions->name_type_action}}</td>
-                    </tr>
-                @endforeach
                 @if ($action->other_action)
                     <tr>
                         <td colspan="3"> - {{ $action->other_action }}</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td colspan="3"> - {{$action->personalaction->typeactions->name_type_action}}</td>
                     </tr>
                 @endif
             </tbody>

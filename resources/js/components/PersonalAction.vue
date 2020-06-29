@@ -11,9 +11,10 @@
                             <div v-for="(type, index) in types" :key="index">
                                 <label class="inline-flex items-center cursor-pointer">
                                     <input
-                                        type="checkbox"
+                                        type="radio"
                                         v-model="typeactions"
-                                        class="form-checkbox bg-gray-400"
+                                        class="form-radio bg-gray-400"
+                                        @click="changeType()"
                                         :value="type.id"
                                     />
                                     <span class="ml-2">{{ type.name_type_action }}</span>
@@ -24,7 +25,7 @@
                                     type="checkbox"
                                     class="form-checkbox bg-gray-400"
                                     :checked="showOther"
-                                    @click="showOther ? (showOther = false) : (showOther = true)"
+                                    @click="changeOther()"
                                 />
                                 <span class="ml-2">Otros</span>
                             </label>
@@ -87,7 +88,7 @@ export default {
     props: ['user', 'types', 'action'],
     data() {
         return {
-            typeactions: [],
+            typeactions: '',
             other: '',
             loading: false,
             description: '',
@@ -103,7 +104,7 @@ export default {
             toastr.info('Por favor espera mientras se crea tu acción de personal')
             let formData = new FormData()
             formData.append('attached', vm.someData)
-            formData.append('actions', JSON.stringify(vm.typeactions))
+            formData.append('actions', vm.typeactions)
             formData.append('otherAction', vm.showOther ? vm.other : '')
             formData.append('description', vm.description)
             axios
@@ -115,7 +116,6 @@ export default {
                 })
                 .then(response => {
                     swal({text:response.data.message, icon:response.data.type})
-                    window.open('/actions/' + response.data.action, '_blank')
                     if(vm.user.role_id == 3){
                         window.location.href = '/myactions';
                     }else{
@@ -137,8 +137,7 @@ export default {
                     description: vm.description,
                 })
                 .then(({ data }) => {
-                    swal({text:response.data.message, icon:response.data.type})
-                    window.open('/actions/' + response.data.action, '_blank')
+                    swal({text:data.message, icon:data.type})
                     if(vm.user.role_id == 3){
                         window.location.href = '/myactions';
                     }else{
@@ -153,6 +152,19 @@ export default {
         processFile(event){
             this.someData = event.target.files[0]
         },
+        changeOther(){
+            if(this.showOther){
+                this.other = ''
+                this.showOther = false
+            }else{
+                this.typeactions = ''
+                this.showOther = true
+            }
+        },
+        changeType(){
+            this.other = ''
+            this.showOther = false
+        },
         showAlert(message) {
             swal({
                 icon: 'warning',
@@ -163,9 +175,9 @@ export default {
             });
         },
         checkForm() {
-            if(!this.typeactions.length && !this.other) {
+            if(!this.typeactions && !this.other) {
                 this.showAlert(
-                    'Por favor selecciona al menos una falta cometida o descríbela en "Otros"',
+                    'Por favor selecciona una falta cometida o descríbela en "Otros"',
                 );
             } else if (!this.description) {
                 this.showAlert('La descripción de su acción de personal es obligatoria');
@@ -185,10 +197,8 @@ export default {
             }
             this.description = this.action.description;
             this.other = this.action.other_action;
-            if (this.action.personalaction.length > 0) {
-                for (let index = 0; index < this.action.personalaction.length; index++) {
-                    this.typeactions.push(this.action.personalaction[index].type_action_id);
-                }
+            if (this.action.personalaction) {
+                    this.typeactions = this.action.personalaction.type_action_id
             }
         }
 
