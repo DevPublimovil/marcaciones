@@ -17,6 +17,8 @@
         :rpending="'/gte/actions/pendings'"
         :rapproved="'/gte/actions/approved'"
         :rnotapproved="'/gte/actions/notapproved'"
+        :approve="'/gte/actions/approve/'"
+        :notapprove="'/gte/actions/notapprove/'"
         :roleuser="'{{Auth::user()->role_id}}'"
     ></action-index-component>
 @endsection

@@ -7,24 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NoApprovedAction extends Notification
+class ReportLastDay extends Notification
 {
     use Queueable;
-
-    private $user;
-    private $url;
-    private $comment;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $comment, $action)
+    public function __construct()
     {
-        $this->comment = $comment;
-        $this->user = $user;
-        $this->url = '/actions/' . $action->id;
+        //
     }
 
     /**
@@ -47,14 +41,10 @@ class NoApprovedAction extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                ->subject('Acción de personal no aprobada')
-                ->greeting('¡Hola '. $notifiable->name .'!')
-                ->line('Tu acción de personal ha sido rechazada por ' . $this->user->name)
-                ->line('Comentario: ' . $this->comment)
-                ->line('Puedes ingresar a la aplicación para revisar su estado')
-                ->action('Ingresar', url($this->url))
-                ->line('¡Gracias por usar nuestra Aplicación!')
-                ->salutation('¡Saludos!');
+                    ->subject('Prueba de notificacion.')
+                    ->line('Hoy es ultimo dia para enviar tus acciones de personal')
+                    ->action('Ingresar', url('/home'))
+                    ->salutation('¡Saludos!');
     }
 
     /**

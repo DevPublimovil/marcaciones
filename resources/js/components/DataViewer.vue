@@ -12,7 +12,7 @@
                 <div class="text-sm">
                     <span
                         v-if="employeesSelected.length > 0"
-                        class="btn border border-blue-800 text-blue-800 hover:bg-blue-200 cursor-pointer"
+                        class="btn bg-white border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white cursor-pointer"
                         @click="showFormChange()"
                         >Cambiar horario</span
                     >
@@ -113,7 +113,9 @@
                                 </thead>
                                 <tbody class="text-gray-700 shadow-inner">
                                     <tr
-                                        class="hover:bg-blue-400 hover:text-white cursor-pointer"
+                                        class="hover:text-white cursor-pointer"
+                                        :class="row.cod == null && rol == 3 ? 'bg-red-500 hover:bg-red-600 text-white' : 'hover:bg-blue-400'"
+                                        :title="row.cod == null && rol == 3 ? 'La información del empleado no esta completa' : ''"
                                         v-for="(row, index) in model"
                                         :key="index"
                                     >
@@ -130,9 +132,13 @@
                                         <td @click="showProfile(row.id)">{{ row.last_name }}</td>
                                         <td @click="showProfile(row.id)">{{ row.cod }}</td>
                                         <td class="text-xl" title="Crear acción de personal" v-if="rol == 2 || rol == 4">
-                                            <a :href="'/create/action/employee/' + row.id">
-                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                            </a>
+                                            <form :action="'/gte/actions/create'" method="GET">
+                                                <input type="hidden" name="_token" :value="token">
+                                                <input type="hidden" name="employee" :value="row.id">
+                                                <button type="submit">
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                     <tr v-if="isLoading">
@@ -269,7 +275,7 @@
                 <div class="body-change-employees mb-8">
                     <label for="selectTimestables">Selecciona el horario</label>
                     <select class="form-select w-full" v-model="selectTime" id="selectTimestables">
-                        <option v-for="(time, index) in timestables" :value="time.id" :key="index"
+                        <option v-for="(time, index) in timestables" :value="time.id" :key="index" 
                             >{{ time.in }} - {{ time.out }}</option
                         >
                     </select>
@@ -358,10 +364,10 @@ export default {
             }
         },
         updateTime(e) {
-            this.timein = e.in;
-            this.timeout = e.out;
-            this.timeTitle = 'Editar horario';
-            this.idtimestable = e.id;
+            this.timein = e.in
+            this.timeout = e.out
+            this.timeTitle = 'Editar horario'
+            this.idtimestable = e.id
             this.typeAction = 2
             e.days.forEach(element => {
                 this.selectDays.push(element.day)
@@ -383,6 +389,7 @@ export default {
             }).then(willDelete=>{
                 if(willDelete){
                     axios.delete('/timestables/' + e).then(response =>{
+                        this.idtimestable = ''
                         this.fetchIndexData();
                         this.fetchTimestable();
                         swal(response.data, {
@@ -492,6 +499,7 @@ export default {
             this.fetchIndexData();
         },
         showFormChange() {
+            this.selectTime = this.idtimestable
             this.$modal.show('modal-change-employees');
         },
         fetchIndexData() {

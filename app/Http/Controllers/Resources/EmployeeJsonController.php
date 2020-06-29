@@ -17,43 +17,18 @@ class EmployeeJsonController extends Controller
     public function index(Request $request)
     {
         $user = User::find(Auth::id());
-        $column = $this->selectColumn($request->column);
+
         if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
-            $resource =  $user->workersGte()->where('status',1);
+            $timestable = $user->workersGte()->active()->first();
+            $model =  $user->workersGte()->active()->SearchPaginateAndOrder($timestable->timetable_id);
+            return EmployeeResource::collection($model);
         }else{
-            $resource = $user->appcompany->company->employees()->where('status',1);
+            $timestable = $user->appcompany->company->employees()->active()->first();
+            $model =  $user->appcompany->company->employees()->active()->SearchPaginateAndOrder($timestable->timetable_id);
+            return EmployeeResource::collection($model);
         }
 
-        (!$request->time) ? $timestable = $resource->first() : $timestableTwo = $request->time;
-
-        $model = $resource->where('timetable_id', $timestable->timetable_id ?? $timestableTwo ?? null)->orderBy($column, $request->direction)
-                ->where(function($query) use($request){
-                    if($request->search_input)
-                    {
-                        return $query->where('name_employee', 'LIKE', '%' . $request->search_input . '%')
-                            ->orWhere('surname_employee', 'LIKE', '%' . $request->search_input . '%')
-                            ->orWhere('employees.cod_marking', 'LIKE', '%' . $request->search_input . '%');
-                    }
-                })->paginate($request->per_page);
-
-        return  EmployeeResource::collection($model);
-
-    }
-
-    public function markings(Request $request, $id)
-    {
-        $start_date = Fecha::parse($request->start_date)->format('Y-m-d');
-        $end_date = Fecha::parse($request->end_date)->format('Y-m-d');
-
-        $employee = Employee::find($id);
-        $markings = $employee->markings()->whereDate('check_in','>=',$start_date)->whereDate('check_in','<',$end_date);
-        return response()->json([
-            'hours_worked'  => $markings->sum('hours_worked'),
-            'extra_hours'   => $markings->sum('extra_hours'),
-            'late_arrivals' => $markings->sum('late_arrivals'),
-            'time' => $end_date
-        ]);
     }
 
     public function showEmployees(){
@@ -68,31 +43,4 @@ class EmployeeJsonController extends Controller
         return response()->json($employees,200);
     }
 
-    public function selectColumn($column)
-     {
-        switch ($column) {
-            case 'apellidos':
-                return 'surname_employee';
-                break;
-            case 'codigo':
-                return 'cod_marking';
-                break;
-            case 'tipo':
-                return 'type_employee';
-                break;
-            case 'compañia':
-                return 'company_id';
-                break;
-            case 'departamento':
-                return 'departament_id';
-                break;
-            case 'codigo':
-                return 'cod_marking';
-                break;
-            
-            default:
-                return 'name_employee';
-                break;
-        }
-     }
 }

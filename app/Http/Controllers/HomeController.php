@@ -9,6 +9,7 @@ use App\User;
 use Carbon\Carbon as Fecha;
 use App\AppSession;
 use App\Marking;
+use App\Webster_checkinout;
 
 class HomeController extends Controller
 {

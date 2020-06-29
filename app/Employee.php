@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Marking;
+use App\Helper\DataViewer;
 
 class Employee extends Model
 {
+
+    use DataViewer;
 
     public static $columns = [
         'nombre', 'apellidos', 'codigo', /* 'cargo', 'tipo','compañia','departamento' */
@@ -63,5 +66,15 @@ class Employee extends Model
     public function getFullNameAttribute($value)
     {
         return $this->name_employee . ' ' . $this->surname_employee;
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status',1);
+    }
+
+    public function scopeTimestable($query, $timestable)
+    {
+        return $query->where('timetable_id',$timestable);
     }
 }

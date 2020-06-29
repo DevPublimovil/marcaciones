@@ -28,6 +28,12 @@ class TimeTableResource extends JsonResource
 
     public function resource($timetable)
     {
-        return $timetable->employees->count();
+        $user = User::find(Auth::id());
+        if($user->role->name == 'rrhh'){
+            return $user->appcompany->company->employees()->where('timetable_id',$timetable->id)->count();
+        }else{
+            return $user->workersGte()->where('timetable_id',$timetable->id)->count();
+        }
+        
     }
 }

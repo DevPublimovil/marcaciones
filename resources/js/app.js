@@ -41,6 +41,7 @@ Vue.component('time-component', require('./components/TimeComponent.vue').defaul
 Vue.component('form-report', require('./components/FormReport.vue').default);
 Vue.component('signature-component', require('./components/SignatureComponent.vue').default);
 Vue.component('action-index-component', require('./components/ActionIndexComponent.vue').default);
+Vue.component('gte-personal-action-component', require('./components/GtePersonalAction.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

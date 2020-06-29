@@ -4,6 +4,26 @@
             <div class="w-full p-0 mx-auto">
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
+                        <template v-if="user.role_id == 2 || user.role_id == 4">
+                            <h4 class="text-xl text-center text-gray-700">Empleado</h4>
+                            <div class="form-control-ic">
+                                <select
+                                    class="form-select w-full"
+                                    name="employee"
+                                    id="employee"
+                                    v-model="employee"
+                                >
+                                    <option
+                                        v-for="(employee, index) in employees"
+                                        :key="index"
+                                        :value="employee.id"
+                                        >{{
+                                            employee.name_employee + ' ' + employee.surname_employee
+                                        }}</option
+                                    >
+                                </select>
+                            </div>
+                        </template>
                         <h4 class="text-xl text-center text-gray-700">Faltas cometidas</h4>
                         <div
                             class="form-control-ic text-base grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2"
@@ -84,7 +104,7 @@
 <script>
 import swal from 'sweetalert';
 export default {
-    props: ['user', 'types', 'action'],
+    props: ['user', 'types', 'action', 'myemployee','employees'],
     data() {
         return {
             typeactions: [],
@@ -93,6 +113,7 @@ export default {
             description: '',
             errors: [],
             showOther: false,
+            employee: '',
             someData:''
         };
     },
@@ -106,6 +127,7 @@ export default {
             formData.append('actions', JSON.stringify(vm.typeactions))
             formData.append('otherAction', vm.showOther ? vm.other : '')
             formData.append('description', vm.description)
+            formData.append('employee', vm.employee)
             axios
                 .post('/actions/', formData,
                 {
@@ -116,11 +138,7 @@ export default {
                 .then(response => {
                     swal({text:response.data.message, icon:response.data.type})
                     window.open('/actions/' + response.data.action, '_blank')
-                    if(vm.user.role_id == 3){
-                        window.location.href = '/myactions';
-                    }else{
-                        window.location.href = '/home';
-                    }
+                    window.location.href = '/home';
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un problema, intentalo de nuevo');
@@ -139,11 +157,7 @@ export default {
                 .then(({ data }) => {
                     swal({text:response.data.message, icon:response.data.type})
                     window.open('/actions/' + response.data.action, '_blank')
-                    if(vm.user.role_id == 3){
-                        window.location.href = '/myactions';
-                    }else{
-                        window.location.href = '/home';
-                    }
+                    window.location.href = '/home';
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un problema, intentalo de nuevo');
@@ -163,13 +177,15 @@ export default {
             });
         },
         checkForm() {
-            if(!this.typeactions.length && !this.other) {
+            if (this.user.role_id == 2 && !this.employee) {
+                this.showAlert('Por favor selecciona un empleado');
+            }else if (!this.typeactions.length && !this.other) {
                 this.showAlert(
                     'Por favor selecciona al menos una falta cometida o descríbela en "Otros"',
                 );
-            } else if (!this.description) {
+            }else if (!this.description) {
                 this.showAlert('La descripción de su acción de personal es obligatoria');
-            } else {
+            }else {
                 if (this.action != null) {
                     this.update(this.action.id);
                 } else {

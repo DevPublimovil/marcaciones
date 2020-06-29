@@ -16,10 +16,12 @@
 @endsection
 
 @section('content')
-    <personal-action-component 
+    <gte-personal-action-component 
         :types="{{ json_encode($typeactions) }}" 
-        :user="{{ json_encode($user)}}" 
-        @isset ($action) :action="{{$action}}" @endisset 
+        :user="{{ json_encode($user)}}"
+        :employees="{{ json_encode($employees) }}"
+        @isset ($action) :action="{{$action}}" @endisset  
+        @isset($employee) :myemployee="{{$employee}}" @endisset
     >
-    </personal-action-component>
+    </gte-personal-action-component>
 @endsection

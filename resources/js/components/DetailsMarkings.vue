@@ -3,7 +3,7 @@
         <div class="dt-header">
             <div class="flex justify-between p-0">
                 <div class="self-center flex-auto">
-                    <h3 class="text-xl font-bold">{{ employee.name_employee + ' ' + employee.surname_employee }}</h3>
+                    <h3 class="text-xl font-bold">{{ employee.name_employee + ' ' + employee.surname_employee }} | {{employee.cod_marking}}</h3>
                     <h3 class="text-gray-500 text-sm">{{ employee.departament ? employee.departament.display_name : '' }}</h3>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <td>{{ marking.hours_worked }}</td>
                         <td>{{ marking.extra_hours }}</td>
                         <td>{{ marking.late_arrivals }}</td>
-                        <td>{{ marking.permission }}</td>
+                        <td :class="[marking.permission == 'AUSENTE' ? 'text-red-600' : marking.permission == 'SI' ? 'text-blue-600' : '']">{{ marking.permission }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -39,7 +39,7 @@
                     <th></th>
                     <th>{{ markings.total_hours_worked}}</th>
                     <th>{{ markings.total_extra_hours }}</th>
-                    <th>{{ markings.total_late_arrivals }}</th>
+                    <th :class="[isArrivals(markings.total_late_arrivals) ? 'text-red-600' : '']">{{ markings.total_late_arrivals }}</th>
                     <th></th>
                 </tfoot>
             </table>
@@ -68,6 +68,11 @@ export default {
                 this.markings = response.data
             })
         },
+        isArrivals(data){
+            var str = String(data);
+            var res = str.replace(":", ".");
+            return res > 0;
+        }
     },
     mounted() {
         this.fetchDataMarkings()

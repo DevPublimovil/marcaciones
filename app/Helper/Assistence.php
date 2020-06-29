@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helper;
 use App\Employee;
 use \Carbon\Carbon as Fecha;
@@ -123,9 +124,14 @@ class Assistence {
         $hours = floor($minutes / 60);
         $minutes -= $hours * 60;
 
-        ($minutes < )
+        
+
         // returns the time already formatted
-        return  sprintf('%02d:%02d', $hours, $minutes);
+        if(sprintf('%02d.%02d', $hours, $minutes) > 0){
+            return  sprintf('%02d:%02d', $hours, $minutes);
+        }else{
+            return  '0:00';
+        }
     }
 
    /*  public static function convertMinutes($times)

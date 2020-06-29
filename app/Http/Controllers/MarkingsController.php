@@ -14,17 +14,10 @@ use Illuminate\Support\Facades\DB;
 class MarkingsController extends Controller
 {
 
-    /**
-     * display a listing of the resource
-     * @return \Illuminate\Http\Response
-     */
-
-     public function index()
-     {
-        $this->authorize('browse_markings');
-        $columns = Employee::$columns;
-        return view('markings.index', compact('columns'));
-     }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * retorna los calculos de horas trabajadas y llegadas tarde

@@ -9,14 +9,10 @@ use App\User;
 use App\Employee;
 use App\ActionType;
 use App\Action;
-use App\PersonalAction;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use App\Notifications\ApprovedAction;
 use App\Notifications\NoApprovedAction;
 use PDF;
 use App\Notifications\NewPersonalAction;
-use Image;
 
 use App\Http\Resources\ActionResource;
 
@@ -37,7 +33,7 @@ class PersonalActionGteController extends Controller
      /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
@@ -55,6 +51,37 @@ class PersonalActionGteController extends Controller
         {
             abort(403);
         }
+    }
+
+    /**
+     * Display form for create new personal action
+     * 
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+
+    public function create(Request $request)
+    {
+        $user = User::find(Auth::id());
+        if(!$user->hasPermission('browse_actions')){
+            return back()->with([
+                'message'   => 'No tienes permiso para crear una acción de personal',
+                'type'      => 'warning'
+            ]);
+        }
+
+        $typeactions = ActionType::all();
+        $employees = $user->workersGte()->orderBy('name_employee','ASC')->get();
+        if(!$user->firm){
+            return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes tener una firma');
+        }
+
+        if($request->employee)
+        {
+            $employee = $request->employee;
+            return view('boss.new-personal-action', compact('user','typeactions','employee','employees'));
+        }
+
+        return view('boss.new-personal-action', compact('user','typeactions','employees'));
     }
 
     /**
@@ -140,20 +167,32 @@ class PersonalActionGteController extends Controller
 
      public function approveAction(Request $request, $id)
      {
+        $user = User::find(Auth::id());
+
+        if(!$user->hasPermission('edit_actions'))
+        {
+            return response()->json([
+                'message'  => 'No tienes permisos para aprobar la acción de personal',
+                'icon'     => 'warning'
+            ]);
+        }
+
         $personal_action = Action::find($id);
-        $gte = User::find(Auth::id());
 
         $employee = $personal_action->user;
 
         $personal_action->update(['check_gte' => 1]);
 
-        $employee->notify(new ApprovedAction($gte->name));
+        $employee->notify(new ApprovedAction($user->name));
 
-        $rh = $gte->companiesResources()->first();
+        $rh = $user->companiesResources()->first();
         $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
         $rh->notify(new NewPersonalAction($employee));
 
-        return 'La acción de personal ha sido aprobada ';
+        return response()->json([
+            'message'   => '¡Tus cambios se han guardado correctamente!',
+            'icon'      => 'success'
+        ]);
      }
 
      /**
@@ -166,25 +205,28 @@ class PersonalActionGteController extends Controller
 
      public function notApproveAction(Request $request, $id)
      {
+        $user = User::find(Auth::id());
+        
+        if(!$user->hasPermission('edit_actions'))
+        {
+            return response()->json([
+                'message'  => 'No tienes permisos para aprobar la acción de personal',
+                'icon'     => 'warning'
+            ]);
+        }
+
         $personal_action = Action::find($id);
 
-        $gte = User::find(Auth::id());
+        $employee = $personal_action->user;
+        
+        $personal_action->update(['check_gte' => 0, 'comments' => $request->comments]);
 
-        $employee = $personal_action->user->employee ?? $personal_action->employee;
+        $employee->notify(new NoApprovedAction($user, $request->comments, $personal_action));
 
-        if($gte->role_id == 3)
-        {
-            $personal_action->update(['check_rh' => 0, 'comments' => $request->comments]);
-        }else{
-            $personal_action->update(['check_gte' => 0, 'comments' => $request->comments]);
-        }
-
-        if($employee->type_employee == 1)
-        {
-            $employee->user->notify(new NoApprovedAction);
-        }
-
-        return 'Has descartado la acción de personal';
+        return response()->json([
+            'message'   => '¡Tus cambios se han guardado correctamente!',
+            'icon'      => 'success'
+        ]);
      }
 
 }

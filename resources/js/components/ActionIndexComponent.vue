@@ -3,7 +3,7 @@
         <div class="w-full md:w-10/12 mx-auto shadow-xs bg-white rounded py-4 px-4 mt-4">
             <div class="flex w-full justify-center md:justify-end">
                 <a
-                    href="/actions/create"
+                    href="/gte/actions/create"
                     title="Crear una nueva acción de personal"
                     v-if="roleuser != 3"
                     class="bg-white hover:bg-gray-800 hover:text-white border border-gray-800 text-gray-800 font-bold py-2 px-4 mx-2 rounded"
@@ -158,7 +158,7 @@
 
 <script>
 export default {
-    props:['rpending','rapproved','rnotapproved','roleuser'],
+    props:['rpending','rapproved','rnotapproved','roleuser','approve','notapprove'],
     data() {
         return {
             actions: [],
@@ -211,14 +211,14 @@ export default {
             this.loadingApproved = true;
             toastr.info('¡espera un momento, tus cambios se estan guardando!');
             axios
-                .put('/gte/actions/approve/' + action)
+                .put(this.approve + action)
                 .then(({ data }) => {
-                    swal(data, {
-                        icon: 'success',
+                    swal(data.message, {
+                        icon: data.icon,
                         timer: 2000,
                         button: false,
                     });
-                    this.getActions('/gte/actions/pendings', 0);
+                    this.getActions(this.rpending, 0);
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un problema, por favor intentelo de nuevo');
@@ -266,14 +266,14 @@ export default {
             vm.loadingNoApproved = true;
             toastr.info('¡Espera un momento, tus cambios se están guardando!');
             axios
-                .put('/gte/actions/notapprove/' + action,{
+                .put(this.notapprove + action,{
                     comments: comments
                 })
                 .then(response => {
                     console.log(response.data)
-                    vm.getActions('/gte/actions/pendings', 0);
-                    swal(response.data, {
-                        icon: 'success',
+                    vm.getActions(this.rpending, 0);
+                    swal(response.data.message, {
+                        icon: response.data.icon,
                         timer: 2000,
                         button: false,
                     });

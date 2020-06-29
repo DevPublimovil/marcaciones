@@ -37,7 +37,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="text-center text-gray-600 border-b border-gray-400" v-for="(item, index) in searchDay" :key="index">
+                    <tr class="text-center border-b border-gray-400" 
+                        :class="[item.minutes >= '20' ? 'text-red-500' : 'text-gray-600']"
+                        :title="[item.minutes >= '20' ? 'Es probable que desees crear una acción de personal para este día' : '']"
+                         v-for="(item, index) in searchDay" :key="index">
                         <td class="px-4 py-2">{{ item.date }}</td>
                         <td class="px-4 py-2">{{ item.in }}</td>
                         <td class="px-4 py-2">{{ item.out }}</td>

@@ -48,8 +48,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapClockbotGteRoutes();
 
-        $this->mapClockbotRhRoutes();
-
         $this->mapClockbotApiRoutes();
     }
 
@@ -58,13 +56,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/clockbotgte.php'));
-    }
-
-    protected function mapClockbotRhRoutes()
-    {
-        Route::middleware('web')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/clockbotrh.php'));
     }
 
     protected function mapClockbotApiRoutes()

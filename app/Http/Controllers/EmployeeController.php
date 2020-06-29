@@ -26,6 +26,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
+        
         if(Auth::user()->hasPermission('browse_employees')){
             $columns = Employee::$columns;
             return view('employees.index', compact('columns'));
@@ -213,22 +214,11 @@ class EmployeeController extends Controller
         //
     }
 
-    /**
-     * retorna todos los empleados administrativos
-     * 
-     * @return \Illuminate\Http\Response
-     */
-
-     public function markings(Request $request)
-     {
-        return view('markings.details');
-     }
-
      public function editFirm($id)
      {
         if(Auth::user()->hasPermission('edit_firm')){
             $user = User::find($id);
-            return view('employees.edit-firm', compact('user'));
+            return view('edit-firm', compact('user'));
         }
      }
 

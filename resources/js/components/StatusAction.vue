@@ -295,8 +295,8 @@ export default {
                 .put('/actions/approved/' + action)
                 .then(({ data }) => {
                     this.fetchData();
-                    swal(data, {
-                        icon: 'success',
+                    swal(data.message, {
+                        icon: data.type,
                         timer: 2000,
                         button: false,
                     });

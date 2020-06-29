@@ -14,11 +14,6 @@
 @endsection
 
 @section('content')
-
-        @if ($user->role->name == 'empleado')
-            <status-action-component :user="{{ $user }}"></status-action-component>
-        @else
-            <history-component :user="{{ $user }}"></history-component>
-        @endif
+        <status-action-component :user="{{ $user }}"></status-action-component>
 @endsection
 

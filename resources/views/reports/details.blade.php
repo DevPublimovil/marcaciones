@@ -5,11 +5,14 @@
         <div class="flex-1">
             <h3 class="font-bold text-base md:text-2xl text-center md:text-left"> <span class="mr-3"><i class="fa fa-file-text" aria-hidden="true"></i></span>Reporte de Asistencias</h3>
         </div>
-        <div class="flex-1 hidden md:block">
-            @if (session('message'))
-                <x-alert :type="session('type')" :message="session('message')"></x-alert>
-            @endif
+        @if(Auth::user()->role->name == 'rrhh')
+        <div class="flex-1 text-right hidden md:block">
+            <form action="{{route('reports.notification')}}" method="POST">
+                @csrf
+                <button type="submit" class="btn bg-white text-gray-800 border border-gray-800 hover:bg-gray-800 hover:text-white">Enviar notificación</button>
+            </form>
         </div>
+        @endif
     </div>
 @endsection
 

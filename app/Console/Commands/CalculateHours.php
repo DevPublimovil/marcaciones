@@ -118,10 +118,12 @@ class CalculateHours extends Command
 
         $interval = $horaInicio->diff($horaTermino);
         $interval = new \DateTime($interval->format('%H:%i'));
-        return $interval->format('H.i');
-       /*  $cal_chour = explode(':', $hour);
-        $cal_real_chour = explode(':', $realHour);
-
-        return sprintf('%02d.%02d',$cal_real_chour[0] - $cal_chour[0],$cal_real_chour[1] - $cal_chour[1]); */
+        if($interval->format('H.i') > 05.00)
+        {
+            return 0.0;
+        }else{
+            return $interval->format('H.i');
+        }
+       
     }
 }

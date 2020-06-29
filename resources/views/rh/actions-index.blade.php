@@ -18,6 +18,8 @@
         :rpending="'/json/apiactions/pending'"
         :rapproved="'/json/apiactions/approved'"
         :rnotapproved="'/json/apiactions/notapproved'"
+        :approve="'/rh/actions/approve/'"
+        :notapprove="'/rh/actions/notapprove/'"
         :roleuser="'{{Auth::user()->role_id}}'"
     ></action-index-component>
 @endsection

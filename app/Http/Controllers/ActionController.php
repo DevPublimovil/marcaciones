@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\Storage;
 use App\Notifications\ApprovedAction;
 use App\Notifications\NoApprovedAction;
 use PDF;
+use App\Helper\ResizeImage;
 use App\Notifications\NewPersonalAction;
 use Image;
 
 class ActionController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -39,12 +41,12 @@ class ActionController extends Controller
                 'type' => 'warning'
             ]);
         }else if(!$user->firm){
-            return view('edit-firm', [$user]);
+            return view('edit-firm', compact('user'));
         }
 
         switch ($user->role->name) {
             case 'empleado':
-                    return view('personalactions.history');
+                    return view('personalactions.history', compact('user'));
                 break;
             case 'gerente':
                     return view('boss.actions-index');
@@ -70,17 +72,27 @@ class ActionController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->hasPermission('browse_actions')){
-            $typeactions = ActionType::all();
-            $user = User::find(Auth::id());
-            //$salary = $user->employee->salary;
-            $firm = $user->firm;
-            if(/* !$salary ||  */!$firm){
-                return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes tener una firma');
-            }else{
-                return view('personalactions.new-personal-action', compact('user','typeactions'));
-            }
+        $user = User::find(Auth::id());
+        if(!$user->hasPermission('browse_actions')){
+            return back()->with([
+                'message'   => 'No tienes permiso para crear una acción de personal',
+                'type'      => 'warning'
+            ]);
         }
+
+        $typeactions = ActionType::all();
+        $user = User::find(Auth::id());
+        if(!$user->firm){
+            return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes tener una firma');
+        }
+
+        if($user->role->name == 'empleado' || $user->role->name == 'rrhh'){
+            return view('personalactions.new-personal-action', compact('user','typeactions'));
+        }else{
+            $employees = $user->workersGte()->orderBy('name_employee','ASC')->get();
+            return view('boss.new-personal-action', compact('user','typeactions','employees'));
+        }
+
     }
 
     public function createForEmployee($id)
@@ -99,63 +111,50 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::user()->hasPermission('browse_actions')){
+        $user = User::find(Auth::id());
 
-            if($request->file('attached'))
-            {
-                $path = Storage::disk('public')->putFile('adjuntos', $request->file('attached'));
-                $file = explode('/',$request->file('attached')->getMimeType());
-                if($file[0]  == 'image')
-                {
-                    $image = Image::make(Storage::disk('public')->get($path));
+        if($request->file('attached'))
+        {
+            $path = $this->resize($request->file('attached'));
+        }
 
-                    $image->resize(1280, null, function($constrait){
-                        $constrait->aspectRatio();
-                        $constrait->upsize();
-                    });
+        $action = Action::create([
+            'other_action'  => $request->otherAction ?? NULL,
+            'description'   => $request->description,
+            'attached'      => $path ?? NULL,
+            'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : null,
+            'employee_id'   => ($user->role->id != 1 && $request->employee) ? $request->employee : NULL,
+            'created_by'    => $user->id,
+        ]);
 
-                    Storage::disk('public')->put($path, (string) $image->encode('jpg', 50));
-                }
+        if($request->actions)
+        {
+            foreach (json_decode($request->actions) as $key => $value) {
+                PersonalAction::create([
+                    'action_id'         => $action->id,
+                    'type_action_id'    => $value
+                ]);
             }
+        }
 
-            $user = User::find(Auth::id());
-            $action = Action::create([
-                'other_action'  => $request->otherAction ?? NULL,
-                'description'   => $request->description,
-                'attached'      => $path ?? NULL,
-                'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : null,
-                'employee_id'   => ($user->role->id != 1 && $request->employee) ? $request->employee : NULL,
-                'created_by'    => $user->id,
-            ]);
-
-            if($request->actions)
+        if($user->role->id != 1 && $request->employee)
+        {
+            $employee = Employee::find($request->employee);
+            if($employee->type_employee == 1)
             {
-                foreach (json_decode($request->actions) as $key => $value) {
-                    PersonalAction::create([
-                        'action_id'         => $action->id,
-                        'type_action_id'    => $value
-                    ]);
-                }
-            }
-
-            if($user->role->id != 1 && $request->employee)
-            {
-                $employee = Employee::find($request->employee);
-                if($employee->type_employee == 1)
-                {
-                    $employee->user->notify(new NewPersonalAction($user));
-                    return response()->json('success',200);
-                }
-
-                return response()->json($action->id,200);
-            }else{
-                $boss = $user->employee->jefe;
-                $boss->notify(new NewPersonalAction($user));
-                return response()->json('success',200);
+                $employee->user->notify(new NewPersonalAction($user));
             }
         }else{
-            abort(403);
+            $boss = $user->employee->jefe;
+            $boss->notify(new NewPersonalAction($user));
         }
+
+        return response()
+                    ->json([ 
+                        'message'   => 'La acción de personal se ha generado con éxito',
+                        'type'      => 'success',
+                        'action'    => $action->id,
+                    ], 200);
     }
 
     /**
@@ -168,7 +167,13 @@ class ActionController extends Controller
     {
         $user = User::find(Auth::id());
         if(Auth::user()->hasPermission('browse_actions')){
-            $action = Action::find($id);
+            $action = Action::findOrFail($id);
+            if($user->role->name == 'empleado')
+            {
+                if($action->employee_id != $user->id || $action->created_by != $user->id){
+                    return back();
+                }
+            }
             $employee = ($action->employee_id) ? $action->employee : $action->user->employee;
 
             if($user->role->name == 'empleado'){
@@ -248,7 +253,12 @@ class ActionController extends Controller
             }
         }
 
-       return response()->json('Tu acción de personal se actualizó con éxito',200);
+        return response()
+            ->json([ 
+                'message'   => 'La acción de personal se ha actualizado con éxito',
+                'type'      => 'success',
+                'action'    => $action->id,
+            ], 200);
     }
 
     /**
@@ -282,49 +292,27 @@ class ActionController extends Controller
 
     public function approved($id)
     {
-        if(Auth::user()->hasPermission('browse_actions_approved')){
-            $action = Action::find($id);
-            $user = User::find(Auth::id());
-            $employee = ($action->employee_id) ? $action->employee->user : $action->user;
-            if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
-            {
-                $action->update([
-                    'check_gte' => 1
-                ]);
-
-                $employee->notify(new ApprovedAction($user->name));
-
-                $rh = $user->companiesResources()->first();
-                $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
-
-                $rh->notify(new NewPersonalAction($action->user));
-
-            }else if($user->role->name == 'rrhh')
-            {
-                $action->update([
-                    'check_rh' => 1
-                ]);
-
-                if($employee->type_employee == 1)
-                {
-                    $employee->notify(new ApprovedAction($user->name));
-                }
-            }else if($user->role->name == 'empleado')
-            {
-                $action->update([
-                    'check_employee' => 1
-                ]);
-
-                $rh = $user->employee->company_id;
-                $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh)->first();
-                
-                $rh->notify(new NewPersonalAction($user));
-            }
-
-            return 'La acción de personal ha sido aprobada ';
-        }else{
-            abort(403);
+        $user = User::find(Auth::id());
+        if(!$user->hasPermission('edit_actions')){
+            return response()->json([
+                'message'   => 'No tienes permisos para aprobar la acción de personal',
+                'type'      => 'warning'
+            ]);
         }
+
+        $action = Action::find($id);
+        if($user->role->name == 'empleado')
+        {
+            $action->update(['check_employee' => 1]);
+            $rh = $user->employee->company->resourceCompany()->with('user')->get();
+            $rh = $rh->where('user.role_id',3)->first();
+            $rh->user->notify(new NewPersonalAction($user));
+        }
+
+        return response()->json([
+            'message'   => '¡Tus cambios se han guardado corractamente!',
+            'type'      => 'success'
+        ]);
     }
 
     public function myactions()
