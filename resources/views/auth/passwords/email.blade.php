@@ -9,6 +9,12 @@
                     {{ session('status') }}
                 </div>
             @endif
+
+            @error('email')
+                <div class="alert alert-danger" role="alert">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
         <div class="input-div one">
             <div class="i">
