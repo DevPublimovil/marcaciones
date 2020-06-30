@@ -57,8 +57,8 @@ class Assistence {
                 $markings->push([
                     'date'          => Fecha::parse($value)->format('d/m/Y'),
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
-                    'in'            => Fecha::parse($marking->check_in)->format('H:i a'),
-                    'out'           => Fecha::parse($marking->check_out)->format('H:i a'),
+                    'in'            => ($marking->check_in) ? Fecha::parse($marking->check_in)->format('H:i a') : 'Sin marcación',
+                    'out'           => ($marking->check_out) ? Fecha::parse($marking->check_out)->format('H:i a') : 'Sin marcación',
                     'hours_worked'  => $marking->hours_worked ? str_replace('.',':',$marking->hours_worked) : null,
                     'extra_hours'   => $marking->extra_hours ? str_replace('.',':',$marking->extra_hours) : null,
                     'late_arrivals' => $marking->late_arrivals ? str_replace('.',':',$marking->late_arrivals) : null,
@@ -70,8 +70,8 @@ class Assistence {
                 $markings->push([
                     'date'          => Fecha::parse($value)->format('d/m/Y'),
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
-                    'in'            => 'sin marcación',
-                    'out'           => 'sin marcación',
+                    'in'            => 'Sin marcación',
+                    'out'           => 'Sin marcación',
                     'hours_worked'  => '',
                     'extra_hours'   => '',
                     'late_arrivals' => '',

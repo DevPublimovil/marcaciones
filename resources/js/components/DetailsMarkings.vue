@@ -24,8 +24,8 @@
                     <tr v-for="(marking, index) in markings.markings" :key="index" class="border-b-2">
                         <td>{{ marking.date }}</td>
                         <td>{{ marking.day }}</td>
-                        <td>{{ marking.in }}</td>
-                        <td>{{ marking.out }}</td>
+                        <td :class="[marking.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ marking.in }}</td>
+                        <td :class="[marking.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ marking.out }}</td>
                         <td>{{ marking.hours_worked }}</td>
                         <td>{{ marking.extra_hours }}</td>
                         <td>{{ marking.late_arrivals }}</td>

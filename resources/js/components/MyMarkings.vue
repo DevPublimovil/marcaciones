@@ -42,9 +42,9 @@
                         :title="[item.minutes >= '20' ? 'Es probable que desees crear una acción de personal para este día' : '']"
                          v-for="(item, index) in searchDay" :key="index">
                         <td class="px-4 py-2">{{ item.date }}</td>
-                        <td class="px-4 py-2">{{ item.in }}</td>
-                        <td class="px-4 py-2">{{ item.out }}</td>
-                        <td class="px-4 py-2 hidden md:block">{{ item.minutes }}</td>
+                        <td class="px-4 py-2" :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
+                        <td class="px-4 py-2" :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
+                        <td class="px-4 py-2 hidden md:block" >{{ item.minutes }}</td>
                     </tr>
                 </tbody>
             </table>

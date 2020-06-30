@@ -49,9 +49,21 @@ class CalculateHours extends Command
         foreach ($markings_local as $key => $marking) {
             $employee = Employee::where('cod_marking', $marking->cod_marking)->where('cod_terminal',$marking->serialno)->first();
             if($employee){
+                $date = new Fecha(Fecha::parse($employee->timestable->hour_out)->format('H:i:s'), 'America/El_Salvador');
+                $datedos = new Fecha(Fecha::parse($employee->timestable->hour_in)->format('H:i:s'), 'America/El_Salvador');
+                $diffHours = $date->diffInHours($datedos);
+                $diffHours = $date->subHours(($diffHours / 2))->format('H:i');
+
                 $hour = Fecha::parse($employee->timestable->hour_in)->format('H:i');
+                if($marking->check_out == null)
+                {
+                    if($marking->check_in != null && Fecha::parse($marking->check_in)->format('H:i') > $diffHours)
+                    {
+                        $marking->update(['check_out' => $marking->check_in, 'check_in' => null]);
+                    }
+                }
                 $realhour = Fecha::parse($marking->check_in)->format('H:i');
-                if($realhour > $hour)
+                if($marking->check_in != null && $realhour > $hour)
                 {
                     $late_arrivals = $this->lateArrivals($hour, $realhour);
                     $marking->update([

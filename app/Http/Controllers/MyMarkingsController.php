@@ -53,7 +53,7 @@ class MyMarkingsController extends Controller
 
         //defino la consulta con sus filtros
         $query = Marking::orderBy('markings.check_in', 'ASC')->MyMarkings($employee->cod_marking, $employee->cod_terminal)->whereBetween('created_at',[$first_day, $last_day])->get();
-
+        
         //retorno una coleccion de los datos de sus marcaciones mensuales
         return MyMarkings::collection($query);
     }
