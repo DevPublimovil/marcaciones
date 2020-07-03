@@ -44,9 +44,9 @@ class Assistence {
 
             if($employee->type_employee == 1 && $employee->user)
             {
-                $action = $employee->user->actionsEmp()->whereDate('created_at',Fecha::parse($value)->format('Y-m-d'))->first();
+                $action = $employee->user->actionsEmp()->whereDate('date_action',Fecha::parse($value)->format('Y-m-d'))->first();
             }else{
-                $action = Action::where('employee_id',$employee->id)->whereDate('created_at',$value)->first();
+                $action = Action::where('employee_id',$employee->id)->whereDate('date_action',$value)->first();
             }
 
             $permission = ($action) ? 'SI' : 'AUSENTE';
@@ -56,6 +56,7 @@ class Assistence {
             {
                 $markings->push([
                     'date'          => Fecha::parse($value)->format('d/m/Y'),
+                    'id_action'     => ($action) ? $action->id : null,
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
                     'in'            => ($marking->check_in) ? Fecha::parse($marking->check_in)->format('H:i a') : 'Sin marcación',
                     'out'           => ($marking->check_out) ? Fecha::parse($marking->check_out)->format('H:i a') : 'Sin marcación',
@@ -69,6 +70,7 @@ class Assistence {
             {
                 $markings->push([
                     'date'          => Fecha::parse($value)->format('d/m/Y'),
+                    'id_action'     => ($action) ? $action->id : null,
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
                     'in'            => 'Sin marcación',
                     'out'           => 'Sin marcación',

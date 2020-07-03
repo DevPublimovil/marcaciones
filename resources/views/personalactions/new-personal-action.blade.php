@@ -20,6 +20,7 @@
         :types="{{ json_encode($typeactions) }}" 
         :user="{{ json_encode($user)}}" 
         @isset ($action) :action="{{$action}}" @endisset 
+        @isset ($date) :date="'{{\Carbon\Carbon::parse($date->created_at)->format('Y-m-d')}}'" @endisset 
     >
     </personal-action-component>
 @endsection

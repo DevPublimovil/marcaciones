@@ -17,6 +17,7 @@ use App\Helper\Assistence;
 use \Carbon\Carbon as Fecha;
 use Illuminate\Support\Collection;
 use App\Notifications\ReportLastDay;
+use App\Notifications\RequestProof;
 use App\Helper\DynamicRecipient;
 use App\Webster_checkinout;
 
@@ -83,6 +84,25 @@ class ReportsController extends Controller
         return response()->json([
             'message' => 'La notificación ha sido enviada',
             'type'  => 'success'
+        ]);
+    }
+
+    public function constancia()
+    {
+        $user = User::find(Auth::id());
+        if($user->role->name == 'gerente'){
+            $rh = $user->companiesResources()->first();
+            $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
+        }else if($user->role->name == 'empleado')
+        {
+            $rh = $user->employee->company->resourceCompany()->select('users.*')->join('users','users.id','company_resources.user_id')->where('users.role_id',3)->first();
+            $rh = User::find($rh->id);
+        }
+        $rh->notify(new RequestProof($user->name));
+
+        return back()->with([
+            'message'   => 'Solicitud enviada',
+            'type'      => 'success'
         ]);
     }
 }

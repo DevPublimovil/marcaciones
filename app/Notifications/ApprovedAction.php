@@ -47,7 +47,7 @@ class ApprovedAction extends Notification
         return (new MailMessage)
                     ->subject('Acción de personal Aprobada')
                     ->greeting('¡Hola '. $notifiable->name .'!')
-                    ->line('Tu acción de personal ha sido aprobada por ' . $this->type)
+                    ->line('Tu acción de personal ha sido aprobada por ' . $this->type .'.')
                     ->line('Puedes ingresar a la aplicación para revisar su estado')
                     ->action('Ingresar', url($this->url))
                     ->line('¡Gracias por usar nuestra Aplicación!')

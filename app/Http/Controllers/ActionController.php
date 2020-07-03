@@ -17,9 +17,11 @@ use PDF;
 use App\Helper\ResizeImage;
 use App\Notifications\NewPersonalAction;
 use Image;
+use App\Marking;
 
 class ActionController extends Controller
 {
+    use ResizeImage;
 
     public function __construct()
     {
@@ -103,6 +105,14 @@ class ActionController extends Controller
         return view('personalactions.new-personal-action', compact('user','typeactions','employee'));
     }
 
+    public function createWithDate(Request $request)    
+    {
+        $date = Marking::find($request->date);
+        $typeactions = ActionType::all();
+        $user = User::find(Auth::id());
+        return view('personalactions.new-personal-action', compact('user','typeactions','date'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -122,6 +132,7 @@ class ActionController extends Controller
             'other_action'  => $request->otherAction ?? null,
             'description'   => $request->description,
             'attached'      => $path ?? NULL,
+            'date_action'    => $request->dateaction,
             'check_gte'     => ($user->role->id != 1 && $request->employee) ? 1 : null,
             'employee_id'   => ($user->role->id != 1 && $request->employee) ? $request->employee : NULL,
             'created_by'    => $user->id,
@@ -232,6 +243,7 @@ class ActionController extends Controller
         $action->update([
             'other_action'  => $request->otherAction ?? null,
             'description'   => $request->description,
+            'date_action'    => $request->dateaction,
             'created_by'   => $user->id,
         ]);
 

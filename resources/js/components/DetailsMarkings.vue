@@ -29,7 +29,12 @@
                         <td>{{ marking.hours_worked }}</td>
                         <td>{{ marking.extra_hours }}</td>
                         <td>{{ marking.late_arrivals }}</td>
-                        <td :class="[marking.permission == 'AUSENTE' ? 'text-red-600' : marking.permission == 'SI' ? 'text-blue-600' : '']">{{ marking.permission }}</td>
+                        <td :class="[marking.permission == 'AUSENTE' ? 'text-red-600' : marking.permission == 'SI' ? 'text-blue-600' : '']" v-if="marking.id_action != null">
+                            <a :href="'/actions/'+marking.id_action" target="_blank">
+                                {{ marking.permission }}
+                            </a>
+                        </td>
+                        <td :class="[marking.permission == 'AUSENTE' ? 'text-red-600' : marking.permission == 'SI' ? 'text-blue-600' : '']" v-else>{{ marking.permission }}</td>
                     </tr>
                 </tbody>
                 <tfoot>

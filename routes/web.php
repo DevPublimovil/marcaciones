@@ -67,6 +67,8 @@ Route::post('/reports/notification', 'ReportsController@sendNotification')->name
 Route::post('/home/company/', 'HomeController@selectCompany')->name('home.company');
 Route::get('/inicio/clockbot', 'HomeController@homeclockbot')->name('home.clockbot');
 Route::get('/myactions', 'ActionController@myactions')->name('actions.myactions');
+Route::get('constancia/salarial', 'ReportsController@constancia')->name('solicitar.constancia');
+Route::get('action/create/date', 'ActionController@createWithDate')->name('actions.create.date');
 
 
 Route::get('/marcaciones/employees', 'MarkingsController@showEmployees')->name('marcaciones.show');

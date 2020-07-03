@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{{$action->created_at}}</title>
     <style>
         @page{
             margin: 0%;
@@ -105,7 +105,7 @@
             </thead>
             <tbody class="text-sm">
                 <tr>
-                    <td class="column"><strong>Fecha:</strong> {{\Carbon\Carbon::parse($action->created_at)->isoFormat('LLLL')}}</td>
+                    <td class="column"><strong>Fecha:</strong> {{\Carbon\Carbon::parse($action->date_action)->format('d-m-Y')}}</td>
                     <td class="column"><strong>Codigo:</strong> {{ $employee->cod_marking}}</td>
                 </tr>
                 <tr>

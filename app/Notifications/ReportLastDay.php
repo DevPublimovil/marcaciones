@@ -43,7 +43,7 @@ class ReportLastDay extends Notification
     {
         return (new MailMessage)
                     ->subject('INFORMACION PARA ELABORACION DE PLANILLA')
-                    ->greeting('Buen día compañeros.')
+                    ->greeting('Buen día Estimados.')
                     ->line('Por este medio se les recuerda que la entrega de la información relacionada con la Planilla:')
                     ->line('Acciones de Personal, Horas Extras, Bajas, Altas, Permisos, descuentos de facturas, Nuevos Ingresos etc., Se recibirá dicha información hasta el día:')
                     ->line($this->datetime)

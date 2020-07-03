@@ -12,10 +12,8 @@
         </div>
     @endif
     @if (session('message'))
-        <div  class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
-            {{ session('message') }}
-        </div>
-    @endif
+		<notification-component :mensaje="'{{ session('message') }}'"></notification-component>
+	@endif
     <h3 class="text-2xl text-blue-900 mb-3 font-bold"><i class="fa fa-address-book" aria-hidden="true"></i> Mi cuenta</h3>
     <div class="shadow-lg rounded-lg border border-gray-300 bg-white">
         <div class="flex justify-between p-2">

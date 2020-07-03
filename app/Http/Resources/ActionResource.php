@@ -19,7 +19,7 @@ class ActionResource extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'created_at' => Fecha::parse($this->created_at)->format('d/m/Y'),
+            'created_at' => Fecha::parse($this->date_action)->format('d/m/Y'),
             'check_gte' => $this->check_gte,
             'check_rh' => $this->check_rh,
             'check_employee' => $this->check_employee,

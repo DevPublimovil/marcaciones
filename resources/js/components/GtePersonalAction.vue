@@ -5,7 +5,7 @@
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
                         <template v-if="user.role_id == 2 || user.role_id == 4">
-                            <h4 class="text-xl text-center text-gray-700">Empleado</h4>
+                            <h4 class="text-xl text-gray-900 font-bold">Empleado</h4>
                             <div class="form-control-ic">
                                 <select
                                     class="form-select w-full"
@@ -25,7 +25,14 @@
                                 </select>
                             </div>
                         </template>
-                        <h4 class="text-xl text-center text-gray-700">Faltas cometidas</h4>
+                        <div class="form-control-ic">
+                            <h4 class="text-xl text-gray-900 font-bold mb-6">
+                                Fecha de aplicación
+                            </h4>
+                            <input type="date" class="form-input" id="start" name="trip-start"
+                                v-model="dateTime">
+                        </div>
+                        <h4 class="text-xl text-gray-900 font-bold">Falta cometida</h4>
                         <div
                             class="form-control-ic text-base grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2"
                         >
@@ -62,7 +69,7 @@
                         </transition>
 
                         <div class="form-control-ic">
-                            <h4 class="text-xl text-center text-gray-700 mb-6">
+                            <h4 class="text-xl text-gray-900 font-bold mb-6">
                                 Desripción de la acción
                             </h4>
                             <textarea
@@ -74,7 +81,7 @@
                         </div>
 
                         <div class="form-control-ic">
-                            <h4 class="text-xl text-center text-gray-700 mb-6">
+                            <h4 class="text-xl text-gray-900 font-bold mb-6">
                                 Adjuntar archivo
                             </h4>
                             <input type="file" class="form-input w-full cursor-pointer" @change="processFile($event)">
@@ -116,7 +123,8 @@ export default {
             errors: [],
             showOther: false,
             employee: '',
-            someData:''
+            someData:'',
+            dateTime: moment().format('YYYY-MM-DD')
         };
     },
     methods: {
@@ -126,7 +134,8 @@ export default {
             toastr.info('Por favor espera mientras se crea tu acción de personal')
             let formData = new FormData()
             formData.append('attached', vm.someData)
-            formData.append('actions', JSON.stringify(vm.typeactions))
+            formData.append('actions', vm.typeactions)
+            formData.append('dateaction', vm.dateTime)
             formData.append('otherAction', vm.showOther ? vm.other : '')
             formData.append('description', vm.description)
             formData.append('employee', vm.employee)
@@ -153,6 +162,7 @@ export default {
             axios
                 .put('/actions/' + action, {
                     actions: vm.typeactions,
+                    dateaction: vm.dateTime,
                     otherAction: vm.showOther ? vm.other : null,
                     description: vm.description,
                 })
@@ -216,6 +226,7 @@ export default {
             }
             this.description = this.action.description;
             this.other = this.action.other_action;
+            this.dateTime = moment(this.action.date_action).format('YYYY-MM-DD');
             if (this.action.personalaction) {
                     this.typeactions = this.action.personalaction.type_action_id
             }

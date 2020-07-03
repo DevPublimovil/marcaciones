@@ -7,24 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NoApprovedAction extends Notification
+class RequestProof extends Notification
 {
     use Queueable;
 
-    private $user;
-    private $url;
-    private $comment;
+    public $user;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $comment, $action)
+    public function __construct($user)
     {
-        $this->comment = $comment;
         $this->user = $user;
-        $this->url = '/actions/' . $action->id;
     }
 
     /**
@@ -47,13 +43,9 @@ class NoApprovedAction extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                ->subject('Acción de personal no aprobada')
+                ->subject('Solicitud de constancia salarial')
                 ->greeting('¡Hola '. $notifiable->name .'!')
-                ->line('Tu acción de personal ha sido rechazada por ' . $this->user->name .'.')
-                ->line('Comentario: ' . $this->comment)
-                ->line('Puedes ingresar a la aplicación para revisar su estado')
-                ->action('Ingresar', url($this->url))
-                ->line('¡Gracias por usar nuestra Aplicación!')
+                ->line('El empleado ' . $this->user .' ha solicitado una constancia de salario')
                 ->salutation('¡Saludos!');
     }
 

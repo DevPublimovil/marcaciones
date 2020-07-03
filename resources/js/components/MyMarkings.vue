@@ -34,6 +34,7 @@
                         <th class="px-4 py-2 text-gray-700">Entrada</th>
                         <th class="px-4 py-2 text-gray-700">Salida</th>
                         <th class="px-4 py-2 text-gray-700 hidden md:block">Minutos tarde</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,6 +46,12 @@
                         <td class="px-4 py-2" :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
                         <td class="px-4 py-2" :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
                         <td class="px-4 py-2 hidden md:block" >{{ item.minutes }}</td>
+                        <td title="Crear acción de personal">
+                            <form :action="'/action/create/date'" method="GET">
+                                <input type="hidden" name="date" :value="item.id">
+                                <button type="submit" class="focus:outline-none"><i class="fa fa-file-text" aria-hidden="true"></i>+</button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>

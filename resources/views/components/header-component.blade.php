@@ -21,6 +21,11 @@
             @endif
         </ul>
         <ul class="navbar-nav ml-auto">
+            @if(Auth::user()->role_id != 3)
+            <li>
+                <a href="{{route('solicitar.constancia')}}" class="hidden md:block btn bg-blue-900 hover:bg-blue-800 text-sm text-white leading-normal pt-2 mx-2">Solicitar constancia salarial</a>
+            </li>
+            @endif
             <header-component :info="{{json_encode($user)}}"></header-component>
         </ul>
     </nav>

@@ -63,14 +63,14 @@
                                                <b> Autor: </b>{{ action.name_employee }}
                                             </h3>
                                         </div>
-                                        <div class="hidden md:block">
+                                        <!-- <div class="hidden md:block">
                                             <span
                                                 class="time text-gray-500 text-xs p-3 float-right"
                                             >
                                                 <i class="fa fa-clock-o"></i>
                                                 {{ action.diffHumans }}
                                             </span>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div class="timeline-body p-2">
@@ -82,6 +82,8 @@
                                                 <p class="text-xs">{{action.comment}}</p>
                                             </div>
                                         </template>
+                                        <p class="text-xs md:text-sm"><b>Fecha de creación: </b><span class="text-xs">{{ action.diffHumans }}</span></p>
+                                        
                                         <div class="flex justify-end">
                                             <a
                                                 :href="action.attached"

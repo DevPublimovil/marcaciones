@@ -4,7 +4,14 @@
             <div class="w-full p-0 mx-auto">
                 <div class="bg-white p-6  shadow-lg uppercase pt-2 rounded">
                     <form id="formActions">
-                        <h4 class="text-xl text-center text-gray-700">Faltas cometidas</h4>
+                        <div class="form-control-ic">
+                            <h4 class="text-xl text-gray-900 font-bold mb-6">
+                                Fecha de aplicación
+                            </h4>
+                            <input type="date" class="form-input" id="start" name="trip-start"
+                                v-model="dateTime">
+                        </div>
+                        <h4 class="text-xl text-gray-900 font-bold">Falta cometida</h4>
                         <div
                             class="form-control-ic text-base grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2"
                         >
@@ -41,7 +48,7 @@
                         </transition>
 
                         <div class="form-control-ic">
-                            <h4 class="text-xl text-center text-gray-700 mb-6">
+                            <h4 class="text-xl text-gray-900 font-bold mb-6">
                                 Desripción de la acción
                             </h4>
                             <textarea
@@ -53,7 +60,7 @@
                         </div>
 
                         <div class="form-control-ic">
-                            <h4 class="text-xl text-center text-gray-700 mb-6">
+                            <h4 class="text-xl text-gray-900 font-bold mb-6">
                                 Adjuntar archivo
                             </h4>
                             <input type="file" class="form-input w-full cursor-pointer" @change="processFile($event)">
@@ -85,7 +92,7 @@
 <script>
 import swal from 'sweetalert';
 export default {
-    props: ['user', 'types', 'action'],
+    props: ['user', 'types', 'action','date'],
     data() {
         return {
             typeactions: '',
@@ -94,7 +101,8 @@ export default {
             description: '',
             errors: [],
             showOther: false,
-            someData:''
+            someData:'',
+            dateTime: moment().format('YYYY-MM-DD')
         };
     },
     methods: {
@@ -105,6 +113,7 @@ export default {
             let formData = new FormData()
             formData.append('attached', vm.someData)
             formData.append('actions', vm.typeactions)
+            formData.append('dateaction', vm.dateTime)
             formData.append('otherAction', vm.showOther ? vm.other : '')
             formData.append('description', vm.description)
             axios
@@ -133,6 +142,7 @@ export default {
             axios
                 .put('/actions/' + action, {
                     actions: vm.typeactions,
+                    dateaction: vm.dateTime,
                     otherAction: vm.showOther ? vm.other : null,
                     description: vm.description,
                 })
@@ -196,6 +206,7 @@ export default {
                 this.showOther = true;
             }
             this.description = this.action.description;
+            this.dateTime = moment(this.action.date_action).format('YYYY-MM-DD');
             this.other = this.action.other_action;
             if (this.action.personalaction) {
                     this.typeactions = this.action.personalaction.type_action_id
@@ -204,6 +215,10 @@ export default {
 
         if (this.myemployee != null) {
             this.employee = this.myemployee;
+        }
+
+        if(this.date != null){
+            this.dateTime = this.date
         }
     },
 };

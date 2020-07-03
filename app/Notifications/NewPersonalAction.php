@@ -47,9 +47,8 @@ class NewPersonalAction extends Notification
         return (new MailMessage)
             ->subject('Nueva acción de personal')
             ->greeting('¡Hola '. $notifiable->name .'!')
-            ->line('Tienes una nueva acción de personal')
-            ->line(($this->user->role->id != 2) ? 'de tu empleado ' . $this->user->name : 'de tu jefe ' . $this->user->name)
-            ->line('La cual requiere tu aprobación')
+            ->line('Tienes una nueva acción de personal.')
+            ->line(($this->user->role->id != 2) ? 'De tu empleado ' . $this->user->name .', la cual requiere tu aprobación' : 'de tu jefe ' . $this->user->name .', la cual requiere tu aprobación')
             ->action('Revisar', url($this->url))
             ->line('¡Gracias por usar nuestra Aplicación!')
             ->salutation('¡Saludos!');
