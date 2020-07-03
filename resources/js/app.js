@@ -137,6 +137,22 @@ const app = new Vue({
                 swal({text:'La notificación ha sido cancelada'})
               }
           })
+        },
+        sendProof(){
+          swal({
+              title: '¿Estás seguro que deseas enviar una notificación para solicitar una constancia salarial?',
+              icon: 'info',
+              buttons: true,
+              buttons: ['Cancelar', 'Aceptar'],
+              dangerMode: true,
+          }).then(willDelete =>{
+            if(willDelete){
+              toastr.info('Tu solicitud se esta procesando')
+              window.location.href = "/constancia/salarial"
+            }else{
+              swal({text:'La acción ha sido cancelada'})
+            }
+          })
         }
       },
     mounted() {

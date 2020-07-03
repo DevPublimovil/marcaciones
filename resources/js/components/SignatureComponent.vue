@@ -66,7 +66,7 @@ export default {
     canvas.getContext("2d").scale(ratio, ratio);
     }
 
-    window.onresize = resizeCanvas;
+    //window.onresize = resizeCanvas;
     resizeCanvas();
 
     function download(dataURL, filename) {
