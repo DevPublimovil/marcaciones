@@ -24,7 +24,7 @@ class CreateActionsTable extends Migration
             $table->text('comments')->nullable();
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->date('date_action')->nullable();
             $table->timestamps();
 
@@ -34,7 +34,7 @@ class CreateActionsTable extends Migration
             $table->foreign('employee_id')->references('id')->on('employees')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreign('action_type_id')->references('id')->on('action_types');
+            $table->foreign('action_type_id')->references('id')->on('action_types')->onDelete('set null')->onUpdate('cascade');
             $table->foreign('company_id')->references('id')->on('companies')
                 ->onDelete('set null')
                 ->onUpdate('cascade');
