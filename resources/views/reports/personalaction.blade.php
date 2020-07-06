@@ -88,7 +88,7 @@
     <header>
         <table class="table negrita uppercase">
             <tr>
-                <td class="column">{{ $employee->company->display_name }} S.A. DE C.V.</td>
+                <td class="column">{{ $company->company->display_name }} S.A. DE C.V.</td>
                 <td class="column"><u>ACCION DE PERSONAL</u></td>
                 <td class="column">RECURSOS HUMANOS</td>
             </tr>
@@ -106,17 +106,17 @@
             <tbody class="text-sm">
                 <tr>
                     <td class="column"><strong>Fecha:</strong> {{\Carbon\Carbon::parse($action->date_action)->format('d-m-Y')}}</td>
-                    <td class="column"><strong>Codigo:</strong> {{ $employee->cod_marking}}</td>
+                    <td class="column"><strong>Codigo:</strong></td>
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Nombre del empleado:</strong> {{$employee->name_employee . ' ' . $employee->surname_employee  ?? ''}}</td>
+                    <td class="column" colspan="2"><strong>Nombre del empleado:</strong></td>
                     {{-- <td class="column"><strong>Sueldo:</strong> ${{$action->employee->salary}}</td> --}}
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> {{$employee->departament->display_name ?? ''}}</td>
+                    <td class="column" colspan="2"><strong>Unidad a la que pertence:</strong> </td>
                 </tr>
                 <tr>
-                    <td class="column" colspan="2"><strong>Nombre del puesto:</strong> {{$employee->position}}</td>
+                    <td class="column" colspan="2"><strong>Nombre del puesto:</strong> </td>
                 </tr>
             </tbody>
         </table>
@@ -148,15 +148,10 @@
                     <p><strong>Descripcion:</strong> {{$action->description}}</p>
                 </td>
                 <td class="text-center column firma">
-                    @if ($employee->user->firm)
-                        <img src="{{public_path('storage/'.$employee->user->firm)}}" class="image_firma" alt="">
-                        Empleado
-                    @else
                         Firma del empleado
                         <div style="height: 80px;">
 
                         </div>
-                    @endif
                 </td>
             </tr>
         </table>
@@ -166,16 +161,14 @@
                 <td>
                     <div style="position: relative;">
                         <div style="position: absolute; left: 40px; top: 40px;">
-                            @if ($action->check_gte == 1 && $employee->jefe->firm)
-                                <img src="{{public_path('storage/'.$employee->jefe->firm)}}" class="image_firma" alt="">
-                            @endif
+                            <img src="{{public_path('storage/'. Auth::user()->firm)}}" class="image_firma" alt="">
                         </div>
                         <div style="position: absolute; left: 0px; top: 90px;">
                             <p style="padding:0%;border-bottom:1px solid gray;"></p>
                         </div>
                         <div style="position: absolute; left: 0px; top: 100px;">
                             <p style="padding:0%;">
-                            {{$action->user->employee->jefe->name ?? $action->employee->jefe->name ?? ''}} &nbsp;&nbsp; | &nbsp;&nbsp; Jefe inmediato
+                            {{Auth::user()->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Jefe inmediato
                             </p>
                         </div>
                       </div>
@@ -199,17 +192,6 @@
                       </div>
                 </td>
             </tr>
-            {{-- <tr>
-                <td>
-                    <p style="padding:0%;border-bottom:1px solid black;margin: 25px 0px 0px 0px;">{{$rh->name}}</p>
-                    <p style="padding:0%;margin:0%">Recursos Humano</p>
-                </td>
-                <td class="text-center firma">
-                    @if ($action->check_rh == 1 && $rh->firm)
-                    <img src="{{public_path('storage/'.$rh->firm)}}" class="image_firma" alt="">
-                    @endif
-                </td>
-            </tr> --}}
         </table>
     </main>
 </body>

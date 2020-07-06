@@ -11,7 +11,7 @@ class Action extends Model
 
     public function personalaction()
     {
-        return $this->hasOne(PersonalAction::class);
+        return $this->hasOne('App\ActionType','id','action_type_id');
     }
 
     public function user()
@@ -33,7 +33,7 @@ class Action extends Model
     }
 
     public function scopeNoCheckRh($query){
-        $query->where('check_rh',0);
+        $query->where('check_rh',null);
     }
 
     public function scopeCheckRh($query){

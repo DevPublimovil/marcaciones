@@ -124,12 +124,25 @@ export default {
                     }
                 })
                 .then(response => {
-                    swal({text:response.data.message, icon:response.data.type})
+                    swal({
+                        text: response.data.message,
+                        icon: response.data.type,
+                        button: "ok",
+                    }).then(god =>{
+                        if(god){
+                            if(vm.user.role_id == 3){
+                                window.location.href = '/myactions';
+                            }else{
+                                window.location.href = '/home';
+                            }
+                        }
+                    });
+                    /* swal({text:response.data.message, icon:response.data.type})
                     if(vm.user.role_id == 3){
                         window.location.href = '/myactions';
                     }else{
                         window.location.href = '/home';
-                    }
+                    } */
                 })
                 .catch(error => {
                     toastr.error('Ocurrió un problema, intentalo de nuevo');
@@ -209,7 +222,7 @@ export default {
             this.dateTime = moment(this.action.date_action).format('YYYY-MM-DD');
             this.other = this.action.other_action;
             if (this.action.personalaction) {
-                    this.typeactions = this.action.personalaction.type_action_id
+                    this.typeactions = this.action.personalaction.id
             }
         }
 

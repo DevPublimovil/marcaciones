@@ -23,7 +23,7 @@ class Company extends Model
         return $this->hasMany('App\CompanyResource', 'company_id', 'id');
     }
 
-    public function actions()
+    /* public function actions()
     {
         return $this->hasManyThrough(
             'App\Action',
@@ -33,5 +33,10 @@ class Company extends Model
             'id', 
             'id'
         );
+    } */
+
+    public function actions()
+    {
+        return $this->hasMany('App\Action', 'company_id', 'id');
     }
 }

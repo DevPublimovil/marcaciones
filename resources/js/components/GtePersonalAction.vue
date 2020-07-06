@@ -132,6 +132,9 @@ export default {
             let vm = this;
             vm.loading = true;
             toastr.info('Por favor espera mientras se crea tu acción de personal')
+            if(vm.typeactions == 12){
+                vm.employee = ''
+            }
             let formData = new FormData()
             formData.append('attached', vm.someData)
             formData.append('actions', vm.typeactions)
@@ -202,7 +205,7 @@ export default {
             });
         },
         checkForm() {
-            if (this.user.role_id == 2 && !this.employee) {
+            if (this.user.role_id == 2 && !this.employee && this.typeactions != 12) {
                 this.showAlert('Por favor selecciona un empleado');
             }else if (!this.typeactions && !this.other) {
                 this.showAlert(

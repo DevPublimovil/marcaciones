@@ -7,10 +7,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewPersonalAction extends Notification
+class NewPersonalActionGte extends Notification
 {
     use Queueable;
-
     private $user;
     private $url;
 
@@ -24,6 +23,7 @@ class NewPersonalAction extends Notification
         $this->user = $user;
         $this->url = '/actions';
     }
+
 
     /**
      * Get the notification's delivery channels.
@@ -48,7 +48,7 @@ class NewPersonalAction extends Notification
             ->subject('Nueva acción de personal')
             ->greeting('¡Hola '. $notifiable->name .'!')
             ->line('Tienes una nueva acción de personal.')
-            ->line(($this->user->role->id != 2) ? 'de tu empleado ' . $this->user->name .', la cual requiere tu aprobación' : 'de tu jefe ' . $this->user->name)
+            ->line('de ' . $this->user->name .', la cual requiere tu aprobación')
             ->action('Revisar', url($this->url))
             ->line('¡Gracias por usar nuestra Aplicación!')
             ->salutation('¡Saludos!');

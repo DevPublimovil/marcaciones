@@ -44,27 +44,10 @@ class ActionsJsonController extends Controller
     public function showActionsPendings()
     {
         $user = User::find(Auth::id());
-        $query = $user->appcompany->company->employees()
-                ->select('actions.*','users.name')
-                ->join('users','users.id','employees.user_id')
-                ->join('actions','actions.created_by','users.id')
-                ->where('actions.check_gte','=',1)
-                ->whereNull('check_rh')
-                ->orderBy('created_at','DESC')
-                ->get();
-        $queryTwo = $user->appcompany->company->employees()
-                    ->select('actions.*','employees.name_employee','employees.surname_employee')
-                    ->join('actions','actions.employee_id','employees.id')
-                    ->where('actions.check_gte','=',1)
-                    ->where('actions.check_employee','=',1)
-                    ->whereNull('check_rh')
-                    ->orderBy('created_at','DESC')
-                    ->get();
-
-        $query = $query->merge($queryTwo);
+        $company = $user->appcompany->company;
         
-        $query = $query->sortByDesc('created_at');
-
+        $query = $company->actions()->checkGte()->NoCheckRh()->get();
+        
         $data = ActionResource::collection($query);
         return response()->json([
             'actions' => $data,
@@ -75,26 +58,9 @@ class ActionsJsonController extends Controller
     public function showActionsApproved()
     {
         $user = User::find(Auth::id());
-        $query = $user->appcompany->company->employees()
-                ->select('actions.*','users.name')
-                ->join('users','users.id','employees.user_id')
-                ->join('actions','actions.created_by','users.id')
-                ->where('actions.check_gte','=',1)
-                ->where('check_rh','=',1)
-                ->orderBy('created_at','DESC')
-                ->get();
-        $queryTwo = $user->appcompany->company->employees()
-                ->select('actions.*','employees.name_employee','employees.surname_employee')
-                ->join('actions','actions.employee_id','employees.id')
-                ->where('actions.check_gte','=',1)
-                ->where('actions.check_employee','=',1)
-                ->where('check_rh','=',1)
-                ->orderBy('created_at','DESC')
-                ->get();
-
-        $query = $query->merge($queryTwo);
-
-        $query = $query->sortByDesc('created_at');
+        $company = $user->appcompany->company;
+        
+        $query = $company->actions()->checkGte()->CheckRh()->get();
 
         $data = ActionResource::collection($query);
         return response()->json([
@@ -106,26 +72,9 @@ class ActionsJsonController extends Controller
     public function showActionsNotApproved()
     {
         $user = User::find(Auth::id());
-        $query = $user->appcompany->company->employees()
-            ->select('actions.*','users.name')
-            ->join('users','users.id','employees.user_id')
-            ->join('actions','actions.created_by','users.id')
-            ->where('actions.check_gte','=',1)
-            ->where('check_rh','=',0)
-            ->orderBy('created_at','DESC')
-            ->get();
-        $queryTwo = $user->appcompany->company->employees()
-                ->select('actions.*','employees.name_employee','employees.surname_employee')
-                ->join('actions','actions.employee_id','employees.id')
-                ->where('actions.check_gte','=',1)
-                ->where('actions.check_employee','=',1)
-                ->where('check_rh','=',0)
-                ->orderBy('created_at','DESC')
-                ->get();
-
-        $query = $query->merge($queryTwo);
-
-        $query = $query->sortByDesc('created_at');
+        $company = $user->appcompany->company;
+        
+        $query = $company->actions()->where('check_rh',0)->get();
 
         $data = ActionResource::collection($query);
         return response()->json([

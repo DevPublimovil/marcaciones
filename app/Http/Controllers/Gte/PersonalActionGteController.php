@@ -124,7 +124,7 @@ class PersonalActionGteController extends Controller
                         ->orderBy('created_at','DESC')
                         ->get();
 
-        $personal_actionsTwo = $gte->actionsEmp()->whereNotNull('employee_id')->get();
+        $personal_actionsTwo = $gte->actionsEmp()->where('check_gte',1)->get();
         $personal_actions = $personal_actions->merge($personal_actionsTwo);
 
         $personal_actions = $personal_actions->sortByDesc('created_at');

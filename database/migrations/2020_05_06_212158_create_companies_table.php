@@ -18,6 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->string('name',100);
             $table->string('display_name',100);
             $table->string('image',255)->nullable();
+            $table->string('listemail', 100)->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->timestamps();
 
