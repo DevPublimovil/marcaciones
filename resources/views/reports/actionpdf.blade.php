@@ -148,7 +148,7 @@
                     <p><strong>Descripcion:</strong> {{$action->description}}</p>
                 </td>
                 <td class="text-center column firma">
-                    @if ($employee->user->firm)
+                    @if ($employee->user && $employee->user->firm)
                         <img src="{{public_path('storage/'.$employee->user->firm)}}" class="image_firma" alt="">
                         Empleado
                     @else
