@@ -69,7 +69,7 @@ class PersonalActionGteController extends Controller
             ]);
         }
 
-        $typeactions = ActionType::all();
+        $typeactions = ActionType::orderBY('created_at','DESC')->get();
         $employees = $user->workersGte()->orderBy('name_employee','ASC')->get();
         if(!$user->firm){
             return redirect()->route('employees.edit', $user->id)->with('message', 'Para crear una accón de personal debes tener una firma');

@@ -84,7 +84,7 @@ class ActionController extends Controller
             ]);
         }
 
-        $typeactions = ActionType::all();
+        $typeactions = ActionType::orderBY('created_at','DESC')->get();
         if($user->role->name == 'empleado')
         {
             $typeactions = $typeactions->except([12]);
@@ -106,7 +106,7 @@ class ActionController extends Controller
     public function createForEmployee($id)
     {
         $employee = $id;
-        $typeactions = ActionType::all();
+        $typeactions = ActionType::orderBY('created_at','DESC')->get();
         $user = User::find(Auth::id());
         return view('personalactions.new-personal-action', compact('user','typeactions','employee'));
     }
@@ -114,7 +114,7 @@ class ActionController extends Controller
     public function createWithDate(Request $request)    
     {
         $date = Marking::find($request->date);
-        $typeactions = ActionType::all();
+        $typeactions = ActionType::orderBY('created_at','DESC')->get();
         $user = User::find(Auth::id());
         return view('personalactions.new-personal-action', compact('user','typeactions','date'));
     }

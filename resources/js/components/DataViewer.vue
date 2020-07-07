@@ -40,6 +40,7 @@
                         <time-component
                             v-for="(time, index) in timestables"
                             :time="time"
+                            :role="rol"
                             :currentTime="idtimestable"
                             :key="index"
                             @update-timestable="updateTime"
