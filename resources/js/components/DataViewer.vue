@@ -114,8 +114,8 @@
                                 <tbody class="text-gray-700 shadow-inner">
                                     <tr
                                         class="hover:text-white cursor-pointer"
-                                        :class="row.cod == null && rol == 3 ? 'bg-red-500 hover:bg-red-600 text-white' : 'hover:bg-blue-400'"
-                                        :title="row.cod == null && rol == 3 ? 'La información del empleado no esta completa' : ''"
+                                        :class="row.cod == null || row.jefe_id == null ? 'bg-red-500 hover:bg-red-600 text-white' : 'hover:bg-blue-400'"
+                                        :title="row.cod == null || row.jefe_id == null ? 'La información del empleado no esta completa' : ''"
                                         v-for="(row, index) in model"
                                         :key="index"
                                     >

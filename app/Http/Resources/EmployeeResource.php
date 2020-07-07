@@ -24,6 +24,7 @@ class EmployeeResource extends JsonResource
                 'timestable' => $this->timetable_id,
                 'type' => $this->typeemployee->name_type_employee,
                 'company' => $this->company->display_name,
+                'jefe_id'  => $this->jefe_id,
                 'departament' => $this->departament->display_name ?? null,
             ];
     }

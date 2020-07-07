@@ -284,21 +284,12 @@ class ActionController extends Controller
         $user = User::find(Auth::id());
         $action = Action::find($id);
         $action->update([
-            'other_action'  => $request->otherAction ?? null,
-            'description'   => $request->description,
-            'date_action'    => $request->dateaction,
-            'created_by'   => $user->id,
+            'other_action'      => $request->otherAction ?? null,
+            'description'       => $request->description,
+            'action_type_id'    => $request->actions,
+            'date_action'       => $request->dateaction,
+            'created_by'        => $user->id,
         ]);
-
-        if($request->actions)
-        {
-            $personalaction = PersonalAction::updateOrCreate([
-                'action_id'   => $action->id
-            ],['type_action_id' => $request->actions]);
-            $action->update(['other_action' => null]);
-        }else{
-            $action->personalaction->delete();
-        }
 
         return response()
             ->json([ 
