@@ -22,6 +22,7 @@
                         <div v-show="!showgif">
                             <div class="w-4/5 lg:w-2/4 xl:w-2/5 h-64 border border-gray-500 rounded-lg mx-auto">
                                 <canvas class="w-full h-64 border-gray-700 rounded-lg" id="mycanvas"></canvas>
+                                <img src="" alt="" id="miimg" style="display:none">
                             </div>
                             <div class="signature-pad-footer w-4/5 lg:w-2/4 xl:w-2/5 mx-auto mt-1">
                                 <div class="flex signature-pad-actions items-end content-end">
@@ -53,20 +54,25 @@ export default {
     var clearButton = wrapper.querySelector("[data-action=clear]");
     var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
     var canvas = wrapper.querySelector("canvas");
+    var miimg = document.getElementById("miimg")
     var signaturePad = new SignaturePad(canvas, {
         backgroundColor: 'rgb(255, 255, 255)'
     });
 
     function resizeCanvas() {
+        miimg.src = signaturePad.toDataURL()
+        var ratio =  Math.max(window.devicePixelRatio || 1, 1);
 
-    var ratio =  Math.max(window.devicePixelRatio || 1, 1);
-
-    canvas.width = canvas.offsetWidth * ratio;
-    canvas.height = canvas.offsetHeight * ratio;
-    canvas.getContext("2d").scale(ratio, ratio);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        var ctx = canvas.getContext("2d")
+        miimg.onload = function(){
+            ctx.drawImage(miimg,0,0)
+        }
+        canvas.getContext("2d").scale(ratio, ratio);
     }
 
-    //window.onresize = resizeCanvas;
+    window.onresize = resizeCanvas;
     resizeCanvas();
 
     function download(dataURL, filename) {
