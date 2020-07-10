@@ -60,11 +60,18 @@ class MipsAttendance extends Command
                 $attend = Marking::firstOrCreate([
                     'serialno'      =>  $employee->cod_terminal,
                     'cod_marking'   =>  $employee->cod_marking,
-                    'photo'         =>  'http://192.168.50.152:9000/MIPS' . $start->img_path,
                     'check_in'      =>  $start->time,
                     'check_out'     =>  $end->time,
+                    'photo'         =>  'http://192.168.50.152:9000/MIPS' . $start->img_path,
                     'created_at'    => Fecha::yesterday()->format('Y-m-d')
                 ]);
+
+                $attend->fill([
+                    'temp_in'      =>  $start->temp,
+                    'temp_out'     =>  $end->temp,
+                ]);
+
+                $attend->save();
             }
         }
     }

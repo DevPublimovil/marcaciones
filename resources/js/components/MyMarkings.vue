@@ -5,7 +5,7 @@
                 <div class="flex items-center border-b-2 border-blue-700 py-2" >
                     <template v-if="markings.length > 0">
                         <span><i class="fa fa-search" aria-hidden="true"></i></span>
-                        <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" v-model="date" aria-label="Busqueda">
+                        <input class="appearance-none bg-transparent border-none w-fullmr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" v-model="date" aria-label="Busqueda">
                     </template>
                 </div>
                 <!--<input v-model="date" class="form-input" name="search" id="search" type="search" placeholder="Buscar">-->
@@ -29,13 +29,15 @@
             </div>
             <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-4" v-else>
                 <thead>
-                    <tr class="border-b border-gray-400 border-t border-gray-400">
+                    <tr class="border-b border-gray-400 text-gray-700 border-t border-gray-400">
                         <th ></th>
-                        <th class="px-4 py-2 text-gray-700 ">Día</th>
-                        <th class="px-4 py-2 text-gray-700">Entrada</th>
-                        <th class="px-4 py-2 text-gray-700">Salida</th>
+                        <th class="px-4 py-2">Día</th>
+                        <th class="px-4 py-2">Entrada</th>
+                        <th class="text-gray-700">°C</th>
+                        <th class="px-4 py-2">Salida</th>
+                        <th>°C</th>
                         <template v-if="employee.role_id != 2 ">
-                            <th class="px-4 py-2 text-gray-700">Minutos tarde</th>
+                            <th class="px-4 py-2">Minutos tarde</th>
                             <th ></th>
                         </template>
                     </tr>
@@ -53,7 +55,9 @@
                         </td>
                         <td >{{ item.date }}</td>
                         <td  :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
+                        <td :class="[item.temp_in > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ item.temp_in }}</td>
                         <td  :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
+                        <td :class="[item.temp_out > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ item.temp_out }}</td>
                         <template v-if="employee.role_id != 2">
                             <td >{{ item.minutes }}</td>
                             <td title="Crear acción de personal">
@@ -66,6 +70,7 @@
                     </tr>
                 </tbody>
             </table>
+            <span class="py-4 text-blue-900 font-bold text-sm">" °C temperatura corporal en grados celsius "</span>
         </div>
          <my-modal-component v-if="showModal" @close="showModal = false">
             <template v-slot:header-modal>

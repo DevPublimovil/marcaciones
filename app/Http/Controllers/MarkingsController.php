@@ -56,9 +56,8 @@ class MarkingsController extends Controller
         $user = User::find(Auth::id());
         if($user->role->name == 'rrhh')
         {
-            $resource = $user->appcompany->first();
-
-            $employees = Employee::where('company_id',$resource->company_id)->where('status',1)->SearchEmployee($request->employee)->with('departament','company')->orderBy('name_employee','ASC')->paginate(2);
+            $resource = $user->appcompany;
+            $employees = Employee::where('company_id',$resource->company_id)->where('status',1)->SearchEmployee($request->employee)->with('departament','company','user:id,avatar')->orderBy('name_employee','ASC')->paginate(2);
         }
         else if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {

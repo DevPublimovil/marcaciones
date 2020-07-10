@@ -3,7 +3,10 @@
         <div class="dt-header">
             <div class="flex justify-between p-0">
                 <div class="self-center flex-auto">
-                    <h3 class="text-xl font-bold">{{ employee.name_employee + ' ' + employee.surname_employee }} | {{employee.cod_marking}}</h3>
+                    <h3 class="text-xl font-bold">
+                        <img :src="'storage/' + employee.user.avatar" class="inline-block rounded-full w-12 h-12" alt="" v-if="employee.user.avatar">
+                        <span class="inline-block">{{ employee.name_employee + ' ' + employee.surname_employee }} | {{employee.cod_marking}}</span>
+                    </h3>
                     <h3 class="text-gray-500 text-sm">{{ employee.departament ? employee.departament.display_name : '' }}</h3>
                 </div>
             </div>
@@ -14,7 +17,9 @@
                     <th>Fecha</th>
                     <th>Dia</th>
                     <th>Entrada</th>
+                    <th>°C</th>
                     <th>Salida</th>
+                    <th>°C</th>
                     <th>Horas Trabajadas</th>
                     <th>Horas extras</th>
                     <th>Llegadas tarde</th>
@@ -25,7 +30,9 @@
                         <td>{{ marking.date }}</td>
                         <td>{{ marking.day }}</td>
                         <td :class="[marking.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ marking.in }}</td>
+                        <td :class="[marking.temp_in > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ marking.temp_in }}</td>
                         <td :class="[marking.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ marking.out }}</td>
+                        <td :class="[marking.temp_out > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ marking.temp_out }}</td>
                         <td>{{ marking.hours_worked }}</td>
                         <td>{{ marking.extra_hours }}</td>
                         <td>{{ marking.late_arrivals }}</td>
