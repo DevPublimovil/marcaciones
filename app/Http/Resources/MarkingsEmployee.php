@@ -18,6 +18,7 @@ class MarkingsEmployee extends JsonResource
         return [
             'id'        => $this->id,
             'date'      => Fecha::parse($this->created_at)->isoFormat('dddd') . ' - ' . Fecha::parse($this->created_at)->format('d/m/Y'),
+            'photo'     => $this->photo,
             'in'        => ($this->check_in) ? Fecha::parse($this->check_in)->format('H:i a') : 'Sin marcación',
             'out'       => ($this->check_out) ? Fecha::parse($this->check_out)->format('H:i a') : 'Sin marcación',
             'minutes'   => $this->formatTime($this->late_arrivals)

@@ -30,11 +30,12 @@
             <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-4" v-else>
                 <thead>
                     <tr class="border-b border-gray-400 border-t border-gray-400">
+                        <th ></th>
                         <th class="px-4 py-2 text-gray-700 ">Día</th>
                         <th class="px-4 py-2 text-gray-700">Entrada</th>
                         <th class="px-4 py-2 text-gray-700">Salida</th>
-                        <th class="px-4 py-2 text-gray-700 hidden md:block">Minutos tarde</th>
-                        <th></th>
+                        <th class="px-4 py-2 text-gray-700">Minutos tarde</th>
+                        <th ></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,10 +43,16 @@
                         :class="[item.minutes >= '20' ? 'text-red-500' : 'text-gray-600']"
                         :title="[item.minutes >= '20' ? 'Es probable que desees crear una acción de personal para este día' : '']"
                          v-for="(item, index) in searchDay" :key="index">
-                        <td class="px-4 py-2">{{ item.date }}</td>
-                        <td class="px-4 py-2" :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
-                        <td class="px-4 py-2" :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
-                        <td class="px-4 py-2 hidden md:block" >{{ item.minutes }}</td>
+                        <td class="px-4 py-2 w-16">
+                            <img :src="item.photo" class="rounded-full cursor-pointer" style="width:100% height:100%" @mouseover="showPhoto = item.id" @mouseleave="showPhoto = ''" alt="">
+                            <div class="absolute w-40 h-40 p-2 border bg-white rounded z-10"  :class="showPhoto == item.id ? 'block' : 'hidden'"  >
+                                <img :src="item.photo" class="cursor-pointer w-full h-full" alt="">
+                            </div>
+                        </td>
+                        <td >{{ item.date }}</td>
+                        <td  :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
+                        <td  :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
+                        <td >{{ item.minutes }}</td>
                         <td title="Crear acción de personal">
                             <form :action="'/action/create/date'" method="GET">
                                 <input type="hidden" name="date" :value="item.id">
@@ -102,6 +109,7 @@ export default {
             en: en,
             es: es,
             showModal:false,
+            showPhoto: '',
             startDate: '',
             endDate: '',
             loading:false,
@@ -122,6 +130,12 @@ export default {
         },
         customFormatter(date) {
             return moment(date).format('YYYY-MM-DD');
+        },
+        showPhotoPre(){
+            this.showPhoto = true
+        },
+        hidePhoto(){
+            this.showPhoto = false
         },
         changePeriod(){
             let vm = this

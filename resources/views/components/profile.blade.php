@@ -1,7 +1,7 @@
 <div>
     <div class="w-full bg-white rounded overflow-hidden shadow-md">
         <div class="w-full h-50 bg-cover p-2" >
-            <img class="mx-auto w-20 h-20 rounded-full"  src="{{ asset('/storage/' . $employee->user->avatar) }}" id="imageavatar">
+            <img class="mx-auto w-20 h-20 rounded-full"  src="{{ $employee->user->avatar }}" id="imageavatar">
             <p class="font-bold text-blue-800 text-center mt-2">
                 {{ $employee->name_employee . ' ' . $employee->surname_employee }}
             </p>

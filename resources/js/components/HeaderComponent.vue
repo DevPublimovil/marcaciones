@@ -3,7 +3,7 @@
         <li>
             <div class="relative inline-block" @mouseover="isVisible = true" @mouseleave="isVisible = false" @keydown.enter="isVisible = !isVisible">
                 <button class="block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-600 focus:outline-none focus:border-white">
-                    <img class="h-full w-full object-cover"  :src="'/storage/'+info.avatar" alt="username">
+                    <img class="h-full w-full object-cover"  :src="info.avatar" alt="username">
                 </button>
                 <transition enter-active-class="transition duration-300 ease-out transform" enter-class="-translate-y-3 scale-95 opacity-0" enter-to-class="translate-y-0 scale-100 opacity-100" leave-active-class="transition duration-150 ease-in transform" leave-class="translate-y-0 opacity-100" leave-to-class="-translate-y-3 opacity-0">
                 <div v-show="isVisible" class="fixed  top-auto right-0">

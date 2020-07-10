@@ -74,4 +74,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/marcaciones/employees', 'MarkingsController@showEmployees')->name('marcaciones.show');
+
+    Route::get('mips', 'Api\MipsController@index')->name('mips.index');
 });

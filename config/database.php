@@ -111,6 +111,10 @@ return [
             ]) : [],
         ],
 
+        'mips' => [
+            'url' => env('MIPS_URL'),
+        ]
+
 
     ],
 
