@@ -61,7 +61,7 @@ class MarkingsController extends Controller
         }
         else if($user->role->name == 'gerente' || $user->role->name == 'subjefe')
         {
-            $employees = $user->workersGte()->where('status',1)->SearchEmployee($request->employee)->with('departament','company')->orderBy('name_employee','ASC')->paginate(2);
+            $employees = $user->workersGte()->where('status',1)->SearchEmployee($request->employee)->with('departament','company','user:id,avatar')->orderBy('name_employee','ASC')->paginate(2);
         }
 
         return $employees;
