@@ -15,7 +15,7 @@ class MyMarkingsController extends Controller
 {
     /**
      * retorna todas las marcaciones semanales de un empleado para un componente vue
-     * 
+     *
      * @param int $id
      * @return \Illuminate\Http\Response
      */
@@ -29,7 +29,7 @@ class MyMarkingsController extends Controller
 
 
         //defino la consulta con sus filtros
-        $query = Marking::orderBy('markings.check_in', 'ASC')->MyMarkings($employee->cod_marking, $employee->cod_terminal)->whereBetween('created_at',[$first_day, $last_day])->get();
+        $query = Marking::orderBy('markings.created_at', 'DESC')->MyMarkings($employee->cod_marking, $employee->cod_terminal)->whereBetween('created_at',[$first_day, $last_day])->get();
 
         //retorno una coleccion con los datos de sus marcaciones semanales
         return MyMarkings::collection($query);
@@ -37,11 +37,11 @@ class MyMarkingsController extends Controller
 
     /**
      * retorna todas las marcaciones mensuales de un empleado para un componente vue
-     * 
+     *
      * @param int id
      * @return \Illuminate\Http\Response
      */
-    public function showPeriod(Request $request, $id) 
+    public function showPeriod(Request $request, $id)
     {
         //busco el empleado
         $employee = Employee::find($id);
@@ -53,7 +53,7 @@ class MyMarkingsController extends Controller
 
         //defino la consulta con sus filtros
         $query = Marking::orderBy('created_at', 'ASC')->MyMarkings($employee->cod_marking, $employee->cod_terminal)->whereBetween('created_at',[$first_day, $last_day])->get();
-        
+
         //retorno una coleccion de los datos de sus marcaciones mensuales
         return MyMarkings::collection($query);
     }
@@ -62,7 +62,7 @@ class MyMarkingsController extends Controller
      * retorna el porcentaje de llegadas tardes para un empleado
      * @param int id
      * @return \Illuminate\Http\Response
-     * 
+     *
      */
     public function showPercent($id)
     {
@@ -98,7 +98,7 @@ class MyMarkingsController extends Controller
     }
 
     public static function AddPlayTime($times) {
-        $minutes = 0; 
+        $minutes = 0;
 
         foreach ($times as $time) {
             list($hour, $minute) = explode('.', $time);

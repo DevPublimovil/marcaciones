@@ -21,7 +21,7 @@ class MarkingsController extends Controller
 
     /**
      * retorna los calculos de horas trabajadas y llegadas tarde
-     * 
+     *
      * @param $id int
      * @return \Illuminate\Http\Response
      */
@@ -64,9 +64,9 @@ class MarkingsController extends Controller
         {
             $employees = $user->workersGte()->where('status',1)->SearchEmployee($request->employee)->with('departament','company')->orderBy('name_employee','ASC')->paginate(2);
         }
-    
+
         return $employees;
      }
 
-     
+
 }

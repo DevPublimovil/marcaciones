@@ -289,7 +289,7 @@ export default {
         },
         changeApproved(action) {
             this.loadingApproved = true;
-            toastr.info('¡espera un momento, tus cambios se estan guardando!');
+            toastr.info('¡espera un momento, tus cambios se estan guardando!');xx
             axios
                 .put('/actions/approved/' + action)
                 .then(({ data }) => {

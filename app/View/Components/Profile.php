@@ -5,24 +5,23 @@ namespace App\View\Components;
 use Illuminate\View\Component;
 use App\User;
 use Auth;
-use App\Employee;
 
 class Profile extends Component
 {
     /**
      * datos del usuario
-     * 
+     *
      * @var string
      */
-    public $employee;
+    public $user;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($employee)
+    public function __construct()
     {
-        $this->employee = Employee::find($employee);
+        $this->user = User::find(Auth::id());
     }
 
     /**

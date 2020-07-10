@@ -21,7 +21,7 @@ class MarkingsEmployee extends JsonResource
             'photo'     => $this->photo,
             'in'        => ($this->check_in) ? Fecha::parse($this->check_in)->format('H:i a') : 'Sin marcación',
             'out'       => ($this->check_out) ? Fecha::parse($this->check_out)->format('H:i a') : 'Sin marcación',
-            'minutes'   => $this->formatTime($this->late_arrivals)
+            'minutes'   => $this->formatTime($this->late_arrivals),
         ];
     }
 
@@ -35,6 +35,6 @@ class MarkingsEmployee extends JsonResource
         }else{
             return $newtime[1] . ' minutos';
         }
-        
+
     }
 }

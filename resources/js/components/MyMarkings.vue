@@ -2,7 +2,7 @@
     <div class="mis-marcaciones ">
         <div class="bg-white rounded overflow-x-auto shadow-md px-6 py-4">
             <div class="flex w-full justify-between mb-2">
-                <div class="flex items-center border-b border-b-2 border-blue-700 py-2" >
+                <div class="flex items-center border-b-2 border-blue-700 py-2" >
                     <template v-if="markings.length > 0">
                         <span><i class="fa fa-search" aria-hidden="true"></i></span>
                         <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Buscar" v-model="date" aria-label="Busqueda">
@@ -15,7 +15,7 @@
                             <i class="fa fa-calendar-o block md:hidden" aria-hidden="true"></i> <span class="hidden md:block">{{ action }}</span>
                         </span>
                     </div>
-                    <div class="flex-initial">
+                    <div class="flex-initial" v-if="employee.role_id != 2">
                         <a href="/actions/create" class="transition duration-500 ease-in-out button bg-blue-600 text-white border-b-4 border-blue-700 transform hover:-translate-y-1 hover:scale-100 " >
                             <i class="fa fa-file block md:hidden" aria-hidden="true"></i>
                             <span class="hidden md:block">Crear acción de personal</span>
@@ -34,12 +34,14 @@
                         <th class="px-4 py-2 text-gray-700 ">Día</th>
                         <th class="px-4 py-2 text-gray-700">Entrada</th>
                         <th class="px-4 py-2 text-gray-700">Salida</th>
-                        <th class="px-4 py-2 text-gray-700">Minutos tarde</th>
-                        <th ></th>
+                        <template v-if="employee.role_id != 2 ">
+                            <th class="px-4 py-2 text-gray-700">Minutos tarde</th>
+                            <th ></th>
+                        </template>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="text-center border-b border-gray-400" 
+                    <tr class="text-center border-b border-gray-400"
                         :class="[item.minutes >= '20' ? 'text-red-500' : 'text-gray-600']"
                         :title="[item.minutes >= '20' ? 'Es probable que desees crear una acción de personal para este día' : '']"
                          v-for="(item, index) in searchDay" :key="index">
@@ -52,13 +54,15 @@
                         <td >{{ item.date }}</td>
                         <td  :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
                         <td  :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
-                        <td >{{ item.minutes }}</td>
-                        <td title="Crear acción de personal">
-                            <form :action="'/action/create/date'" method="GET">
-                                <input type="hidden" name="date" :value="item.id">
-                                <button type="submit" class="focus:outline-none"><i class="fa fa-file-text" aria-hidden="true"></i>+</button>
-                            </form>
-                        </td>
+                        <template v-if="employee.role_id != 2">
+                            <td >{{ item.minutes }}</td>
+                            <td title="Crear acción de personal">
+                                <form :action="'/action/create/date'" method="GET">
+                                    <input type="hidden" name="date" :value="item.id">
+                                    <button type="submit" class="focus:outline-none"><i class="fa fa-file-text" aria-hidden="true"></i>+</button>
+                                </form>
+                            </td>
+                        </template>
                     </tr>
                 </tbody>
             </table>
@@ -124,7 +128,7 @@ export default {
     },
     methods: {
         getMarkingsWeekly(){
-            axios.get('/markings-weekly/' + this.employee).then(response => {
+            axios.get('/markings-weekly/' + this.employee.employee.id).then(response => {
                 this.markings = response.data.data
             })
         },
@@ -142,7 +146,7 @@ export default {
             if(moment(vm.endDate) > moment(vm.startDate))
             {
                 vm.loading = true
-                axios.get('/markings/period/' + this.employee,{
+                axios.get('/markings/period/' + this.employee.employee.id,{
                     params:{
                         startDate: vm.startDate,
                         endDate: vm.endDate
@@ -157,7 +161,7 @@ export default {
                         this.$root.showBar = false
                     }
                 }).catch(error => {
-                    vm.message = 'No se encontro ningun registro'
+                    vm.message = 'No se encontro ningún registro'
                     vm.loading = false
                 }).finally(()=>{
                     vm.loading = false

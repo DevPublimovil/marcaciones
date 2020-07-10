@@ -7,6 +7,7 @@
                         <div class="form-control-ic">
                             <h4 class="text-xl text-gray-900 font-bold mb-6">
                                 Fecha de aplicación
+                                <span class="text-sm text-blue-600"> (La fecha que seleccione representa el día en el que se aplicará su acción de personal)</span>
                             </h4>
                             <input type="date" class="form-input" id="start" name="trip-start"
                                 v-model="dateTime">

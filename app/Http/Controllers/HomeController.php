@@ -31,19 +31,17 @@ class HomeController extends Controller
     public function index()
     {
         $user = User::find(Auth::id());
-        
-        if($user->role->name == 'gerente')
-        {
-            return redirect()->route('gte.actions.index');
-        }else if( $user->role->name == 'rrhh'){
+
+        if( $user->role->name == 'rrhh'){
             $companies = $user->companiesResources()->with(['company'])->get();
             return view('select-company', compact('companies','user'));
         }else if($user->role->name == 'admin'){
             return redirect()->route('voyager.dashboard');
-        }else{
-            $employee = $user->employee->id;
-            return view('home', compact('employee'));
         }
+
+        $employee = $user->load('employee');
+
+        return view('home', compact('employee'));
     }
 
     public function selectCompany(Request $request)
@@ -58,7 +56,7 @@ class HomeController extends Controller
     public function homeclockbot()
     {
         $user = User::find(Auth::id());
-        $employee = $user->employee->id;
+        $employee = $user->load('employee');
         return view('subjefe.home', compact('employee'));
     }
 }
