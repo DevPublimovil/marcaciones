@@ -4,7 +4,7 @@
             <div class="flex justify-between p-0">
                 <div class="self-center flex-auto">
                     <h3 class="text-xl font-bold">
-                        <img :src="'storage/' + employee.user.avatar" class="inline-block rounded-full w-12 h-12" alt="" v-if="employee.user.avatar">
+                        <img :src="viewPhoto(employee.user.avatar)" class="inline-block rounded-full w-12 h-12" alt="" v-if="employee.user.avatar">
                         <span class="inline-block">{{ employee.name_employee + ' ' + employee.surname_employee }} | {{employee.cod_marking}}</span>
                     </h3>
                     <h3 class="text-gray-500 text-sm">{{ employee.departament ? employee.departament.display_name : '' }}</h3>
@@ -84,6 +84,10 @@ export default {
             var str = String(data);
             var res = str.replace(":", ".");
             return res > 0;
+        },
+        viewPhoto(photo)
+        {
+            return photo;
         }
     },
     mounted() {
