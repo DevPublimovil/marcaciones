@@ -151,6 +151,7 @@ class ActionController extends Controller
         $action->save();
 
         if($request->actions == 12){
+            $action->update(['check_gte' => 1]);
             $rh = $user->companiesResources()->first();
             $rh = User::select('users.*')->where('role_id',3)->join('company_resources','company_resources.user_id','users.id')->where('company_resources.company_id',$rh->company_id)->first();
             $rh->notify(new NewPersonalActionGte($user));

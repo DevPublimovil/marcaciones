@@ -168,7 +168,7 @@
                         </div>
                         <div style="position: absolute; left: 0px; top: 100px;">
                             <p style="padding:0%;">
-                            {{Auth::user()->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Jefe inmediato
+                            {{$action->user->name}} &nbsp;&nbsp; | &nbsp;&nbsp; Jefe inmediato
                             </p>
                         </div>
                       </div>
