@@ -218,7 +218,8 @@ class ActionController extends Controller
 
        $action = Action::findOrFail($id);
        $employee = ($action->employee_id) ? $action->employee : $action->user->employee;
-       if($employee){
+       
+       if($action->action_type_id != 12){
 
             if($user->role->name == 'empleado'){
                 if($employee->id != $user->employee->id){
