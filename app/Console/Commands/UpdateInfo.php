@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Employee;
 use App\User;
 use App\Picture;
+use App\MipsEmployee;
 use Illuminate\Support\Facades\Log;
 
 
@@ -46,9 +47,12 @@ class UpdateInfo extends Command
 
         foreach ($users as $user) {
             if($user->employee){
-                $picture = Picture::where('picture_vip_id',$user->employee->cod_marking)->first();
-                if($picture){
-                    $user->update(['avatar' => 'http://192.168.50.152:9000/MIPS' . $picture->picture_url]);   
+                $employeemips = MipsEmployee::where('person_id','=',$user->employee->cod_marking)->first();
+                if($employeemips){
+                    $picture = Picture::where('picture_vip_id',$employeemips->id)->first();
+                    if($picture){
+                        $user->update(['avatar' => 'http://sanipass.grupopublimovil.com:9000/MIPS' . $picture->picture_url]);
+                    }
                 }
             }
         }

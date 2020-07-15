@@ -7,6 +7,7 @@ use App\Employee;
 use App\Mips;
 use \Carbon\Carbon as Fecha;
 use App\Marking;
+use App\MipsEmployee;
 
 
 class MipsAttendance extends Command
@@ -51,27 +52,30 @@ class MipsAttendance extends Command
             $dateend = Fecha::yesterday()->format('Y-m-d') . ' ' . $employee->timestable->hour_out;
             $dateend = Fecha::parse($datestart)->addHours($hoursdiff + 13);
 
-            $markings = Mips::where('vip_id',$employee->cod_marking)->where('device_id', $employee->cod_terminal)->whereBetween('time',[$datestart->format('Y-m-d H:i:s'),$dateend->format('Y-m-d H:i:s')])->orderBy('time','ASC')->get();
-            
-            if($markings->count() > 0)
-            {
-                $start = $markings->first();
-                $end = $markings->last();
-                $attend = Marking::firstOrCreate([
-                    'serialno'      =>  $employee->cod_terminal,
-                    'cod_marking'   =>  $employee->cod_marking,
-                    'check_in'      =>  $start->time,
-                    'check_out'     =>  $end->time,
-                    'photo'         =>  'http://192.168.50.152:9000/MIPS' . $start->img_path,
-                    'created_at'    => Fecha::yesterday()->format('Y-m-d')
-                ]);
+            $employeemips = MipsEmployee::where('person_id','=',$employee->cod_marking)->first();
+            if($employeemips){
+                $markings = $employeemips->markings()->where('device_id', $employee->cod_terminal)->whereBetween('time',[$datestart->format('Y-m-d H:i:s'),$dateend->format('Y-m-d H:i:s')])->orderBy('time','ASC')->get();
+                
+                if($markings->count() > 0)
+                {
+                    $start = $markings->first();
+                    $end = $markings->last();
+                    $attend = Marking::firstOrCreate([
+                        'serialno'      =>  $employee->cod_terminal,
+                        'cod_marking'   =>  $employee->cod_marking,
+                        'check_in'      =>  $start->time,
+                        'check_out'     =>  $end->time,
+                        'photo'         =>  'http://192.168.50.152:9000/MIPS' . $end->img_path,
+                        'created_at'    => Fecha::yesterday()->format('Y-m-d')
+                    ]);
 
-                $attend->fill([
-                    'temp_in'      =>  $start->temp,
-                    'temp_out'     =>  $end->temp,
-                ]);
+                    $attend->fill([
+                        'temp_in'      =>  $start->temp,
+                        'temp_out'     =>  $end->temp,
+                    ]);
 
-                $attend->save();
+                    $attend->save();
+                }
             }
         }
     }
