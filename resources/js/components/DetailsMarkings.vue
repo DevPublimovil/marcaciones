@@ -4,7 +4,7 @@
             <div class="flex justify-between p-0">
                 <div class="self-center flex-auto">
                     <h3 class="text-xl font-bold">
-                        <img :src="viewPhoto(employee.user.avatar)" class="inline-block rounded-full w-12 h-12" alt="" v-if="employee.user.avatar">
+                        <img :src="viewPhoto(employee.avatar)" class="inline-block rounded-full w-12 h-12" alt="" v-if="employee.avatar">
                         <span class="inline-block">{{ employee.name_employee + ' ' + employee.surname_employee }} | {{employee.cod_marking}}</span>
                     </h3>
                     <h3 class="text-gray-500 text-sm">{{ employee.departament ? employee.departament.display_name : '' }}</h3>
@@ -14,6 +14,7 @@
         <div class="dt-body mt-4 overflow-x-auto">
             <table class="table-auto w-full text-sm text-gray-800">
                 <thead class="text-center border-b-2">
+                    <th>#</th>
                     <th>Fecha</th>
                     <th>Dia</th>
                     <th>Entrada</th>
@@ -27,6 +28,12 @@
                 </thead>
                 <tbody class="text-center">
                     <tr v-for="(marking, index) in markings.markings" :key="index" class="border-b-2">
+                        <td>
+                            <img :src="viewPhoto(marking.avatar)" class="inline-block rounded-full w-8 h-8 cursor-pointer" @mouseover="showPhoto = index" @mouseleave="showPhoto = ''" alt="" v-if="marking.avatar">
+                            <div class="absolute w-40 h-40 p-2 border bg-white rounded z-10"  :class="showPhoto === index ? 'block' : 'hidden'"  >
+                                <img :src="viewPhoto(marking.avatar)" class="cursor-pointer w-full h-full" alt="">
+                            </div>
+                        </td>
                         <td>{{ marking.date }}</td>
                         <td>{{ marking.day }}</td>
                         <td :class="[marking.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ marking.in }}</td>
@@ -67,6 +74,7 @@ export default {
     data(){
         return{
             markings: [],
+            showPhoto: '',
         }
     },
     methods: {

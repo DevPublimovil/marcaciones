@@ -55,6 +55,7 @@ class Assistence {
             if($marking)
             {
                 $markings->push([
+                    'avatar'        => $marking->photo,
                     'date'          => Fecha::parse($value)->format('d/m/Y'),
                     'id_action'     => ($action) ? $action->id : null,
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
@@ -71,6 +72,7 @@ class Assistence {
             else
             {
                 $markings->push([
+                    'avatar'        => '',
                     'date'          => Fecha::parse($value)->format('d/m/Y'),
                     'id_action'     => ($action) ? $action->id : null,
                     'day'           => Fecha::parse($value)->locale('es')->isoFormat('dddd'),
