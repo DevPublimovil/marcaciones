@@ -9,7 +9,6 @@ use \Carbon\Carbon as Fecha;
 use App\Marking;
 use App\MipsEmployee;
 
-
 class MipsAttendance extends Command
 {
     /**
@@ -65,8 +64,8 @@ class MipsAttendance extends Command
                         'cod_marking'   =>  $employee->cod_marking,
                         'check_in'      =>  $start->time,
                         'check_out'     =>  $end->time,
-                        'photo'         =>  'http://192.168.50.152:9000/MIPS' . $end->img_path,
-                        'created_at'    => Fecha::yesterday()->format('Y-m-d')
+                        'photo'         =>  'http://biometrico.grupopublimovil.com:9000/MIPS' . $end->img_path,
+                        'created_at'    =>  Fecha::yesterday()->format('Y-m-d')
                     ]);
 
                     $attend->fill([

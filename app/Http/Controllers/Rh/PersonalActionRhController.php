@@ -34,11 +34,11 @@ class PersonalActionRhController extends Controller
 
        $personal_action = Action::find($id);
 
-       $employee = ($personal_action->employee_id)  ?  $personal_action->employee->user : $personal_action->user;
+       $user_action = User::find($personal_action->created_by);
 
        $personal_action->update(['check_rh' => 1]);
 
-       $employee->notify(new ApprovedAction($user->name));
+       $user_action->notify(new ApprovedAction($user->name));
 
        return response()->json([
            'message'   => '¡Tus cambios se han guardado correctamente!',

@@ -51,7 +51,7 @@ class UpdateInfo extends Command
                 if($employeemips){
                     $picture = Picture::where('picture_vip_id',$employeemips->id)->first();
                     if($picture){
-                        $user->update(['avatar' => 'http://sanipass.grupopublimovil.com:9000/MIPS' . $picture->picture_url]);
+                        $user->update(['avatar' => 'http://biometrico.grupopublimovil.com:9000/MIPS' . $picture->picture_url]);
                     }
                 }
             }

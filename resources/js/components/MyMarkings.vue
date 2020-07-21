@@ -27,50 +27,52 @@
                 <img src="/images/empty.svg">
                 <p class="text-black font-bold text-center mb-4">No se encontró ningún registro</p>
             </div>
-            <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-4" v-else>
-                <thead>
-                    <tr class="border-b border-gray-400 text-gray-700 border-t border-gray-400">
-                        <th ></th>
-                        <th class="px-4 py-2">Día</th>
-                        <th class="px-4 py-2">Entrada</th>
-                        <th class="text-gray-700">°C</th>
-                        <th class="px-4 py-2">Salida</th>
-                        <th>°C</th>
-                        <template v-if="employee.role_id != 2 ">
-                            <th class="px-4 py-2">Minutos tarde</th>
+            <div v-else>
+                <table class="w-full table-auto rounded border-collapse  border-gray-500 mt-4" >
+                    <thead>
+                        <tr class="border-b border-gray-400 text-gray-700 border-t border-gray-400">
                             <th ></th>
-                        </template>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="text-center border-b border-gray-400"
-                        :class="[item.minutes >= '20' ? 'text-red-500' : 'text-gray-600']"
-                        :title="[item.minutes >= '20' ? 'Es probable que desees crear una acción de personal para este día' : '']"
-                         v-for="(item, index) in searchDay" :key="index">
-                        <td class="px-4 py-2 w-16">
-                            <img :src="item.photo" class="rounded-full cursor-pointer" style="width:100% height:100%" @mouseover="showPhoto = item.id" @mouseleave="showPhoto = ''" alt="">
-                            <div class="absolute w-40 h-40 p-2 border bg-white rounded z-10"  :class="showPhoto == item.id ? 'block' : 'hidden'"  >
-                                <img :src="item.photo" class="cursor-pointer w-full h-full" alt="">
-                            </div>
-                        </td>
-                        <td >{{ item.date }}</td>
-                        <td  :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
-                        <td :class="[item.temp_in > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ item.temp_in }}</td>
-                        <td  :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
-                        <td :class="[item.temp_out > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ item.temp_out }}</td>
-                        <template v-if="employee.role_id != 2">
-                            <td >{{ item.minutes }}</td>
-                            <td title="Crear acción de personal">
-                                <form :action="'/action/create/date'" method="GET">
-                                    <input type="hidden" name="date" :value="item.id">
-                                    <button type="submit" class="focus:outline-none"><i class="fa fa-file-text" aria-hidden="true"></i>+</button>
-                                </form>
+                            <th class="px-4 py-2">Día</th>
+                            <th class="px-4 py-2">Entrada</th>
+                            <th class="text-gray-700">°C</th>
+                            <th class="px-4 py-2">Salida</th>
+                            <th>°C</th>
+                            <template v-if="employee.role_id != 2 ">
+                                <th class="px-4 py-2">Minutos tarde</th>
+                                <th ></th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center border-b border-gray-400"
+                            :class="[item.minutes >= '20' ? 'text-red-500' : 'text-gray-600']"
+                            :title="[item.minutes >= '20' ? 'Es probable que desees crear una acción de personal para este día' : '']"
+                            v-for="(item, index) in searchDay" :key="index">
+                            <td class="px-4 py-2 w-16">
+                                <img :src="item.photo" class="rounded-full cursor-pointer" style="width:100% height:100%" @mouseover="showPhoto = item.id" @mouseleave="showPhoto = ''" alt="">
+                                <div class="absolute w-40 h-40 p-2 border bg-white rounded z-10"  :class="showPhoto == item.id ? 'block' : 'hidden'"  >
+                                    <img :src="item.photo" class="cursor-pointer w-full h-full" alt="">
+                                </div>
                             </td>
-                        </template>
-                    </tr>
-                </tbody>
-            </table>
+                            <td >{{ item.date }}</td>
+                            <td  :class="[item.in >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.in  }}</td>
+                            <td :class="[item.temp_in > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ item.temp_in }}</td>
+                            <td  :class="[item.out >= 'Sin marcación' ? 'text-red-500' : 'text-gray-600']">{{ item.out }}</td>
+                            <td :class="[item.temp_out > 37.3 ? 'text-red-500 font-bold' : 'text-green-600']">{{ item.temp_out }}</td>
+                            <template v-if="employee.role_id != 2">
+                                <td >{{ item.minutes }}</td>
+                                <td title="Crear acción de personal">
+                                    <form :action="'/action/create/date'" method="GET">
+                                        <input type="hidden" name="date" :value="item.id">
+                                        <button type="submit" class="focus:outline-none"><i class="fa fa-file-text" aria-hidden="true"></i>+</button>
+                                    </form>
+                                </td>
+                            </template>
+                        </tr>
+                    </tbody>
+                </table>
             <span class="py-4 text-blue-900 font-bold text-sm">" °C temperatura corporal en grados celsius "</span>
+            </div>
         </div>
          <my-modal-component v-if="showModal" @close="showModal = false">
             <template v-slot:header-modal>

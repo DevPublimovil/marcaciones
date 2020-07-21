@@ -350,7 +350,7 @@ class ActionController extends Controller
         }
 
         return response()->json([
-            'message'   => '¡Tus cambios se han guardado corractamente!',
+            'message'   => '¡Tus cambios se han guardado correctamente!',
             'type'      => 'success'
         ]);
     }
