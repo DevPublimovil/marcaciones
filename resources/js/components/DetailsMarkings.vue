@@ -58,6 +58,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th>{{ markings.total_hours_worked}}</th>
                     <th>{{ markings.total_extra_hours }}</th>
                     <th :class="[isArrivals(markings.total_late_arrivals) ? 'text-red-600' : '']">{{ markings.total_late_arrivals }}</th>
